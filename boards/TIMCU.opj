@@ -1,0 +1,123 @@
+(ExpressProject "TIMCU"
+  (ProjectVersion "19981106")
+  (ProjectType "PCB")
+  (Folder "Design Resources"
+    (Folder "Library"
+      (File ".\library1.olb"
+        (Type "Schematic Library")))
+    (NoModify)
+    (File ".\timcu.dsn"
+      (Type "Schematic Design"))
+    (BuildFileAddedOrDeleted "x")
+    (CompileFileAddedOrDeleted "x"))
+  (Folder "Outputs")
+  (Folder "Referenced Projects")
+  (PartMRUSelector
+    (R
+      (FullPartName "R.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\PSPICE\ANALOG.OLB")
+      (DeviceIndex "0"))
+    (D1N4005
+      (FullPartName "D1N4005.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\PSPICE\DIODE.OLB")
+      (DeviceIndex "0"))
+    (2SA1145
+      (FullPartName "2SA1145.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\PSPICE\JPWRBJT.OLB")
+      (DeviceIndex "0"))
+    (POT/SM
+      (FullPartName "POT/SM.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\DISCRETE.OLB")
+      (DeviceIndex "0"))
+    (CON3
+      (FullPartName "CON3.Normal")
+      (LibraryName
+         "C:\DOCUMENTS AND SETTINGS\MUILEVAN\DESKTOP\THU VIEN ORCAD FULL\CAPTURE FULL\THU VIEN CAPTURE.OLB")
+      (DeviceIndex "0"))
+    (0
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\PSPICE\SOURCE.OLB")
+      (DeviceIndex "0"))
+    ("HEADER 16"
+      (FullPartName "HEADER 16.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\CONNECTOR.OLB")
+      (DeviceIndex "0"))
+    (LCD
+      (FullPartName "LCD.Normal")
+      (LibraryName
+         "C:\DOCUMENTS AND SETTINGS\MUILEVAN\DESKTOP\THU VIEN ORCAD FULL\CAPTURE FULL\LIBRARY6.OLB")
+      (DeviceIndex "0"))
+    (C
+      (FullPartName "C.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\PSPICE\ANALOG.OLB")
+      (DeviceIndex "0"))
+    ("SW PUSHBUTTON"
+      (FullPartName "SW PUSHBUTTON.Normal")
+      (LibraryName
+         "C:\DOCUMENTS AND SETTINGS\MUILEVAN\DESKTOP\THU VIEN ORCAD FULL\CAPTURE FULL\THU VIEN CAPTURE.OLB")
+      (DeviceIndex "0"))
+    ("CONNECTOR EDGE 10x2"
+      (FullPartName "CONNECTOR EDGE 10x2.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\CONNECTOR.OLB")
+      (DeviceIndex "0"))
+    (LED
+      (FullPartName "LED.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\DISCRETE.OLB")
+      (DeviceIndex "0"))
+    ("HEADER 3"
+      (FullPartName "HEADER 3.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\CONNECTOR.OLB")
+      (DeviceIndex "0"))
+    (VCC_ARROW
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\CAPSYM.OLB")
+      (DeviceIndex "0"))
+    ("DIODE TVS BI-DIR"
+      (FullPartName "DIODE TVS BI-DIR.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\DISCRETE.OLB")
+      (DeviceIndex "0"))
+    (USB
+      (FullPartName "USB.Normal")
+      (LibraryName "C:\TIMCU\LIBRARY1.OLB")
+      (DeviceIndex "0"))
+    (JUMPER1
+      (FullPartName "JUMPER1.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\CONNECTOR.OLB")
+      (DeviceIndex "0"))
+    (LM7805C
+      (FullPartName "LM7805C.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\PSPICE\OPAMP.OLB")
+      (DeviceIndex "0"))
+    (LM3S9B96-IQC
+      (FullPartName "LM3S9B96-IQC.Normal")
+      (LibraryName
+         "C:\DOCUMENTS AND SETTINGS\MUILEVAN\DESKTOP\STELLARIS-ORCAD\TI STELLARIS.OLB")
+      (DeviceIndex "0")))
+  (GlobalState
+    (FileView
+      (Path "Design Resources")
+      (Path "Design Resources"
+         "C:\Documents and Settings\muilevan\Desktop\TI\TIMCU\timcu.dsn")
+      (Path "Design Resources"
+         "C:\Documents and Settings\muilevan\Desktop\TI\TIMCU\timcu.dsn"
+         "SCHEMATIC1")
+      (Path "Design Resources" "Library")
+      (Select "Design Resources"
+         "C:\Documents and Settings\muilevan\Desktop\TI\TIMCU\timcu.dsn"
+         "SCHEMATIC1" "PAGE1"))
+    (HierarchyView)
+    (Doc
+      (Type "COrCapturePMDoc")
+      (Frame
+        (Placement "44 0 1 -1 -1 -4 -30 -35 165 15 418"))
+      (Tab 0))
+    (Doc
+      (Type "COrSchematicDoc")
+      (Frame
+        (Placement "44 2 3 -1 -1 -4 -30 44 910 58 491")
+        (Scroll "0 300")
+        (Zoom "100")
+        (Occurrence "/"))
+      (Path "C:\DOCUMENTS AND SETTINGS\MUILEVAN\DESKTOP\TI\TIMCU\TIMCU.DSN")
+      (Schematic "SCHEMATIC1")
+      (Page "PAGE1")))
+  (LastUsedLibraryBrowseDirectory
+     "C:\Documents and Settings\muilevan\Desktop\THU VIEN ORCAD FULL\Capture full"))
