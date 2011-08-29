@@ -9,10 +9,46 @@
     (File ".\timcu.dsn"
       (Type "Schematic Design"))
     (BuildFileAddedOrDeleted "x")
-    (CompileFileAddedOrDeleted "x"))
-  (Folder "Outputs")
+    (CompileFileAddedOrDeleted "x")
+    (DRC_Scope "0")
+    (DRC_Action "0")
+    (DRC_Create_Warnings "FALSE")
+    (DRC_Check_Ports "FALSE")
+    (DRC_Check_Off-Page_Connectors "FALSE")
+    (DRC_Identical_References "TRUE")
+    (DRC_Type_Mismatch "TRUE")
+    (DRC_Report_Ports_and_Off-page_Connectors "FALSE")
+    (DRC_SDT_Compatibility "FALSE")
+    (DRC_Report_Off-grid_Objects "FALSE")
+    (DRC_Check_Unconnected_Nets "TRUE")
+    (DRC_Report_Netnames "FALSE")
+    (DRC_View_Output "FALSE")
+    (DRC_Report_File
+       "C:\DOCUMENTS AND SETTINGS\MUILEVAN\DESKTOP\TI\ARM-MP3-PLAYER\BOARDS\TIMCU.DRC")
+    (Netlist_TAB "0")
+    (EDIF_Netlist_File "TIMCU.EDN")
+    (EDIF_Allow_NonEDIF "FALSE")
+    (EDIF_Pin_Names "FALSE")
+    (EDIF_No_Library "FALSE")
+    (EDIF_Net_Props "FALSE")
+    (EDIF_Part_Props "FALSE")
+    (EDIF_Pin_Props "FALSE")
+    (EDIF_Designators "FALSE")
+    (EDIF_Part_Value "{Value}")
+    (EDIF_PCB_Footprint "{PCB Footprint}")
+    (EDIF_View_Output "FALSE"))
+  (Folder "Outputs"
+    (File ".\timcu.drc"
+      (Type "Report"))
+    (File ".\timcu.edn"
+      (Type "Report")))
   (Folder "Referenced Projects")
   (PartMRUSelector
+    (myjumper
+      (FullPartName "myjumper.Normal")
+      (LibraryName
+         "C:\DOCUMENTS AND SETTINGS\MUILEVAN\DESKTOP\TI\ARM-MP3-PLAYER\BOARDS\LIBRARY1.OLB")
+      (DeviceIndex "0"))
     ("HEADER 1"
       (FullPartName "HEADER 1.Normal")
       (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\CONNECTOR.OLB")
@@ -32,11 +68,6 @@
     (R
       (FullPartName "R.Normal")
       (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\PSPICE\ANALOG.OLB")
-      (DeviceIndex "0"))
-    (myjumper
-      (FullPartName "myjumper.Normal")
-      (LibraryName
-         "C:\DOCUMENTS AND SETTINGS\MUILEVAN\DESKTOP\TI\ARM-MP3-PLAYER\BOARDS\LIBRARY1.OLB")
       (DeviceIndex "0"))
     (0
       (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\PSPICE\SOURCE.OLB")
@@ -122,9 +153,8 @@
   (GlobalState
     (FileView
       (Path "Design Resources")
-      (Path "Design Resources" ".\timcu.dsn")
-      (Path "Design Resources" ".\timcu.dsn" "SCHEMATIC1")
-      (Path "Design Resources" "Library"))
+      (Path "Design Resources" "Library")
+      (Path "Outputs"))
     (HierarchyView)
     (Doc
       (Type "COrCapturePMDoc")
@@ -134,9 +164,9 @@
     (Doc
       (Type "COrSchematicDoc")
       (Frame
-        (Placement "44 2 3 0 609 -4 -30 44 910 58 491")
-        (Scroll "40 240")
-        (Zoom "80")
+        (Placement "44 0 1 0 609 -4 -30 44 910 58 491")
+        (Scroll "2988 72")
+        (Zoom "288")
         (Occurrence "/"))
       (Path
          "C:\DOCUMENTS AND SETTINGS\MUILEVAN\DESKTOP\TI\ARM-MP3-PLAYER\BOARDS\TIMCU.DSN")
