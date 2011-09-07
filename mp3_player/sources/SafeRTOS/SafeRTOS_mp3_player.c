@@ -20,6 +20,9 @@
 #include "SafeRTOS/SafeRTOS_API.h"
 #include "idle_task.h"
 #include "led_task.h"
+#include "detect_event_task.h"
+#include "process_event_task.h"
+#include "play_task.h"
 //*****************************************************************************
 //
 //! The error routine that is called if the driver library encounters an error.
@@ -161,6 +164,15 @@ main(void)
         while(1)
         {
         }
+    }
+    if(detect_event_task_init() !=0){
+      while(1);
+    }
+    if(process_event_task_init() !=0){
+      while(1);
+    }
+    if(play_task_init() !=0){
+      while(1);
     }
     //
     //! Start the scheduler.  This should not return.
