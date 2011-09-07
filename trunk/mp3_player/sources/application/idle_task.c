@@ -21,7 +21,6 @@
 #include "idle_task.h"
 
 /**
-
 * The stack for the idle task.
 */
 unsigned long g_pulIdleTaskStack[128];

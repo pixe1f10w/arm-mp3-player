@@ -300,6 +300,7 @@
           <state>$PROJ_DIR$\sources\HAL\StellarisWare\third_party</state>
           <state>$PROJ_DIR$\sources\drivers</state>
           <state>$PROJ_DIR$\sources\SafeRTOS</state>
+          <state>$PROJ_DIR$\sources\Utils</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -905,10 +906,19 @@
   <group>
     <name>Application</name>
     <file>
+      <name>$PROJ_DIR$\sources\application\detect_event_task.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\sources\application\idle_task.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\sources\application\led_task.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\sources\application\play_task.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\sources\application\process_event_task.c</name>
     </file>
   </group>
   <group>
@@ -1195,6 +1205,12 @@
   </group>
   <group>
     <name>Utils</name>
+    <file>
+      <name>$PROJ_DIR$\sources\Utils\mp3_file.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\sources\Utils\wav_file.c</name>
+    </file>
   </group>
 </project>
 
