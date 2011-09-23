@@ -190,8 +190,16 @@
   (GlobalState
     (FileView
       (Path "Design Resources")
+      (Path "Design Resources"
+         "C:\Documents and Settings\muile\Desktop\TIMCU contest\boards\timcu.dsn")
+      (Path "Design Resources"
+         "C:\Documents and Settings\muile\Desktop\TIMCU contest\boards\timcu.dsn"
+         "SCHEMATIC1")
       (Path "Design Resources" "Library")
-      (Path "Outputs"))
+      (Path "Outputs")
+      (Select "Design Resources"
+         "C:\Documents and Settings\muile\Desktop\TIMCU contest\boards\timcu.dsn"
+         "SCHEMATIC1" "PAGE1"))
     (HierarchyView)
     (Doc
       (Type "COrCapturePMDoc")
@@ -201,12 +209,12 @@
     (Doc
       (Type "COrSchematicDoc")
       (Frame
-        (Placement "44 2 3 0 605 -4 -30 82 948 66 499")
-        (Scroll "0 0")
-        (Zoom "36")
+        (Placement "44 2 3 -1 -1 -4 -30 44 910 58 521")
+        (Scroll "1189 274")
+        (Zoom "100")
         (Occurrence "/"))
       (Path
-         "C:\DOCUMENTS AND SETTINGS\MUILEVAN\DESKTOP\TI\ARM-MP3-PLAYER\BOARDS\TIMCU.DSN")
+         "C:\DOCUMENTS AND SETTINGS\MUILE\DESKTOP\TIMCU CONTEST\BOARDS\TIMCU.DSN")
       (Schematic "SCHEMATIC1")
       (Page "PAGE1")))
   (LastUsedLibraryBrowseDirectory "C:\Documents and Settings\muilevan\Desktop"))
