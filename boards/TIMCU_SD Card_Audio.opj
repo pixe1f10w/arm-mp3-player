@@ -1,0 +1,213 @@
+(ExpressProject "TIMCU"
+  (ProjectVersion "19981106")
+  (ProjectType "PCB")
+  (Folder "Design Resources"
+    (Folder "Library"
+      (File ".\library1.olb"
+        (Type "Schematic Library")))
+    (NoModify)
+    (File ".\timcu.dsn"
+      (Type "Schematic Design"))
+    (BuildFileAddedOrDeleted "x")
+    (CompileFileAddedOrDeleted "x")
+    (DRC_Scope "0")
+    (DRC_Action "0")
+    (DRC_Create_Warnings "FALSE")
+    (DRC_Check_Ports "FALSE")
+    (DRC_Check_Off-Page_Connectors "FALSE")
+    (DRC_Identical_References "TRUE")
+    (DRC_Type_Mismatch "TRUE")
+    (DRC_Report_Ports_and_Off-page_Connectors "FALSE")
+    (DRC_SDT_Compatibility "FALSE")
+    (DRC_Report_Off-grid_Objects "FALSE")
+    (DRC_Check_Unconnected_Nets "TRUE")
+    (DRC_Report_Netnames "FALSE")
+    (DRC_View_Output "FALSE")
+    (DRC_Report_File
+       "C:\DOCUMENTS AND SETTINGS\MUILEVAN\DESKTOP\TI\ARM-MP3-PLAYER\BOARDS\TIMCU.DRC")
+    (Netlist_TAB "5")
+    (EDIF_Netlist_File "TIMCU.EDN")
+    (EDIF_Allow_NonEDIF "FALSE")
+    (EDIF_Pin_Names "FALSE")
+    (EDIF_No_Library "FALSE")
+    (EDIF_Net_Props "FALSE")
+    (EDIF_Part_Props "FALSE")
+    (EDIF_Pin_Props "FALSE")
+    (EDIF_Designators "FALSE")
+    (EDIF_Part_Value "{Value}")
+    (EDIF_PCB_Footprint "{PCB Footprint}")
+    (EDIF_View_Output "FALSE")
+    (VERILOG_Part_Value "{Value}")
+    (VERILOG_Netlist_File "TIMCU.V")
+    (VERILOG_View_Output "FALSE")
+    (OTHER_Part_Value "{Value}")
+    (OTHER_Netlist_File "TIMCU.NET")
+    (OTHER_Netlist_File2 "TIMCU.CMP")
+    (OTHER_View_Output "FALSE")
+    (OTHER_View_Output2 "FALSE")
+    (OTHER_Formatter "accel.dll")
+    (OTHER_PCB_Footprint "{PCB Footprint}")
+    (OTHER_Switch0 "FALSE")
+    (OTHER_Switch1 "FALSE")
+    (OTHER_Switch2 "FALSE")
+    (OTHER_Switch3 "FALSE")
+    (OTHER_Switch4 "FALSE")
+    (OTHER_Switch5 "FALSE")
+    (OTHER_Switch6 "FALSE")
+    (LAYOUT_Netlist_File "TIMCU.MNL")
+    (LAYOUT_PCB_Footprint "{PCB Footprint}")
+    (TRUE)
+    (LAYOUT_Units "0")
+    (TRUE)
+    (TRUE)
+    (TRUE)
+    (FALSE)
+    (TRUE)
+    (TRUE)
+    (TRUE)
+    (TRUE)
+    (TRUE)
+    (TRUE))
+  (Folder "Outputs"
+    (File ".\timcu.drc"
+      (Type "Report"))
+    (File ".\timcu.edn"
+      (Type "Report"))
+    (File ".\timcu.v"
+      (Type "Report"))
+    (File ".\timcu.net"
+      (Type "Report"))
+    (File ".\timcu.mnl"
+      (Type "LAYOUT Netlist File")))
+  (Folder "Referenced Projects")
+  (PartMRUSelector
+    (0
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\PSPICE\SOURCE.OLB")
+      (DeviceIndex "0"))
+    (LED
+      (FullPartName "LED.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\DISCRETE.OLB")
+      (DeviceIndex "0"))
+    (R
+      (FullPartName "R.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\PSPICE\ANALOG.OLB")
+      (DeviceIndex "0"))
+    ("HEADER 2"
+      (FullPartName "HEADER 2.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\CONNECTOR.OLB")
+      (DeviceIndex "0"))
+    (myjumper
+      (FullPartName "myjumper.Normal")
+      (LibraryName
+         "C:\DOCUMENTS AND SETTINGS\MUILEVAN\DESKTOP\TI\ARM-MP3-PLAYER\BOARDS\LIBRARY1.OLB")
+      (DeviceIndex "0"))
+    (CON10
+      (FullPartName "CON10.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\CONNECTOR.OLB")
+      (DeviceIndex "0"))
+    ("HEADER 1"
+      (FullPartName "HEADER 1.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\CONNECTOR.OLB")
+      (DeviceIndex "0"))
+    ("HEADER 32"
+      (FullPartName "HEADER 32.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\CONNECTOR.OLB")
+      (DeviceIndex "0"))
+    ("HEADER 16"
+      (FullPartName "HEADER 16.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\CONNECTOR.OLB")
+      (DeviceIndex "0"))
+    ("HEADER 16X2"
+      (FullPartName "HEADER 16X2.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\CONNECTOR.OLB")
+      (DeviceIndex "0"))
+    (CON32
+      (FullPartName "CON32.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\CONNECTOR.OLB")
+      (DeviceIndex "0"))
+    (CON19
+      (FullPartName "CON19.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\CONNECTOR.OLB")
+      (DeviceIndex "0"))
+    (C
+      (FullPartName "C.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\PSPICE\ANALOG.OLB")
+      (DeviceIndex "0"))
+    ("HEADER 3"
+      (FullPartName "HEADER 3.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\CONNECTOR.OLB")
+      (DeviceIndex "0"))
+    (CON3
+      (FullPartName "CON3.Normal")
+      (LibraryName
+         "C:\DOCUMENTS AND SETTINGS\MUILEVAN\DESKTOP\THU VIEN ORCAD FULL\CAPTURE FULL\THU VIEN CAPTURE.OLB")
+      (DeviceIndex "0"))
+    (C_elect
+      (FullPartName "C_elect.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\PSPICE\ANALOG.OLB")
+      (DeviceIndex "0"))
+    (TLV320AIC23BIPWR
+      (FullPartName "TLV320AIC23BIPWR.Normal")
+      (LibraryName
+         "C:\DOCUMENTS AND SETTINGS\MUILEVAN\DESKTOP\TLV320AIC23BIPWR.OLB")
+      (DeviceIndex "0"))
+    (TLV320AIC23BIPWR_0
+      (FullPartName "TLV320AIC23BIPWR_0.Normal")
+      (LibraryName
+         "C:\DOCUMENTS AND SETTINGS\MUILEVAN\DESKTOP\TI\ARM-MP3-PLAYER\BOARDS\TIMCU.DSN")
+      (DeviceIndex "0"))
+    (LM3S9BN6-IBZ
+      (FullPartName "LM3S9BN6-IBZ.Normal")
+      (LibraryName
+         "C:\DOCUMENTS AND SETTINGS\MUILEVAN\DESKTOP\STELLARIS-ORCAD\TI STELLARIS.OLB")
+      (DeviceIndex "0"))
+    (SDcard
+      (FullPartName "SDcard.Normal")
+      (LibraryName
+         "C:\DOCUMENTS AND SETTINGS\MUILEVAN\DESKTOP\TI\ARM-MP3-PLAYER\BOARDS\LIBRARY1.OLB")
+      (DeviceIndex "0"))
+    (D1N4005
+      (FullPartName "D1N4005.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\PSPICE\DIODE.OLB")
+      (DeviceIndex "0"))
+    (2SA1145
+      (FullPartName "2SA1145.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\PSPICE\JPWRBJT.OLB")
+      (DeviceIndex "0"))
+    (POT/SM
+      (FullPartName "POT/SM.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\DISCRETE.OLB")
+      (DeviceIndex "0"))
+    (LCD
+      (FullPartName "LCD.Normal")
+      (LibraryName
+         "C:\DOCUMENTS AND SETTINGS\MUILEVAN\DESKTOP\THU VIEN ORCAD FULL\CAPTURE FULL\LIBRARY6.OLB")
+      (DeviceIndex "0"))
+    ("SW PUSHBUTTON"
+      (FullPartName "SW PUSHBUTTON.Normal")
+      (LibraryName
+         "C:\DOCUMENTS AND SETTINGS\MUILEVAN\DESKTOP\THU VIEN ORCAD FULL\CAPTURE FULL\THU VIEN CAPTURE.OLB")
+      (DeviceIndex "0")))
+  (GlobalState
+    (FileView
+      (Path "Design Resources")
+      (Path "Design Resources" "Library")
+      (Path "Outputs"))
+    (HierarchyView)
+    (Doc
+      (Type "COrCapturePMDoc")
+      (Frame
+        (Placement "44 0 1 0 605 -4 -30 -35 165 16 418"))
+      (Tab 0))
+    (Doc
+      (Type "COrSchematicDoc")
+      (Frame
+        (Placement "44 2 3 -1 -1 -4 -30 44 910 58 491")
+        (Scroll "484 775")
+        (Zoom "100")
+        (Occurrence "/"))
+      (Path
+         "C:\DOCUMENTS AND SETTINGS\ADMINISTRATOR\DESKTOP\TIMCU CONTEST\BOARDS\TIMCU.DSN")
+      (Schematic "SCHEMATIC1")
+      (Page "PAGE1")))
+  (LastUsedLibraryBrowseDirectory "C:\Documents and Settings\muilevan\Desktop"))
