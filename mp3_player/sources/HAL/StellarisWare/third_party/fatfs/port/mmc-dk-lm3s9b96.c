@@ -16,7 +16,6 @@
 #include "driverlib/ssi.h"
 #include "driverlib/sysctl.h"
 #include "fatfs/src/diskio.h"
-#include "RTC/RTC_I2C.h"
 /*
  * The following header defines the hardware connections used to connect
  * the SDCard.  This can be found under the relevant board directory.
@@ -669,14 +668,12 @@ void disk_timerproc (void)
 DWORD get_fattime (void)
 {
 
-    RTC time;
-    rtc_gettime(&time);
-    return    ((time.year-1980) << 25)    // Year = 2008
-            | (time.month << 21)            // Month = February
-            | (time.mday << 16)            // Day = 26
-            | (time.hour << 11)            // Hour = 14
-            | (time.min << 5)            // Min = 0
-            | (time.sec >> 1)                // Sec = 0
+    return    ((2011-1980) << 25)    // Year = 2008
+            | (9 << 21)            // Month = February
+            | (12 << 16)            // Day = 26
+            | (14 << 11)            // Hour = 14
+            | (0 << 5)            // Min = 0
+            | (0 >> 1)                // Sec = 0
             ;
 
 }

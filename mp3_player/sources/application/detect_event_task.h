@@ -16,6 +16,6 @@
 /**
 *
 */
-char get_event_code(short timeout);
+char get_event_code(portTickType timeout);
 char detect_event_task_init(void);
 #endif //_DETECT_EVENT_TASK_H_

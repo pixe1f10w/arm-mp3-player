@@ -38,7 +38,9 @@ static void IntDefaultHandler(void);
 //*****************************************************************************
 //extern void UART0IntHandler(void);
 //extern void UART1IntHandler(void);
-
+extern void ButtonsIntHandler(void);
+extern void SoundIntHandler(void);
+extern void Timer0IntHandler(void);
 //*****************************************************************************
 //
 //! The entry point for the application startup code.
@@ -148,9 +150,9 @@ __root const uVectorEntry __vector_table[] @ ".intvec" =
     IntDefaultHandler,                      // ADC1 Sequence 1
     IntDefaultHandler,                      // ADC1 Sequence 2
     IntDefaultHandler,                      // ADC1 Sequence 3
-    IntDefaultHandler,                      // I2S0
+    SoundIntHandler,                      // I2S0
     IntDefaultHandler,                      // External Bus Interface 0
-    IntDefaultHandler                       // GPIO Port J
+    ButtonsIntHandler                       // GPIO Port J
 };
 
 //*****************************************************************************

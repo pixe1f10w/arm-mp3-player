@@ -299,6 +299,7 @@
           <state>$PROJ_DIR$\sources\HAL\StellarisWare</state>
           <state>$PROJ_DIR$\sources\HAL\StellarisWare\third_party</state>
           <state>$PROJ_DIR$\sources\drivers</state>
+          <state>$PROJ_DIR$\sources\drivers\Audio</state>
           <state>$PROJ_DIR$\sources\SafeRTOS</state>
           <state>$PROJ_DIR$\sources\Utils</state>
         </option>
@@ -923,6 +924,24 @@
   </group>
   <group>
     <name>Drivers</name>
+    <file>
+      <name>$PROJ_DIR$\sources\HAL\StellarisWare\third_party\fatfs\src\ff.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\sources\HAL\StellarisWare\third_party\fatfs\port\mmc-dk-lm3s9b96.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\sources\drivers\Audio\mp3_file.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\sources\drivers\SD_card\sd_card.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\sources\HAL\StellarisWare\drivers\sound.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\sources\drivers\Audio\wav_file.c</name>
+    </file>
   </group>
   <group>
     <name>HAL</name>
@@ -1057,6 +1076,9 @@
     </file>
     <file>
       <name>$PROJ_DIR$\sources\HAL\StellarisWare\driverlib\timer.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\sources\HAL\StellarisWare\drivers\tlv320aic23b.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\sources\HAL\StellarisWare\driverlib\uart.c</name>
@@ -1205,12 +1227,6 @@
   </group>
   <group>
     <name>Utils</name>
-    <file>
-      <name>$PROJ_DIR$\sources\Utils\mp3_file.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\sources\Utils\wav_file.c</name>
-    </file>
   </group>
 </project>
 
