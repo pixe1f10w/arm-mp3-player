@@ -30,14 +30,13 @@
 // The priorities of the various tasks.
 //
 //*****************************************************************************
-#define PRIORITY_IN_GATE_TASK       5
-#define PRIORITY_OUT_GATE_TASK      5
-#define PRIORITY_LED_TASK           5
-#define PRIORITY_CHECKIN_TASK       4
-#define PRIORITY_CHECKOUT_TASK      3
 
-#define PRIORITY_COMMUNICATE_TASK   2
-#define PRIORITY_LCD_TASK           1
+#define PRIORITY_LED_TASK           5
+#define PRIORITY_DETECT_EVENT_TASK  4
+#define PRIORITY_PROCESS_EVENT_TASK 3
+#define PRIORITY_LCD_TASK           2
+#define PRIORITY_PLAY_TASK          1
+
 #define PRIORITY_CONFIG_TASK        0 //don't use
 
 #define PRIORITY_ALARM_TASK      2

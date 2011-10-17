@@ -165,6 +165,7 @@ main(void)
         {
         }
     }
+    
     if(detect_event_task_init() !=0){
       while(1);
     }
