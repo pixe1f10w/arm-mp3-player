@@ -43,15 +43,8 @@
 //**********************************
 /* pototype  section */
 void lcd_init(void);										// Initial LCD
-void lcd_out_data4(unsigned char);						// Strobe 4-Bit Data to LCD
-void lcd_write_byte(unsigned char);						// Write 1 Byte Data to LCD
-void lcd_write_control(unsigned char); 					// Write Instruction
-void lcd_write_ascii(unsigned char); 					// Write LCD Display(ASCII)
 void gotoxy(unsigned char,unsigned char);						// Set Position Cursor LCD
 void lcd_print(unsigned char*);							// Print Display to LCD
-char busy_lcd(void);									// Read Busy LCD Status
-void enable_lcd(void);	 								// Enable Pulse
-void delay_us(unsigned long int);
 void lcd_print_number(unsigned long int num);
 void lcd_print_number4(unsigned long int num);		
 #endif	//end __LCD_H
