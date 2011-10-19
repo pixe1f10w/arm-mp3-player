@@ -36,12 +36,13 @@ unsigned long ProcessEventDelay = 100;
 /**
 * menu
 */
-#define	NOWPLAY		0
-#define BROWSE		1
-#define RECORD		2
+#define ROOT            0
+#define	NOWPLAY		1 //start item
+#define BROWSE		2
 #define SETTING		3
-unsigned char menu = NOWPLAY;
-
+#define RECORD		4 //end item
+unsigned char Menu = NOWPLAY;
+unsigned char ChooseItem = NOWPLAY;
 //setting: storage info, key sound, sleep time, usb/sd, default
 unsigned char key_sound = 0;
 /**time to sleep*/
@@ -53,22 +54,19 @@ unsigned char sleep_time = 0;
 //nowplay
 unsigned char path[32] = "/";
 unsigned char volume = 20;
-unsigned char play_event = NOTHING;
 unsigned char play_mode =REPEAT_ALL;
 
-static DIR g_sDirObject;
-static FILINFO g_sFileInfo;
-static FIL g_sFileObject;
+static FIL g_sButFileObject;
 // The wav file header information.
-static tWaveHeader g_sWaveHeader;
+static tWaveHeader g_sButWaveHeader;
 /**
 *
 */
 static void
 ProcessEventTask(void *pvParameters){
   portTickType ulLastTime;
-  unsigned long PlayFlags =0;
   char event_code;
+  unsigned long tmp;
     //
     // Get the current tick count.
     //
@@ -77,35 +75,86 @@ ProcessEventTask(void *pvParameters){
     // Loop forever.
     //
   while(1){
-        //
+    //get event from button
     event_code = get_event_code(portMAX_DELAY);
-    /*if(WaveOpen(&g_sFileObject, "m.wav",
-                &g_sWaveHeader) == FR_OK){
-      //
-      // Try to play Wav file.
-      //
-      WavePlay(&g_sFileObject, &g_sWaveHeader);
+    //play button sound
+    //-Enter critical section
+        vTaskSuspendScheduler();
+       tmp = get_byes_remain();
+    if(WaveOpen(&g_sButFileObject, "SYS/button.wav",
+                    &g_sButWaveHeader) == FR_OK){
+          set_play_flags(BUFFER_BOTTOM_EMPTY | BUFFER_TOP_EMPTY|BUFFER_PLAYING);
+          while(UpdateBufferForPlay(&g_sButFileObject, &g_sButWaveHeader)!=0);
     }
-    */
-     if(WaveOpen(&g_sFileObject, "SYS/button.wav",
-                    &g_sWaveHeader) == FR_OK){
-          PlayFlags = BUFFER_BOTTOM_EMPTY | BUFFER_TOP_EMPTY|BUFFER_PLAYING;
-          set_play_flags(PlayFlags);
-          while(UpdateBufferForPlay(&g_sFileObject, &g_sWaveHeader)!=0);
-    }
-    
-    
-    if(event_code == SHORT_V_PLUS)
-      SoundVolumeUp(2);
-    else if(event_code == SHORT_V_MINUS)
-      SoundVolumeDown(2);
-    else if(event_code == SHORT_M){
-      toggle_play_ctl_flags(PLAY);
-      //signal_for_play();
+    restore_format();
+    set_play_flags(BUFFER_BOTTOM_EMPTY | BUFFER_TOP_EMPTY|BUFFER_PLAYING);
+    set_byes_remain(tmp);
+      //-Exit critical section
+  xTaskResumeScheduler();
+    //process event
+    if(Menu == NOWPLAY){
+      if(event_code == LONG_M){
+          //back ROOT
+          Menu = ROOT;
+      }else if(event_code == SHORT_M){
+          playCtlEvent(PAUSE_PLAY);
+      }else if(event_code == SHORT_V_PLUS){  
+        //-Enter critical section
+        vTaskSuspendScheduler();
+        //-Volume up
+        SoundVolumeUp(2);
+        //-Exit critical section
+        xTaskResumeScheduler();
+      }else if(event_code == SHORT_V_MINUS){
+        //-Enter critical section
+        vTaskSuspendScheduler();
+        //volume down
+        SoundVolumeDown(2);
+        //-Exit critical section
+        xTaskResumeScheduler();
+      }else if(event_code == SHORT_P_PLUS){
+          //next song
+        playCtlEvent(NEXT_SONG);
+      }else if(event_code == SHORT_P_MINUS){
+          //previous song
+        playCtlEvent(PRE_SONG);
+      }
+    }else if(Menu == BROWSE){
+      if(event_code == LONG_M){
+          //back ROOT
+          Menu = ROOT;
+      }else if(event_code == SHORT_M){
+         //open dir if it's dir, else file and play;
+      }
+    }else if(Menu == SETTING){
+      if(event_code == LONG_M){
+          //back ROOT
+          Menu = ROOT;
+      };
+    }else if(Menu == RECORD){
+      if(event_code == LONG_M){
+          //back ROOT
+          Menu = ROOT;
+      };
+    }else if(Menu == ROOT){
+      if(event_code == SHORT_M){
+        //enter choose item;
+        Menu = ChooseItem;
+      }else if(event_code == SHORT_P_PLUS){
+          //next item
+        ChooseItem++;
+        if(ChooseItem > RECORD)
+          ChooseItem = NOWPLAY;
+      }else if(event_code == SHORT_P_MINUS){
+          //previous item
+        ChooseItem--;
+        if(ChooseItem < NOWPLAY)
+          ChooseItem = RECORD;
+      } 
     }
     // Wait for the required amount of time.
     //
-    //xTaskDelayUntil(&ulLastTime, 100);
+    //xTaskDelayUntil(&ulLastTime, 0);
   }
 }
 /**

@@ -83,7 +83,18 @@ xQueueHandle  xPlayQueue;
 static unsigned long PlayTaskStack[128];
 // The period of the Play task.
 unsigned long PlayDelay = 100;
-unsigned long PlayCtlFlags = 0;
+
+char PlayEvent;
+#define START       0
+#define PAUSE       1
+#define STOP        2
+#define PLAY        3
+#define NEXT        4
+#define PREVIOUS    5
+unsigned long PlayCtlFlags = START;
+#define CONTINUOUS  0
+#define SINGLE      1
+unsigned char ListState = CONTINUOUS;
 //******************************************************************************
 //
 // This function is called to read the contents of the current directory on
@@ -91,7 +102,7 @@ unsigned long PlayCtlFlags = 0;
 //
 //******************************************************************************
 static int
-PopulateFileListBox(tBoolean bRepaint)
+PopulateFileListBox(unsigned long *count)
 {
     unsigned long ulItemCount;
     FRESULT fresult;
@@ -155,7 +166,6 @@ PopulateFileListBox(tBoolean bRepaint)
                          MAX_FILENAME_STRING_LEN);
             }
         }
-
         //
         // Ignore directories.
         //
@@ -168,16 +178,19 @@ PopulateFileListBox(tBoolean bRepaint)
             ulItemCount++;
         }
     }
+    *count = ulItemCount;
     //
     // Made it to here, return with no errors.
     //
     return(0);
 }
-void toggle_play_ctl_flags(unsigned long mask){
-  PlayCtlFlags = PlayCtlFlags ^ mask;
-}
-void signal_for_play(void){
+void playCtlEvent(char a){
+  PlayEvent = a;
   xQueueSend(xPlayQueue, NULL, 0);
+}
+void restore_format(void){
+  SoundSetFormat(g_sWaveHeader.ulSampleRate, g_sWaveHeader.usBitsPerSample,
+                   g_sWaveHeader.usNumChannels);
 }
 /**
 *
@@ -185,7 +198,7 @@ void signal_for_play(void){
 static void
 PlayTask(void *pvParameters){
   portTickType ulLastTime;
-  unsigned long PlayFlags =0;
+  unsigned long max_count,count;
     //
     // Get the current tick count.
     //
@@ -194,36 +207,98 @@ PlayTask(void *pvParameters){
     // Loop forever.
     //
   while(1){
-    /*
-    if(WaveOpen(&g_sFileObject, "m.wav",
-                &g_sWaveHeader) == FR_OK){
-      //
-      // Try to play Wav file.
-      //
-      WavePlay(&g_sFileObject, &g_sWaveHeader);
-    }
-    */
-    
-    if(PlayCtlFlags & PLAY){
-      //PlayFlags=get_play_flags();
-      //if((PlayFlags & BUFFER_PLAYING)){
-       if( UpdateBufferForPlay(&g_sFileObject, &g_sWaveHeader)==0){
-        if(WaveOpen(&g_sFileObject, "m.wav",
-                    &g_sWaveHeader) == FR_OK){
-          PlayFlags = BUFFER_BOTTOM_EMPTY | BUFFER_TOP_EMPTY|BUFFER_PLAYING;
-          set_play_flags(PlayFlags);
-          
-                    }
+    //get event
+    if(xQueueReceive(xPlayQueue, NULL, 0)==pdPASS){
+      if(PlayEvent == PAUSE_PLAY){
+        if(PlayCtlFlags == PLAY)
+          PlayCtlFlags = PAUSE;
+        else if(PlayCtlFlags == PAUSE)
+          PlayCtlFlags = PLAY;
+      }else if (PlayEvent == NEXT_SONG){
+        PlayCtlFlags = NEXT;
+      }else if(PlayEvent == PRE_SONG){
+        PlayCtlFlags = PREVIOUS;
       }
     }
+    if(PlayCtlFlags == PLAY){
+      //-Enter critical section
+        vTaskSuspendScheduler();
+      //update buffer for play;
+       if( UpdateBufferForPlay(&g_sFileObject, &g_sWaveHeader)==0){
+        //end file
+         PlayCtlFlags = STOP;
+       }
+       //-Exit critical section
+        xTaskResumeScheduler();
+    }else if(PlayCtlFlags == PAUSE){
+      ;
+    }else if(PlayCtlFlags == STOP || PlayCtlFlags == NEXT){
+      //close current file
+      WaveClose(&g_sFileObject);
+      //open next song
+      count++;
+      if(count >= max_count)
+        count = 0;
+      if(WaveOpen(&g_sFileObject, g_pcFilenames[count],
+                     &g_sWaveHeader) == FR_OK ){
+        set_play_flags(BUFFER_BOTTOM_EMPTY | BUFFER_TOP_EMPTY|BUFFER_PLAYING);
+        if(ListState == CONTINUOUS){
+          //play the song
+          PlayCtlFlags = PLAY;
+        }else if(ListState == SINGLE){
+          //transfer to PAUSE
+          PlayCtlFlags = PAUSE;
+        }
+                     }else{
+        set_play_flags(~BUFFER_PLAYING);
+        PlayCtlFlags = PAUSE;
+                     }
+        
       
-    //
+    }else if(PlayCtlFlags == PREVIOUS){
+      //close current file
+      WaveClose(&g_sFileObject);
+      //open pre song
+      count--;
+      if(count > max_count)
+        count = max_count -1;
+      if(WaveOpen(&g_sFileObject, g_pcFilenames[count],
+                  &g_sWaveHeader) == FR_OK){
+        set_play_flags(BUFFER_BOTTOM_EMPTY | BUFFER_TOP_EMPTY|BUFFER_PLAYING);
+        if(ListState == CONTINUOUS){
+          //play the song
+          PlayCtlFlags = PLAY;
+        
+        }else if(ListState == SINGLE){
+          //transfer to PAUSE
+          PlayCtlFlags = PAUSE;
+        }
+                  }else{
+        set_play_flags(~BUFFER_PLAYING);
+        PlayCtlFlags = PAUSE;
+                     }
+      
+    }else if(PlayCtlFlags == START){
+      //list songs
+      PopulateFileListBox(&max_count);
+      //open first song
+      count =0;
+      while(WaveOpen(&g_sFileObject, g_pcFilenames[count],
+                    &g_sWaveHeader) != FR_OK && count < max_count)
+        count++;
+      if(count < max_count){
+        set_play_flags(BUFFER_BOTTOM_EMPTY | BUFFER_TOP_EMPTY|BUFFER_PLAYING);
+        PlayCtlFlags = PAUSE;
+      }
+      //??????
+    }
+
     wait_buffer_signal(PlayDelay);
 
     //
     // Wait for the required amount of time.
     //
-    //xTaskDelayUntil(&ulLastTime, PlayDelay);
+    //xTaskDelayUntil(&ulLastTime, 10);
   }
 }
 /**
@@ -281,10 +356,6 @@ char play_task_init(void){
         return(1);
     }
 
-    //
-    // Populate the list box with the contents of the root directory.
-    //
-    PopulateFileListBox(true);
 
     init_wav_play();
 

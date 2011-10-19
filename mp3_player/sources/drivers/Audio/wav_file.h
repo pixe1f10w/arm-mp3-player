@@ -47,6 +47,8 @@ typedef struct
 tWaveHeader;
 FRESULT
 WaveOpen(FIL *psFileObject, const char *pcFileName, tWaveHeader *pWaveHeader);
+void
+WaveClose(FIL *psFileObject);
 unsigned long
 WavePlay(FIL *psFileObject, tWaveHeader *pWaveHeader);
 int
@@ -56,4 +58,6 @@ UpdateBufferForPlay(FIL *psFileObject, tWaveHeader *pWaveHeader);
 char wait_buffer_signal(portTickType timeout);
 void set_play_flags(unsigned long a);
 unsigned long get_play_flags(void);
+unsigned long get_byes_remain(void);
+void set_byes_remain( unsigned long a);
 #endif //_WAV_FILE_H_
