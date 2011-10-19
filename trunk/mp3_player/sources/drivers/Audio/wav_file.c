@@ -134,6 +134,12 @@ void set_play_flags(unsigned long a){
 unsigned long get_play_flags(void){
   return g_ulFlags;
 }
+unsigned long get_byes_remain(void){
+  return g_ulBytesRemaining;
+}
+void set_byes_remain( unsigned long a){
+  g_ulBytesRemaining = a;
+}
 //******************************************************************************
 //
 // Basic wav file RIFF header information used to open and read a wav file.
@@ -322,7 +328,6 @@ WaveOpen(FIL *psFileObject, const char *pcFileName, tWaveHeader *pWaveHeader)
     //
     SoundSetFormat(pWaveHeader->ulSampleRate, pWaveHeader->usBitsPerSample,
                    pWaveHeader->usNumChannels);
-
     return(FR_OK);
 }
 
