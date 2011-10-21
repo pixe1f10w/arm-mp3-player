@@ -1,10 +1,7 @@
 /**
-* @file detect_event_task.c
+* @file event_task.c
 * @brief
 *
-* Wait a signal from interrupt
-* Process buttons to give event codes. Then, inform to
-* process_event_task
 *
 */
 #include "inc/hw_memmap.h"
@@ -17,7 +14,8 @@
 #include "SafeRTOS/SafeRTOS_API.h"
 #include "third_party/fatfs/src/diskio.h"
 #include "priorities.h"
-#include "detect_event_task.h"
+#include "conf.h"
+#include "button_event_task.h"
 //*****************************************************************************
 //----------DEFINES
 //*****************************************************************************
@@ -29,31 +27,36 @@
 #define LEFT_BUTTON    GPIO_PIN_4
 #define CENTER_BUTTON  GPIO_PIN_5
 
-#define DETECT_EVENT_QUEUE_LENGTH 1
-#define DETECT_EVENT_QUEUE_ITEM_SIZE 0
-#define DETECT_EVENT_BUFFER_SIZE    ( ( DETECT_EVENT_QUEUE_LENGTH * DETECT_EVENT_QUEUE_ITEM_SIZE ) + portQUEUE_OVERHEAD_BYTES )
+#define BUTTON_EVENT_QUEUE_LENGTH 1
+#define BUTTON_EVENT_QUEUE_ITEM_SIZE 0
+#define BUTTON_EVENT_BUFFER_SIZE    ( ( BUTTON_EVENT_QUEUE_LENGTH * BUTTON_EVENT_QUEUE_ITEM_SIZE ) + portQUEUE_OVERHEAD_BYTES )
 
 //*****************************************************************************
 //----------VARIABLES
 //*****************************************************************************
-portCHAR cDetectEventQueueBuffer[ DETECT_EVENT_BUFFER_SIZE ];
-xQueueHandle  xDetectEventQueue;
-// The stack for the Detect Event task.
-static unsigned long DetectEventTaskStack[128];
-// The period of the Detect Event task.
-unsigned long DetectEventDelay = 100;
-long key =0x0ff;
-long old_key =0x0ff;
-char event = 0xff;
-char delay =0;
+portCHAR cButtonEventQueueBuffer[ BUTTON_EVENT_BUFFER_SIZE ];
+xQueueHandle  xButtonEventQueue;
+// The stack for the Button Event task.
+static unsigned long ButtonEventTaskStack[128];
+// The period of the Button Event task.
+unsigned long ButtonEventDelay = 100;
+long Button =0x0ff;
+long OldButton =0x0ff;
+char ButtonEvent = 0xff;
+char Delay =0;
 /**
 *
 */
-char get_event_code(portTickType timeout){
-  if(xQueueReceive(xDetectEventQueue, NULL, timeout) == pdPASS){
-    return event;
+char takeButtonEvntCode(portTickType Timeout){
+  if(xQueueReceive(xButtonEventQueue, NULL, Timeout) == pdPASS){
+    return ButtonEvent;
   }
   return 0xff;
+}
+char giveButtonEvntCode(char e){
+  ButtonEvent = e;
+  xQueueSend(xButtonEventQueue, NULL, 0);
+  return 0;
 }
 /**
 *
@@ -61,44 +64,44 @@ char get_event_code(portTickType timeout){
 void ButtonsIntHandler(void){
   portBASE_TYPE xTaskWoken = pdFALSE;
   GPIOPinIntClear(BUTTON_PORT, UP_BUTTON|DOWN_BUTTON|RIGHT_BUTTON|LEFT_BUTTON|CENTER_BUTTON);
-  if(delay > 1){
-    key = GPIOPinRead(BUTTON_PORT, UP_BUTTON|DOWN_BUTTON|RIGHT_BUTTON|LEFT_BUTTON|CENTER_BUTTON);
-    if((key& UP_BUTTON)&&((old_key & UP_BUTTON)==0)){
-      if(delay > 5)
-        event = LONG_P_PLUS;
+  if(Delay > 1){
+    Button = GPIOPinRead(BUTTON_PORT, UP_BUTTON|DOWN_BUTTON|RIGHT_BUTTON|LEFT_BUTTON|CENTER_BUTTON);
+    if((Button& UP_BUTTON)&&((OldButton & UP_BUTTON)==0)){
+      if(Delay > 5)
+        ButtonEvent = L_UP;
       else
-        event = SHORT_P_PLUS;
+        ButtonEvent = S_UP;
     }
-    if((key& DOWN_BUTTON)&&((old_key & DOWN_BUTTON)==0)){
-      if(delay > 5)
-        event = LONG_P_MINUS;
+    if((Button& DOWN_BUTTON)&&((OldButton & DOWN_BUTTON)==0)){
+      if(Delay > 5)
+        ButtonEvent = L_DOWN;
       else
-        event = SHORT_P_MINUS;
+        ButtonEvent = S_DOWN;
     }
-    if((key& RIGHT_BUTTON)&&((old_key & RIGHT_BUTTON)==0)){
-      if(delay > 5)
-        event = LONG_V_PLUS;
+    if((Button& RIGHT_BUTTON)&&((OldButton & RIGHT_BUTTON)==0)){
+      if(Delay > 5)
+        ButtonEvent = L_RIGHT;
       else
-        event = SHORT_V_PLUS;
+        ButtonEvent = S_RIGHT;
     }
-    if((key& LEFT_BUTTON)&&((old_key & LEFT_BUTTON)==0)){
-      if(delay > 5)
-        event = LONG_V_MINUS;
+    if((Button& LEFT_BUTTON)&&((OldButton & LEFT_BUTTON)==0)){
+      if(Delay > 5)
+        ButtonEvent = L_LEFT;
       else
-        event = SHORT_V_MINUS;
+        ButtonEvent = S_LEFT;
     }
-    if((key& CENTER_BUTTON)&&((old_key & CENTER_BUTTON)==0)){
-      if(delay > 5)
-        event = LONG_M;
+    if((Button& CENTER_BUTTON)&&((OldButton & CENTER_BUTTON)==0)){
+      if(Delay > 5)
+        ButtonEvent = L_CENTER;
       else
-        event = SHORT_M;
+        ButtonEvent = S_CENTER;
     }
-    old_key = key;
-    if(((key & UP_BUTTON)==0)||((key & DOWN_BUTTON)==0)||((key & RIGHT_BUTTON)==0)||
-        ((key & LEFT_BUTTON)==0)||((key & CENTER_BUTTON)==0))
-      delay =0;
+    OldButton = Button;
+    if(((Button & UP_BUTTON)==0)||((Button & DOWN_BUTTON)==0)||((Button & RIGHT_BUTTON)==0)||
+        ((Button & LEFT_BUTTON)==0)||((Button & CENTER_BUTTON)==0))
+      Delay =0;
     else //Wakeup in_gate task
-      xQueueSendFromISR( xDetectEventQueue,NULL,&xTaskWoken);
+      xQueueSendFromISR( xButtonEventQueue,NULL,&xTaskWoken);
   }
   /* If the peripheral handler task has a priority higher than the interrupted
   task request a switch to the handler task. */
@@ -108,7 +111,7 @@ void ButtonsIntHandler(void){
 *
 */
 static void
-DetectEventTask(void *pvParameters)
+ButtonEventTask(void *pvParameters)
 {
   portTickType ulLastTime;
     //
@@ -124,10 +127,10 @@ DetectEventTask(void *pvParameters)
     //
     disk_timerproc();
     
-    if(delay > 5)
-      delay = 10;
+    if(Delay > 5)
+      Delay = 10;
     else
-      delay++;
+      Delay++;
     //
     // Wait for the required amount of time.
     //
@@ -137,7 +140,7 @@ DetectEventTask(void *pvParameters)
 /**
 *
 */
-char detect_event_task_init(void){
+char initButtonEventTask(void){
   //setup interrupt
   SysCtlPeripheralEnable(SYSCTL_BUTTON_PORT);
   //J7 for external interrupts
@@ -149,17 +152,17 @@ char detect_event_task_init(void){
   GPIOPinIntEnable(BUTTON_PORT,UP_BUTTON|DOWN_BUTTON|RIGHT_BUTTON|LEFT_BUTTON|CENTER_BUTTON);
   IntEnable(INT_GPIOJ);
   //Create Queues (semaphore)
-  if(xQueueCreate( (signed portCHAR *)cDetectEventQueueBuffer,DETECT_EVENT_BUFFER_SIZE,
-                  DETECT_EVENT_QUEUE_LENGTH, DETECT_EVENT_QUEUE_ITEM_SIZE, &xDetectEventQueue ) != pdPASS){
+  if(xQueueCreate( (signed portCHAR *)cButtonEventQueueBuffer,BUTTON_EVENT_BUFFER_SIZE,
+                  BUTTON_EVENT_QUEUE_LENGTH, BUTTON_EVENT_QUEUE_ITEM_SIZE, &xButtonEventQueue ) != pdPASS){
                     //FAIL;
                     return(2);
                   }
   //
   // Create the InGate task.
   //
-  if(xTaskCreate(DetectEventTask, (signed portCHAR *)"button",
-                   (signed portCHAR *)DetectEventTaskStack,
-                   sizeof(DetectEventTaskStack), NULL, PRIORITY_DETECT_EVENT_TASK,
+  if(xTaskCreate(ButtonEventTask, (signed portCHAR *)"button",
+                   (signed portCHAR *)ButtonEventTaskStack,
+                   sizeof(ButtonEventTaskStack), NULL, PRIORITY_BUTTON_EVENT_TASK,
                    NULL) != pdPASS)
   {
     return(1);

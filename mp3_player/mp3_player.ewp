@@ -167,6 +167,8 @@
           <state>ewarm</state>
           <state>PART_LM3S9B96</state>
           <state>TARGET_IS_TEMPEST_RB1</state>
+          <state>DISK0_DK_LM3S9B96</state>
+          <state>DISK1_USB_MSC</state>
         </option>
         <option>
           <name>CCPreprocFile</name>
@@ -300,6 +302,7 @@
           <state>$PROJ_DIR$\sources\HAL\StellarisWare\third_party</state>
           <state>$PROJ_DIR$\sources\drivers</state>
           <state>$PROJ_DIR$\sources\drivers\Audio</state>
+          <state>$PROJ_DIR$\sources\drivers\LCD</state>
           <state>$PROJ_DIR$\sources\SafeRTOS</state>
           <state>$PROJ_DIR$\sources\Utils</state>
         </option>
@@ -907,7 +910,7 @@
   <group>
     <name>Application</name>
     <file>
-      <name>$PROJ_DIR$\sources\application\detect_event_task.c</name>
+      <name>$PROJ_DIR$\sources\application\button_event_task.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\sources\application\idle_task.c</name>
@@ -916,19 +919,28 @@
       <name>$PROJ_DIR$\sources\application\led_task.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\sources\application\play_task.c</name>
+      <name>$PROJ_DIR$\sources\application\player_control_task.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\sources\application\process_event_task.c</name>
+      <name>$PROJ_DIR$\sources\application\sound_player_task.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\sources\application\support_play_file.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\sources\application\usb_control_task.c</name>
     </file>
   </group>
   <group>
     <name>Drivers</name>
     <file>
+      <name>$PROJ_DIR$\sources\HAL\StellarisWare\third_party\fatfs\port\dual-disk-driver.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\sources\HAL\StellarisWare\third_party\fatfs\src\ff.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\sources\HAL\StellarisWare\third_party\fatfs\port\mmc-dk-lm3s9b96.c</name>
+      <name>$PROJ_DIR$\sources\drivers\LCD\LCD.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\sources\drivers\Audio\mp3_file.c</name>
@@ -938,6 +950,9 @@
     </file>
     <file>
       <name>$PROJ_DIR$\sources\HAL\StellarisWare\drivers\sound.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\sources\drivers\USB\usb_host_msc.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\sources\drivers\Audio\wav_file.c</name>
@@ -1183,7 +1198,28 @@
       <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\device\usbdmsc.h</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\host\usbhaudio.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\host\usbhhid.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\host\usbhhidkeyboard.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\host\usbhhidmouse.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\usbhid.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\host\usbhmsc.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\host\usbhostenum.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\host\usbhscsi.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\usbkeyboardmap.c</name>

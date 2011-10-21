@@ -1,5 +1,5 @@
-#ifndef _PROCESS_EVENT_TASK_H_
-#define _PROCESS_EVENT_TASK_H_
+#ifndef _PLAYER_CONTROL_TASK_H_
+#define _PLAYER_CONTROL_TASK_H_
 /**
 * Define events
 */
@@ -16,5 +16,5 @@ char get_volume(void);
 char * get_path(void);
 char get_mode(void);
 
-char process_event_task_init(void);
-#endif //_PROCESS_EVENT_TASK_H_
+char initPlayerControlTask(void);
+#endif //_PLAYER_CONTROL_TASK_H_
