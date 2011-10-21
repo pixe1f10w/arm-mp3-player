@@ -24,15 +24,19 @@
 #include "driverlib/udma.h"
 #include "driverlib/i2s.h"
 #include "drivers/sound.h"
-#include "play_task.h"
-#include "detect_event_task.h"
-#include "process_event_task.h"
+#include "support_play_file.h"
+#include "button_event_task.h"
+#include "sound_player_task.h"
+#include "conf.h"
+#include "player_control_task.h"
 
 xQueueHandle  xProcessEventQueue;
 // The stack for the Process Event task.
 static unsigned long ProcessEventTaskStack[128];
 // The period of the Process Event task.
 unsigned long ProcessEventDelay = 100;
+char *Filename;
+FATFS g_sFatFs;
 /**
 * menu
 */
@@ -52,100 +56,97 @@ unsigned char sleep_time = 0;
 //record: enter, pause, exit
 
 //nowplay
-unsigned char path[32] = "/";
 unsigned char volume = 20;
 unsigned char play_mode =REPEAT_ALL;
 
-static FIL g_sButFileObject;
-// The wav file header information.
-static tWaveHeader g_sButWaveHeader;
 /**
 *
 */
 static void
 ProcessEventTask(void *pvParameters){
-  portTickType ulLastTime;
-  char event_code;
-  unsigned long tmp;
+  //portTickType ulLastTime;
+  char eventCode;
+  char itemCount = 0;
     //
     // Get the current tick count.
     //
-    ulLastTime = xTaskGetTickCount();
+    //ulLastTime = xTaskGetTickCount();
+  PopulateFileListBox();
     //
     // Loop forever.
     //
   while(1){
     //get event from button
-    event_code = get_event_code(portMAX_DELAY);
+    eventCode = takeButtonEvntCode(1000);
+    //if(eventCode == 0xff)
+    //  eventCode = NOTHING;
     //play button sound
-    //-Enter critical section
-        vTaskSuspendScheduler();
-       tmp = get_byes_remain();
-    if(WaveOpen(&g_sButFileObject, "SYS/button.wav",
-                    &g_sButWaveHeader) == FR_OK){
-          set_play_flags(BUFFER_BOTTOM_EMPTY | BUFFER_TOP_EMPTY|BUFFER_PLAYING);
-          while(UpdateBufferForPlay(&g_sButFileObject, &g_sButWaveHeader)!=0);
-    }
-    restore_format();
-    set_play_flags(BUFFER_BOTTOM_EMPTY | BUFFER_TOP_EMPTY|BUFFER_PLAYING);
-    set_byes_remain(tmp);
-      //-Exit critical section
-  xTaskResumeScheduler();
+    giveSoundCtlEvent(PLAY_BTN_SND);
     //process event
     if(Menu == NOWPLAY){
-      if(event_code == LONG_M){
+      if(eventCode == L_CENTER){
           //back ROOT
           Menu = ROOT;
-      }else if(event_code == SHORT_M){
-          playCtlEvent(PAUSE_PLAY);
-      }else if(event_code == SHORT_V_PLUS){  
+      }else if(eventCode == S_CENTER){
+          giveSoundCtlEvent(PAUSE_PLAY);
+      }else if(eventCode == S_RIGHT){  
         //-Enter critical section
         vTaskSuspendScheduler();
         //-Volume up
+        volume+=2;
         SoundVolumeUp(2);
         //-Exit critical section
         xTaskResumeScheduler();
-      }else if(event_code == SHORT_V_MINUS){
+      }else if(eventCode == S_LEFT){
         //-Enter critical section
         vTaskSuspendScheduler();
         //volume down
+        volume -=2;
         SoundVolumeDown(2);
         //-Exit critical section
         xTaskResumeScheduler();
-      }else if(event_code == SHORT_P_PLUS){
-          //next song
-        playCtlEvent(NEXT_SONG);
-      }else if(event_code == SHORT_P_MINUS){
-          //previous song
-        playCtlEvent(PRE_SONG);
+      }else if(eventCode == S_UP){
+        itemCount++;//next song
+        if(itemCount >= maxItemCount)
+          itemCount =0;
+        Filename = g_pcFilenames[itemCount];
+        giveSoundCtlEvent(START);
+      }else if(eventCode == S_DOWN){
+        //previous song
+        if(itemCount <= 0)
+          itemCount = maxItemCount;
+        else
+          itemCount--;
+        Filename = g_pcFilenames[itemCount];
+        giveSoundCtlEvent(START);
       }
     }else if(Menu == BROWSE){
-      if(event_code == LONG_M){
+      if(eventCode == L_CENTER){
           //back ROOT
           Menu = ROOT;
-      }else if(event_code == SHORT_M){
+      }else if(eventCode == S_CENTER){
          //open dir if it's dir, else file and play;
       }
     }else if(Menu == SETTING){
-      if(event_code == LONG_M){
+      if(eventCode == L_CENTER){
           //back ROOT
           Menu = ROOT;
       };
     }else if(Menu == RECORD){
-      if(event_code == LONG_M){
+      if(eventCode == L_CENTER){
           //back ROOT
           Menu = ROOT;
       };
     }else if(Menu == ROOT){
-      if(event_code == SHORT_M){
+      if(eventCode == S_CENTER){
         //enter choose item;
         Menu = ChooseItem;
-      }else if(event_code == SHORT_P_PLUS){
+      }else if(eventCode == S_UP){
           //next item
         ChooseItem++;
         if(ChooseItem > RECORD)
           ChooseItem = NOWPLAY;
-      }else if(event_code == SHORT_P_MINUS){
+      }else if(eventCode == S_DOWN){
           //previous item
         ChooseItem--;
         if(ChooseItem < NOWPLAY)
@@ -160,7 +161,16 @@ ProcessEventTask(void *pvParameters){
 /**
 *
 */
-char process_event_task_init(void){
+char initPlayerControlTask(void){
+  FRESULT fresult;
+  //
+    // Mount the file system, using logical disk 0.
+    //
+    fresult = f_mount(0, &g_sFatFs);
+    if(fresult != FR_OK)
+    {
+        return(1);
+    }
   //
   // Create the InGate task.
   //

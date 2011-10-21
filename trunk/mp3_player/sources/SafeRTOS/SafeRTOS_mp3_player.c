@@ -20,9 +20,9 @@
 #include "SafeRTOS/SafeRTOS_API.h"
 #include "idle_task.h"
 #include "led_task.h"
-#include "detect_event_task.h"
-#include "process_event_task.h"
-#include "play_task.h"
+#include "button_event_task.h"
+#include "player_control_task.h"
+#include "sound_player_task.h"
 //*****************************************************************************
 //
 //! The error routine that is called if the driver library encounters an error.
@@ -166,13 +166,13 @@ main(void)
         }
     }
     
-    if(detect_event_task_init() !=0){
+    if(initButtonEventTask() !=0){
       while(1);
     }
-    if(process_event_task_init() !=0){
+    if(initPlayerControlTask() !=0){
       while(1);
     }
-    if(play_task_init() !=0){
+    if(initSoundPlayerTask() !=0){
       while(1);
     }
     //

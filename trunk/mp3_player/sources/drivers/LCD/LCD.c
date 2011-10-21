@@ -6,6 +6,8 @@
 #include "inc/hw_types.h"
 #include "driverlib/gpio.h"
 #include "LCD.h"
+void enable_lcd(void);
+void delay_us(unsigned long int microsecond);
 //===================================
 void lcd_out_data4(unsigned char val)
 {  
