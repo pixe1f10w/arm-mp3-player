@@ -3,6 +3,7 @@
 */
 
 #include "mp3_file.h"
+#include "audio.h"
 FRESULT OpenMp3File(FIL *g_sFileObject, char *g_pcFilenames, SoundInfoHeader *pSoundInfoHeader)
 {
   //FRESULT Result;

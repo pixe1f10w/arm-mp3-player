@@ -2,13 +2,7 @@
 
 <workspace>
   <project>
-    <path>C:\StellarisWare\boards\dk-lm3s9b96\i2s_demo\i2s_demo.ewp</path>
-  </project>
-  <project>
     <path>$WS_DIR$\mp3_player.ewp</path>
-  </project>
-  <project>
-    <path>F:\MyDocument\Materials\DLS\pandora\pandora.ewp</path>
   </project>
   <batchBuild/>
 </workspace>
