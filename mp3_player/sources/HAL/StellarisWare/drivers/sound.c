@@ -413,10 +413,11 @@ SoundInit(unsigned long ulEnableReceive)
         //
         I2STxEnable(I2S0_BASE);
     }
-
+    
     //
     // Enable the I2S interrupt on the NVIC
     //
+    IntPrioritySet(INT_I2S0,6<<5);
     IntEnable(INT_I2S0);
 }
 

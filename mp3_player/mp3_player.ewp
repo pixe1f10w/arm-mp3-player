@@ -926,16 +926,13 @@
       <name>$PROJ_DIR$\sources\application\sound_player_task.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\sources\application\support_play_file.c</name>
-    </file>
-    <file>
       <name>$PROJ_DIR$\sources\application\usb_control_task.c</name>
     </file>
   </group>
   <group>
     <name>Drivers</name>
     <file>
-      <name>$PROJ_DIR$\sources\HAL\StellarisWare\third_party\fatfs\port\dual-disk-driver.c</name>
+      <name>$PROJ_DIR$\sources\drivers\Audio\audio_play.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\sources\HAL\StellarisWare\third_party\fatfs\src\ff.c</name>
@@ -944,10 +941,10 @@
       <name>$PROJ_DIR$\sources\drivers\LCD\LCD.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\sources\drivers\Audio\mp3_file.c</name>
+      <name>$PROJ_DIR$\sources\HAL\StellarisWare\third_party\fatfs\port\mmc-dk-lm3s9b96.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\sources\drivers\SD_card\sd_card.c</name>
+      <name>$PROJ_DIR$\sources\drivers\Audio\mp3_file.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\sources\HAL\StellarisWare\drivers\sound.c</name>

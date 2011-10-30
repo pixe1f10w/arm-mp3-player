@@ -47,11 +47,11 @@ char Delay =0;
 /**
 *
 */
-char takeButtonEvntCode(portTickType Timeout){
-  if(xQueueReceive(xButtonEventQueue, NULL, Timeout) == pdPASS){
-    return ButtonEvent;
-  }
-  return 0xff;
+portBASE_TYPE  takeButtonEvntCode(portTickType Timeout,char *x){
+  portBASE_TYPE rt ;
+  rt = xQueueReceive(xButtonEventQueue, NULL, Timeout);
+  *x = ButtonEvent;
+  return rt;
 }
 char giveButtonEvntCode(char e){
   ButtonEvent = e;
@@ -150,6 +150,7 @@ char initButtonEventTask(void){
   // Enable the interrupts.
   //
   GPIOPinIntEnable(BUTTON_PORT,UP_BUTTON|DOWN_BUTTON|RIGHT_BUTTON|LEFT_BUTTON|CENTER_BUTTON);
+  IntPrioritySet(INT_I2S0,5<<5);
   IntEnable(INT_GPIOJ);
   //Create Queues (semaphore)
   if(xQueueCreate( (signed portCHAR *)cButtonEventQueueBuffer,BUTTON_EVENT_BUFFER_SIZE,

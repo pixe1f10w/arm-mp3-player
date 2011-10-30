@@ -54,6 +54,19 @@ SafeRTOSErrorHook(xTaskHandle xHandleOfTaskWithError,
     //! on entry to this function, so no processor interrupts will interrupt
     //! this loop.
     //
+  if(xErrorCode==errINVALID_TICK_VALUE)
+    while(1)
+    {
+    }
+  else if(xErrorCode==errINVALID_TASK_SELECTED)
+    while(1)
+    {
+    }
+  else if(xErrorCode==errTASK_STACK_OVERFLOW)
+    while(1)
+    {
+    }
+  else
     while(1)
     {
     }
@@ -159,6 +172,7 @@ main(void)
     //
     //! Create the LED task.
     //
+    
     if(LEDTaskInit() != 0)
     {
         while(1)
@@ -166,12 +180,13 @@ main(void)
         }
     }
     
-    if(initButtonEventTask() !=0){
+   if(initButtonEventTask() !=0){
       while(1);
-    }
+   }
     if(initPlayerControlTask() !=0){
       while(1);
     }
+   
     if(initSoundPlayerTask() !=0){
       while(1);
     }
