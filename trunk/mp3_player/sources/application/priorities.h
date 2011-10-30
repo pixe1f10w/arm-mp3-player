@@ -33,12 +33,7 @@
 
 #define PRIORITY_LED_TASK           5
 #define PRIORITY_BUTTON_EVENT_TASK  4
-#define PRIORITY_PROCESS_EVENT_TASK 3
-#define PRIORITY_LCD_TASK           2
-#define PRIORITY_SOUND_PLAYER_TASK          1
-
-#define PRIORITY_CONFIG_TASK        0 //don't use
-
-#define PRIORITY_ALARM_TASK      2
-
+#define PRIORITY_PROCESS_EVENT_TASK 2
+#define PRIORITY_SOUND_PLAYER_TASK  3
+#define PRIORITY_USB_CTRL_TASK  2
 #endif // __PRIORITIES_H__

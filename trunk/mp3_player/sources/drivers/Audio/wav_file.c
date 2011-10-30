@@ -18,6 +18,7 @@
 #include "SafeRTOS/SafeRTOS_API.h"
 #include "utils/ustdlib.h"
 #include "drivers/sound.h"
+#include "audio_play.h"
 #include "wav_file.h"
 
 
@@ -48,19 +49,16 @@
 // function.
 //
 //******************************************************************************
+static unsigned char buff[16];
 FRESULT
 OpenWavFile(FIL *psFileObject, char *pcFileName, SoundInfoHeader *pSoundInfoHeader)
 {
-    unsigned long *pulBuffer;
-    unsigned short *pusBuffer;
+  
+    unsigned long *pulBuffer=(unsigned long *)buff;
+    unsigned short *pusBuffer=(unsigned short *)buff;
     unsigned long ulChunkSize;
     unsigned short usCount;
-    unsigned long ulBytesPerSample;
     FRESULT Result;
-
-    pulBuffer = (unsigned long *)g_pucBuffer;
-    pusBuffer = (unsigned short *)g_pucBuffer;
-
     Result = f_open(psFileObject, pcFileName, FA_READ);
     if(Result != FR_OK)
     {
@@ -70,7 +68,7 @@ OpenWavFile(FIL *psFileObject, char *pcFileName, SoundInfoHeader *pSoundInfoHead
     //
     // Read the first 12 bytes.
     //
-    Result = f_read(psFileObject, g_pucBuffer, 12, &usCount);
+    Result = f_read(psFileObject, buff, 12, &usCount);
     if(Result != FR_OK)
     {
         f_close(psFileObject);
@@ -89,7 +87,7 @@ OpenWavFile(FIL *psFileObject, char *pcFileName, SoundInfoHeader *pSoundInfoHead
     //
     // Read the next chunk header.
     //
-    Result = f_read(psFileObject, g_pucBuffer, 8, &usCount);
+    Result = f_read(psFileObject,buff, 8, &usCount);
     if(Result != FR_OK)
     {
         f_close(psFileObject);
@@ -116,7 +114,7 @@ OpenWavFile(FIL *psFileObject, char *pcFileName, SoundInfoHeader *pSoundInfoHead
     //
     // Read the next chunk header.
     //
-    Result = f_read(psFileObject, g_pucBuffer, ulChunkSize, &usCount);
+    Result = f_read(psFileObject, buff, ulChunkSize, &usCount);
     if(Result != FR_OK)
     {
         f_close(psFileObject);
@@ -130,34 +128,6 @@ OpenWavFile(FIL *psFileObject, char *pcFileName, SoundInfoHeader *pSoundInfoHead
     pSoundInfoHeader->usBitsPerSample = pusBuffer[7];
 
     //
-    // Reset the byte count.
-    //
-    g_ulBytesPlayed = 0;
-
-    //
-    // Calculate the Maximum buffer size based on format.  There can only be
-    // 1024 samples per ping pong buffer due to uDMA.
-    //
-    ulBytesPerSample = (pSoundInfoHeader->usBitsPerSample *
-                        pSoundInfoHeader->usNumChannels) >> 3;
-
-    if(((AUDIO_BUFFER_SIZE >> 1) / ulBytesPerSample) > 1024)
-    {
-        //
-        // The maximum number of DMA transfers was more than 1024 so limit
-        // it to 1024 transfers.
-        //
-        g_ulMaxBufferSize = 1024 * ulBytesPerSample;
-    }
-    else
-    {
-        //
-        // The maximum number of DMA transfers was not more than 1024.
-        //
-        g_ulMaxBufferSize = AUDIO_BUFFER_SIZE >> 1;
-    }
-
-    //
     // Only mono and stereo supported.
     //
     if(pSoundInfoHeader->usNumChannels > 2)
@@ -169,7 +139,7 @@ OpenWavFile(FIL *psFileObject, char *pcFileName, SoundInfoHeader *pSoundInfoHead
     //
     // Read the next chunk header.
     //
-    Result = f_read(psFileObject, g_pucBuffer, 8, &usCount);
+    Result = f_read(psFileObject,buff, 8, &usCount);
     if(Result != FR_OK)
     {
         f_close(psFileObject);
@@ -186,16 +156,7 @@ OpenWavFile(FIL *psFileObject, char *pcFileName, SoundInfoHeader *pSoundInfoHead
     // Save the size of the data.
     //
     pSoundInfoHeader->ulDataSize = pulBuffer[1];
-
-    g_usSeconds = pSoundInfoHeader->ulDataSize/pSoundInfoHeader->ulAvgByteRate;
-    g_usMinutes = g_usSeconds/60;
-    g_usSeconds -= g_usMinutes*60;
-
-    //
-    // Set the number of data bytes in the file.
-    //
-    g_ulBytesRemaining = pSoundInfoHeader->ulDataSize;
-
+ 
     //
     // Adjust the average bit rate for 8 bit mono files.
     //
@@ -257,4 +218,3 @@ WaveRead(FIL *psFileObject, SoundInfoHeader *pSoundInfoHeader, unsigned char *pu
 
     return(usCount);
 }
-

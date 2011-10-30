@@ -39,7 +39,7 @@ static void IntDefaultHandler(void);
 //extern void UART0IntHandler(void);
 //extern void UART1IntHandler(void);
 extern void ButtonsIntHandler(void);
-extern void SoundIntHandler(void);
+extern void AudioCodecIntHandler(void);
 extern void Timer0IntHandler(void);
 //*****************************************************************************
 //
@@ -150,7 +150,7 @@ __root const uVectorEntry __vector_table[] @ ".intvec" =
     IntDefaultHandler,                      // ADC1 Sequence 1
     IntDefaultHandler,                      // ADC1 Sequence 2
     IntDefaultHandler,                      // ADC1 Sequence 3
-    SoundIntHandler,                      // I2S0
+    AudioCodecIntHandler,                      // I2S0
     IntDefaultHandler,                      // External Bus Interface 0
     ButtonsIntHandler                       // GPIO Port J
 };

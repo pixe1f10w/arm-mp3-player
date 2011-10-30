@@ -24,7 +24,6 @@
 #include "driverlib/udma.h"
 #include "driverlib/i2s.h"
 #include "drivers/sound.h"
-#include "support_play_file.h"
 #include "button_event_task.h"
 #include "sound_player_task.h"
 #include "conf.h"
@@ -35,7 +34,7 @@ xQueueHandle  xProcessEventQueue;
 static unsigned long ProcessEventTaskStack[128];
 // The period of the Process Event task.
 unsigned long ProcessEventDelay = 100;
-char *Filename;
+char Filename[]="0:/m.wav";
 FATFS g_sFatFs;
 /**
 * menu
@@ -56,7 +55,7 @@ unsigned char sleep_time = 0;
 //record: enter, pause, exit
 
 //nowplay
-unsigned char volume = 20;
+unsigned char volume = 60;
 unsigned char play_mode =REPEAT_ALL;
 
 /**
@@ -67,58 +66,60 @@ ProcessEventTask(void *pvParameters){
   //portTickType ulLastTime;
   char eventCode;
   char itemCount = 0;
+  char soundCtrl = 0;
     //
     // Get the current tick count.
     //
     //ulLastTime = xTaskGetTickCount();
-  PopulateFileListBox();
+  //PopulateFileListBox();
     //
     // Loop forever.
     //
   while(1){
     //get event from button
-    eventCode = takeButtonEvntCode(1000);
+    if( takeButtonEvntCode(100,&eventCode)==pdPASS)
+    {
+      soundCtrl = PLAY_BTN_SND;
+      giveSoundCtrlEvent(100,&soundCtrl);
+    }else
+      eventCode = 0xff;
     //if(eventCode == 0xff)
     //  eventCode = NOTHING;
     //play button sound
-    giveSoundCtlEvent(PLAY_BTN_SND);
+    
     //process event
     if(Menu == NOWPLAY){
       if(eventCode == L_CENTER){
           //back ROOT
           Menu = ROOT;
       }else if(eventCode == S_CENTER){
-          giveSoundCtlEvent(PAUSE_PLAY);
+        soundCtrl=PAUSE_PLAY;
+        giveSoundCtrlEvent(100,&soundCtrl);
       }else if(eventCode == S_RIGHT){  
-        //-Enter critical section
-        vTaskSuspendScheduler();
-        //-Volume up
-        volume+=2;
-        SoundVolumeUp(2);
-        //-Exit critical section
-        xTaskResumeScheduler();
+        soundCtrl = VLM_UP;
+        giveSoundCtrlEvent(100,&soundCtrl);
+        volume +=2;
       }else if(eventCode == S_LEFT){
-        //-Enter critical section
-        vTaskSuspendScheduler();
-        //volume down
+        soundCtrl = VLM_DOWN;
+        giveSoundCtrlEvent(100,&soundCtrl);
         volume -=2;
-        SoundVolumeDown(2);
-        //-Exit critical section
-        xTaskResumeScheduler();
+
       }else if(eventCode == S_UP){
         itemCount++;//next song
-        if(itemCount >= maxItemCount)
-          itemCount =0;
-        Filename = g_pcFilenames[itemCount];
-        giveSoundCtlEvent(START);
+        //if(itemCount >= maxItemCount)
+         // itemCount =0;
+        //Filename = g_pcFilenames[itemCount];
+        soundCtrl = START;
+        giveSoundCtrlEvent(100,&soundCtrl);
       }else if(eventCode == S_DOWN){
         //previous song
-        if(itemCount <= 0)
-          itemCount = maxItemCount;
-        else
-          itemCount--;
-        Filename = g_pcFilenames[itemCount];
-        giveSoundCtlEvent(START);
+       //if(itemCount <= 0)
+        //  itemCount = maxItemCount;
+        //else
+        //  itemCount--;
+        //Filename = g_pcFilenames[itemCount];
+        soundCtrl = START;
+        giveSoundCtrlEvent(100,&soundCtrl);
       }
     }else if(Menu == BROWSE){
       if(eventCode == L_CENTER){

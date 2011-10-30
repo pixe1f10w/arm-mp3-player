@@ -17,14 +17,11 @@
 #include "utils/ustdlib.h"
 #include "drivers/sound.h"
 #include "wav_file.h"
-#include "support_play_file.h"
-
-#define INITIAL_VOLUME_PERCENT 60
-//******************************************************************************
+#include "mp3_file.h"
+#include "audio_play.h"
 //
 // The DMA control structure table.
 //
-//******************************************************************************
 #ifdef ewarm
 #pragma data_alignment=1024
 tDMAControlTable sDMAControlTable[64];
@@ -35,44 +32,26 @@ tDMAControlTable sDMAControlTable[64];
 tDMAControlTable sDMAControlTable[64] __attribute__ ((aligned(1024)));
 #endif
 //
+//Using Semaphore by Queue
+//
 #define FLAGS_QUEUE_LENGTH 1
 #define FLAGS_QUEUE_ITEM_SIZE 0
 #define FLAGS_BUFFER_SIZE    ( ( FLAGS_QUEUE_LENGTH * FLAGS_QUEUE_ITEM_SIZE ) + portQUEUE_OVERHEAD_BYTES )
-portCHAR cFlagsQueueBuffer[ FLAGS_BUFFER_SIZE ];
-xQueueHandle  xFlagsQueue;
-
-extern unsigned char volume ;
-//******************************************************************************
+static portCHAR cFlagsQueueBuffer[ FLAGS_BUFFER_SIZE ];
+static xQueueHandle  xFlagsQueue;
+static portBASE_TYPE xTaskWoken = pdFALSE;
 //
 // State information for keep track of time.
 //
-//******************************************************************************
-unsigned long g_ulBytesPlayed;
+static unsigned long g_ulBytesPlayed;
 
-//******************************************************************************
-//
-// Buffer management and flags.
-//
-//******************************************************************************
-unsigned char g_pucBuffer[AUDIO_BUFFER_SIZE];
+/**
+* Buffer management and flags.
+*/
+#define AUDIO_BUFFER_SIZE       4096
+static unsigned char g_pucBuffer[AUDIO_BUFFER_SIZE];
 unsigned long g_ulMaxBufferSize;
 
-//******************************************************************************
-//
-// Storage for the names of the files in the current directory.  Filenames
-// are stored in format "filename.ext".
-//
-//******************************************************************************
-char  maxItemCount;
-char g_pcFilenames[NUM_LIST_STRINGS][MAX_FILENAME_STRING_LEN];
-DIR g_sDirObject;
-FILINFO g_sFileInfo;
-//
-// Flags used in the g_ulFlags global variable.
-//
-#define BUFFER_BOTTOM_EMPTY     0x00000001
-#define BUFFER_TOP_EMPTY        0x00000002
-#define BUFFER_PLAYING          0x00000004
 volatile unsigned long g_ulFlags;
 
 //
@@ -82,15 +61,14 @@ unsigned long g_ulBytesRemaining;
 unsigned short g_usMinutes;
 unsigned short g_usSeconds;
 
-//******************************************************************************
-//
-// Handler for bufffers being released. Call from ISR
-//
-//******************************************************************************
+/**
+*
+* Handler for bufffers being released. Call from ISR
+*
+*/
 void
 BufferCallback(void *pvBuffer, unsigned long ulEvent)
 {
-  portBASE_TYPE xTaskWoken = pdFALSE;
     if(ulEvent & BUFFER_EVENT_FREE)
     {
         if(pvBuffer == g_pucBuffer)
@@ -114,30 +92,51 @@ BufferCallback(void *pvBuffer, unsigned long ulEvent)
         //
         g_ulBytesPlayed += AUDIO_BUFFER_SIZE >> 1;
     }
-    /* If the peripheral handler task has a priority higher than the interrupted
-    task request a switch to the handler task. */
-    //taskYIELD_FROM_ISR( xTaskWoken );
 }
+/**
+*
+*/
 char WaitBufferSignal(portTickType timeout){
   if(xQueueReceive(xFlagsQueue, NULL, timeout ) == pdPASS)
     return 0;
   else
     return 1;
 }
-
-void CloseFile(FIL *psFileObject){
-  f_close(psFileObject);
+char StartBufferSignal(portTickType timeout){
+  if(xQueueSend(xFlagsQueue, NULL, timeout ) == pdPASS)
+    return 0;
+  else
+    return 1;
 }
+/**
+*
+*/
 char CheckExtension(char *fileName){
-  return WAV_FILE;
+  char i=0;
+  while(fileName[i]!='.'&&i<20)
+    i++;
+  if(i==20)
+    return NOT_SUPPORT_FORMAT;
+  if(fileName[i+1]=='w'&&fileName[i+2]=='a'&&fileName[i+3]=='v')
+    return WAV_FILE;
+  else if(fileName[i+1]=='m'&&fileName[i+2]=='p'&&fileName[i+3]=='3')
+    return MP3_FILE;
+  else
+    return NOT_SUPPORT_FORMAT;
+    
 }
-  
-
-
+/**
+*
+*/
 unsigned long
 UpdateBufferForPlay(FIL *psFileObject,SoundInfoHeader *pSoundInfoHeader,char format)
 {
 static unsigned short usCount;
+//
+        // Must disable I2S interrupts during this time to prevent state
+        // problems.
+        //
+        IntDisable(INT_I2S0);
     //
     // If the refill flag gets cleared then fill the requested side of the
     // buffer.
@@ -219,21 +218,22 @@ static unsigned short usCount;
             if(g_ulFlags == (BUFFER_TOP_EMPTY | BUFFER_BOTTOM_EMPTY))
               return 0;
         }
+    //
+        // Must disable I2S interrupts during this time to prevent state
+        // problems.
+        //
+        IntEnable(INT_I2S0);
     return(1);
 }
 int
-init_play_sound(void)
+initAudioCodec(unsigned long volume)
 {
-  //Setup hardware
-
-  //
     // GPIO Port B pins
     //
     GPIOPinConfigure(GPIO_PB2_I2C0SCL);
     GPIOPinConfigure(GPIO_PB3_I2C0SDA);
     GPIOPinConfigure(GPIO_PB6_I2S0TXSCK);
     GPIOPinConfigure(GPIO_PB7_NMI);
-
     //
     // GPIO Port D pins.
     //
@@ -241,13 +241,11 @@ init_play_sound(void)
     GPIOPinConfigure(GPIO_PD1_I2S0RXWS);
     GPIOPinConfigure(GPIO_PD4_I2S0RXSD);
     GPIOPinConfigure(GPIO_PD5_I2S0RXMCLK);
-
     //
     // GPIO Port E pins
     //
     GPIOPinConfigure(GPIO_PE4_I2S0TXWS);
     GPIOPinConfigure(GPIO_PE5_I2S0TXSD);
-
     //
     // GPIO Port F pins
     //
@@ -265,13 +263,10 @@ init_play_sound(void)
     // Enable Interrupts
     //
     ROM_IntMasterEnable();
-
-
     //
     // Configure the I2S peripheral.
     //
     SoundInit(0);
-
     //
     // Set the initial volume to something sensible.  Beware - if you make the
     // mistake of using 24 ohm headphones and setting the volume to 100% you
@@ -283,108 +278,17 @@ init_play_sound(void)
     //
     g_ulFlags = 0;
     if(xQueueCreate( (signed portCHAR *)cFlagsQueueBuffer,FLAGS_BUFFER_SIZE,
-                  FLAGS_QUEUE_LENGTH, FLAGS_QUEUE_ITEM_SIZE, &xFlagsQueue ) != pdPASS){
-                    //FAIL;
-                    while(1);
-                  }
+                  FLAGS_QUEUE_LENGTH, FLAGS_QUEUE_ITEM_SIZE, &xFlagsQueue ) != pdPASS)
+	{//FAIL;
+        return 1;
+    }
     return 0;
 }
-//******************************************************************************
-//
-// This function is called to read the contents of the current directory on
-// the SD card and fill the listbox containing the names of all files.
-//
-//******************************************************************************
-int
-PopulateFileListBox(void)
-{
-    unsigned long ulItemCount;
-    FRESULT fresult;
 
-    //
-    // Open the current directory for access.
-    //
-    fresult = f_opendir(&g_sDirObject, "0:/");
-
-    //
-    // Check for error and return if there is a problem.
-    //
-    if(fresult != FR_OK)
-    {
-        //
-        // Ensure that the error is reported.
-        //
-        return(fresult);
-    }
-
-    ulItemCount = 0;
-
-    //
-    // Enter loop to enumerate through all directory entries.
-    //
-    while(1)
-    {
-        //
-        // Read an entry from the directory.
-        //
-        fresult = f_readdir(&g_sDirObject, &g_sFileInfo);
-
-        //
-        // Check for error and return if there is a problem.
-        //
-        if(fresult != FR_OK)
-        {
-            return(fresult);
-        }
-
-        //
-        // If the file name is blank, then this is the end of the
-        // listing.
-        //
-        if(!g_sFileInfo.fname[0])
-        {
-            break;
-        }
-
-        //
-        // Add the information as a line in the listbox widget.
-        //
-        if(ulItemCount < NUM_LIST_STRINGS)
-        {
-            //
-            // Ignore directories.
-            //
-            if((g_sFileInfo.fattrib & AM_DIR) == 0)
-            {
-                strncpy(g_pcFilenames[ulItemCount], g_sFileInfo.fname,
-                         MAX_FILENAME_STRING_LEN);
-            }
-        }
-
-        //
-        // Ignore directories.
-        //
-        if((g_sFileInfo.fattrib & AM_DIR) == 0)
-        {
-            //
-            // Move to the next entry in the item array we use to populate the
-            // list box.
-            //
-            ulItemCount++;
-        }
-    }
-    maxItemCount = ulItemCount;
-    //
-    // Made it to here, return with no errors.
-    //
-    return(0);
-}
-//******************************************************************************
-//
-// Convert an 8 bit unsigned buffer to 8 bit signed buffer in place so that it
-// can be passed into the i2s playback.
-//
-//******************************************************************************
+/**
+* Convert an 8 bit unsigned buffer to 8 bit signed buffer in place so that it
+* can be passed into the i2s playback.
+*/
 void
 Convert8Bit(unsigned char *pucBuffer, unsigned long ulSize)
 {
@@ -398,4 +302,104 @@ Convert8Bit(unsigned char *pucBuffer, unsigned long ulSize)
         *pucBuffer = ((short)(*pucBuffer)) - 128;
         pucBuffer++;
     }
+}
+void setupAudioCodecForSong(SoundInfoHeader pSoundInfoHeader){
+  unsigned long ulBytesPerSample;
+  //
+  // Reset the byte count.
+  //
+  //g_ulBytesPlayed = 0;
+  //
+  // Calculate the Maximum buffer size based on format.  There can only be
+  // 1024 samples per ping pong buffer due to uDMA.
+  //
+  ulBytesPerSample = (pSoundInfoHeader.usBitsPerSample *
+                        pSoundInfoHeader.usNumChannels) >> 3;
+
+  if(((AUDIO_BUFFER_SIZE >> 1) / ulBytesPerSample) > 1024)
+  {
+      //
+      // The maximum number of DMA transfers was more than 1024 so limit
+      // it to 1024 transfers.
+      //
+      g_ulMaxBufferSize = 1024 * ulBytesPerSample;
+  }
+  else
+  {
+      //
+      // The maximum number of DMA transfers was not more than 1024.
+      //
+      g_ulMaxBufferSize = AUDIO_BUFFER_SIZE >> 1;
+  }
+
+  g_usSeconds = pSoundInfoHeader.ulDataSize/pSoundInfoHeader.ulAvgByteRate;
+  g_usMinutes = g_usSeconds/60;
+  g_usSeconds -= g_usMinutes*60;
+  //
+  // Set the number of data bytes in the file.
+  //
+  g_ulBytesRemaining = pSoundInfoHeader.ulDataSize;
+  //
+  // Adjust the average bit rate for 8 bit mono files.
+  //
+  if((pSoundInfoHeader.usNumChannels == 1) && (pSoundInfoHeader.usBitsPerSample == 8))
+  {
+      pSoundInfoHeader.ulAvgByteRate <<=1;
+  }
+  //
+  // Set the format of the playback in the sound driver.
+  //
+  SoundSetFormat(pSoundInfoHeader.ulSampleRate, pSoundInfoHeader.usBitsPerSample,
+                   pSoundInfoHeader.usNumChannels);
+}
+
+
+//
+static SoundInfoHeader g_sButtonHeader;
+static FIL g_sButtonFileObject;
+unsigned long s_ulMaxBufferSize;
+unsigned long s_ulBytesRemaining;
+unsigned long s_ulBytesPlayed;
+unsigned long s_ulFlags;
+
+void playButtonSound(SoundInfoHeader SongInfoHeader){
+  //Store pre song
+  s_ulMaxBufferSize= g_ulMaxBufferSize;
+  s_ulBytesRemaining= g_ulBytesRemaining;
+  s_ulBytesPlayed= g_ulBytesPlayed;
+  // No longer playing audio.
+  g_ulFlags &= ~BUFFER_PLAYING;
+  //Open the button song
+  if(OpenWavFile(&g_sButtonFileObject,"0:/SYS/button.wav",&g_sButtonHeader) == FR_OK ){
+    //Setting for codec: bits/s, Hz, channels
+    setupAudioCodecForSong(g_sButtonHeader);
+    //set state for PLAY
+    g_ulFlags=(BUFFER_BOTTOM_EMPTY | BUFFER_TOP_EMPTY|BUFFER_PLAYING);
+    //Play the button song
+    while(UpdateBufferForPlay(&g_sButtonFileObject,&g_sButtonHeader,WAV_FILE)!=0);
+  }
+  g_ulFlags &= ~BUFFER_PLAYING;
+  //Wait for DMA TX is done
+  while(uDMAChannelModeGet(UDMA_CHANNEL_I2S0TX | UDMA_PRI_SELECT) !=
+           UDMA_MODE_STOP);
+  while(uDMAChannelModeGet(UDMA_CHANNEL_I2S0TX | UDMA_ALT_SELECT) !=
+           UDMA_MODE_STOP);
+  //Retore pre song
+  g_ulMaxBufferSize= s_ulMaxBufferSize;
+  g_ulBytesRemaining= s_ulBytesRemaining;
+  g_ulBytesPlayed= s_ulBytesPlayed;
+  //
+  // Set the format of the playback in the sound driver.
+  //
+  SoundSetFormat(SongInfoHeader.ulSampleRate, SongInfoHeader.usBitsPerSample,
+                   SongInfoHeader.usNumChannels);
+  g_ulFlags=(BUFFER_BOTTOM_EMPTY | BUFFER_TOP_EMPTY|BUFFER_PLAYING);
+}
+void AudioCodecIntHandler(void)
+{
+  xTaskWoken =pdFALSE;
+  SoundIntHandler();
+  /* If the peripheral handler task has a priority higher than the interrupted
+    task request a switch to the handler task. */
+  taskYIELD_FROM_ISR( xTaskWoken );
 }

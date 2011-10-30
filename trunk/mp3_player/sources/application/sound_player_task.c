@@ -22,27 +22,26 @@
 #include "mp3_file.h"
 #include "wav_file.h"
 #include <string.h>
-#include "support_play_file.h"
 #include "driverlib/flash.h"
 #include "driverlib/udma.h"
 #include "driverlib/i2s.h"
 #include "drivers/sound.h"
 
 #include "conf.h"
-#include "sound_player_task.h"
+#include "audio_play.h"
 //*****************************************************************************
 //*****************************************************************************
 
-#define SOUND_CTRL_QUEUE_LENGTH 1
-#define SOUND_CTRL_QUEUE_ITEM_SIZE 0
-#define SOUND_CTRL_BUFFER_SIZE    ( ( SOUND_CTRL_QUEUE_LENGTH * SOUND_CTRL_QUEUE_ITEM_SIZE ) + portQUEUE_OVERHEAD_BYTES )
-portCHAR cSoundCtrlQueueBuffer[ SOUND_CTRL_BUFFER_SIZE ];
-xQueueHandle  xSoundCtrlQueue;
+#define PLAY_CTRL_QUEUE_LENGTH 2 //1 Play button, 1 data control
+#define PLAY_CTRL_QUEUE_ITEM_SIZE 1
+#define PLAY_CTRL_BUFFER_SIZE    ( ( PLAY_CTRL_QUEUE_LENGTH *PLAY_CTRL_QUEUE_ITEM_SIZE ) + portQUEUE_OVERHEAD_BYTES )
+static portCHAR cPlayCtrlQueueBuffer[ PLAY_CTRL_BUFFER_SIZE ];
+static xQueueHandle  xPlayCtrlQueue;
 #define PLAY_EVNT_QUEUE_LENGTH 1
-#define PLAY_EVNT_QUEUE_ITEM_SIZE 0
+#define PLAY_EVNT_QUEUE_ITEM_SIZE 1
 #define PLAY_EVNT_BUFFER_SIZE    ( ( PLAY_EVNT_QUEUE_LENGTH * PLAY_EVNT_QUEUE_ITEM_SIZE ) + portQUEUE_OVERHEAD_BYTES )
-portCHAR cPlayEvntQueueBuffer[ PLAY_EVNT_BUFFER_SIZE ];
-xQueueHandle  xPlayEvntQueue;
+static portCHAR cPlayEvntQueueBuffer[ PLAY_EVNT_BUFFER_SIZE ];
+static xQueueHandle  xPlayEvntQueue;
 extern char *Filename;
 //******************************************************************************
 //
@@ -52,6 +51,7 @@ extern char *Filename;
 
 
 static FIL g_sSongFileObject,g_sButtonFileObject;
+static FATFS g_sFatFs;
 // The wav file header information.
 static SoundInfoHeader g_sSongHeader;
 static SoundInfoHeader g_sButtonHeader;
@@ -59,150 +59,206 @@ static SoundInfoHeader g_sButtonHeader;
 static unsigned long SoundPlayerTaskStack[128];
 // The period of the Play task.
 unsigned long SoundPlayerDelay = 100;
-char FileExt = WAV_FILE;
-char PlayEvent,SoundCtrlEvent;
-#define STOP_BUTTON_SOUND 0
-#define OPEN_BUTTON_SOUND 1
-#define PLAY_BUTTON_SOUND 2
-#define RETORE_SONG       3
-unsigned long PlayButtonFlags = STOP_BUTTON_SOUND;
+static char FileExt = WAV_FILE;
+static char PlayEvent,SoundCtrlEvent;
+#define PLAY_SONG_STATE   1
+#define PLAY_BUTTON_STATE 2
+static unsigned long PlayButtonState = PLAY_SONG_STATE;
 #define STOP_SONG         0
 #define START_SONG        1
 #define PLAY_SONG         2
 #define PAUSE_SONG        3
-unsigned long PlaySongFlags = STOP_SONG;
+static unsigned long PlaySongState = STOP_SONG;
 /**
 *
 */
-void giveSoundCtlEvent(char a){
-  SoundCtrlEvent = a;
-  xQueueSend(xSoundCtrlQueue, NULL, 0);
+portBASE_TYPE giveSoundCtrlEvent(portTickType d,char *a){
+  return xQueueSend(xPlayCtrlQueue, (char*)a, d);
 }
-void givePlayEventCode(char a){
-  PlayEvent = a;
-  xQueueSend(xPlayEvntQueue, NULL, 0);
+/**
+*
+*/
+static portBASE_TYPE takeSoundCtrlEvent(portTickType d){
+  return xQueueReceive(xPlayCtrlQueue, (char*)&SoundCtrlEvent, d);
+  //return SoundCtrlEvent;
+}
+/**
+*
+*/
+portBASE_TYPE takePlayEventCode(portTickType d, char * e){
+  return xQueueReceive(xPlayEvntQueue, (char*)e, d);
+}
+/**
+*
+*/
+static portBASE_TYPE givePlayEventCode(portTickType d,char *e){
+  return xQueueSend(xPlayEvntQueue, (char*)e, d);
 }
 /**
 *
 */
 static void
 SoundPlayerTask(void *pvParameters){
-  //portTickType ulLastTime;
+  portTickType ulLastTime;
+  unsigned long i=0;
+  FRESULT fresult;
     //
     // Get the current tick count.
     //
-    //ulLastTime = xTaskGetTickCount();
+    ulLastTime = xTaskGetTickCount();
+     //
+    // Mount the file system, using logical disk 0.
+    //
+    fresult = f_mount(0, &g_sFatFs);
+    if(fresult != FR_OK)
+    {
+        return;
+    }
     //
     // Loop forever.
     //
+  //g_ulFlags=(BUFFER_BOTTOM_EMPTY | BUFFER_TOP_EMPTY);
+    PlayButtonState = PLAY_BUTTON_STATE;
+    PlaySongState = START_SONG;
+    SoundCtrlEvent = PLAY;
   while(1){
-    //get event
-    if(xQueueReceive(xSoundCtrlQueue, NULL, 0)==pdPASS){
-      if(SoundCtrlEvent == PAUSE_PLAY){
-        if(PlaySongFlags == PLAY_SONG)
-          PlaySongFlags = PAUSE_SONG;
-        else if(PlaySongFlags == PAUSE_SONG)
-          PlaySongFlags = PLAY_SONG;
-      }else if (SoundCtrlEvent == START){
-        PlaySongFlags = START_SONG;
-      }else
-        PlayButtonFlags = OPEN_BUTTON_SOUND;
+    if(takeSoundCtrlEvent(0)==pdPASS)
+    {
+      //Play sound Button
+      if(SoundCtrlEvent == PLAY_BTN_SND)
+        PlayButtonState = PLAY_BUTTON_STATE;
+      //Volume up
+      else if(SoundCtrlEvent == VLM_UP)
+        SoundVolumeUp(2);
+      //Volume down
+      else if(SoundCtrlEvent == VLM_DOWN)
+        SoundVolumeDown(2);
+      //Pause or Play
+      else if(SoundCtrlEvent == PAUSE_PLAY)
+      {
+        if(PlaySongState == PAUSE_SONG)
+          SoundCtrlEvent = PLAY;
+        else if(PlaySongState ==PLAY_SONG)
+          SoundCtrlEvent = PAUSE;
+      }
+      ////////////////////////////////////
+      //START playing the song from any state
+      if(SoundCtrlEvent == START)
+      {
+        PlaySongState = START_SONG;
+      }
+      //===PLAYING SONG state==============
+      else if(PlaySongState == PLAY_SONG)
+      {
+        //STOP playing the song
+        if(SoundCtrlEvent == STOP)
+        {
+          PlaySongState = STOP_SONG;
+        }
+        //PAUSE playing the song
+        else if(SoundCtrlEvent == PAUSE)
+        {
+          PlaySongState = PAUSE_SONG;
+        }
+      }
+      //STOP state
+      else if(PlaySongState == STOP_SONG)
+      {
+        if(SoundCtrlEvent == PLAY)
+          //Switch to START_SONG
+          PlaySongState = START_SONG;
+      }
+      //PAUSE state
+      else if(PlaySongState == PAUSE_SONG){
+        if(SoundCtrlEvent == PLAY)
+          PlaySongState = PLAY_SONG;
+        else if(SoundCtrlEvent == STOP)
+        {
+          //close the song
+          f_close(&g_sSongFileObject);
+          //Switch to STOP_SONG
+          PlaySongState = STOP_SONG;
+        }
+      }
     }
-    if(PlayButtonFlags == STOP_BUTTON_SOUND){
-      if(PlaySongFlags == PLAY_SONG){
+    if(PlayButtonState == PLAY_SONG_STATE){
+      //===PLAY_SONG==============
+      if(PlaySongState == PLAY_SONG){
         //-Enter critical section
          vTaskSuspendScheduler();
         //update buffer for play;
          if( UpdateBufferForPlay(&g_sSongFileObject, &g_sSongHeader,FileExt)==0){
-          //end file
-           PlaySongFlags = STOP_SONG;
+           //PLAY_DONE file
+           PlaySongState = START_SONG;//STOP_SONG;
+           //PlayButtonState = PLAY_BUTTON_STATE;
+           //close current file
+           f_close(&g_sSongFileObject);
+           //PlayEvent
+           //PlayEvntCode = PLAY_DONE;
+           //givePlayEventCode(100,&PlayEvntCode);
          }
          //-Exit critical section
-          xTaskResumeScheduler();
-      }else if(PlaySongFlags == PAUSE_SONG){
-        ;
-      }else if(PlaySongFlags == START_SONG){
-        //close current file
-        CloseFile(&g_sSongFileObject);
-        //open song
-        FileExt = CheckExtension(Filename);
+         xTaskResumeScheduler();
+      }//==========START_SONG===============
+      else if(PlaySongState == START_SONG){
+        // No longer playing audio.
+        g_ulFlags &= ~BUFFER_PLAYING;
+        // Wait for the buffer to empty.
+         //while(g_ulFlags != (BUFFER_TOP_EMPTY | BUFFER_BOTTOM_EMPTY));
+        //close the current song
+        f_close(&g_sSongFileObject);
+        //===Open song
+        FileExt = CheckExtension("0:/m.wav");
         if(FileExt == WAV_FILE){
-          if(OpenWavFile(&g_sSongFileObject,Filename,&g_sSongHeader) == FR_OK ){
-            //setting for codec: bits/s, Hz, channels
-            SoundSetFormat(g_sSongHeader.ulSampleRate,g_sSongHeader.usBitsPerSample,
-                         g_sSongHeader.usNumChannels);
-            //set state for PLAY
-            g_ulFlags=(BUFFER_BOTTOM_EMPTY | BUFFER_TOP_EMPTY|BUFFER_PLAYING);
-            //switch to PLAY the song
-            PlaySongFlags = PLAY_SONG;
-          }else{
+          if(OpenWavFile(&g_sSongFileObject,"0:/m.wav",&g_sSongHeader) != FR_OK ){
             //announce opening fail
-            givePlayEventCode(OPEN_FAIL);
+            //PlayEvntCode = OPEN_FAIL;
+           //givePlayEventCode(100,&PlayEvntCode);
             //switch STOP
-            PlaySongFlags = STOP_SONG;
+            
+            PlaySongState = STOP_SONG;
           }
         }else if(FileExt == MP3_FILE){
-          if(OpenMp3File(&g_sSongFileObject, Filename,&g_sSongHeader) == FR_OK ){
-            //setting for codec: bits/s, Hz, channels
-            SoundSetFormat(g_sSongHeader.ulSampleRate,g_sSongHeader.usBitsPerSample,
-                         g_sSongHeader.usNumChannels);
-            //set state for PLAY
-            g_ulFlags=(BUFFER_BOTTOM_EMPTY | BUFFER_TOP_EMPTY|BUFFER_PLAYING);
-            //switch to PLAY the song
-            PlaySongFlags = PLAY_SONG;
-          }else{
+          if(OpenMp3File(&g_sSongFileObject, Filename,&g_sSongHeader) != FR_OK ){
             //announce opening fail
-            givePlayEventCode(OPEN_FAIL);
+            //PlayEvntCode = OPEN_FAIL;
+           //givePlayEventCode(100,&PlayEvntCode);
             //switch STOP
-            PlaySongFlags = STOP_SONG;
-          }
+            PlaySongState = STOP_SONG;
+         }
         }else{
           //annouce not format correctly
-          givePlayEventCode(FORMAT_ERR);
+          //PlayEvntCode = FORMAT_ERR;
+          //givePlayEventCode(100,&PlayEvntCode);
           //switch STOP
-          PlaySongFlags = STOP_SONG;
+          PlaySongState = STOP_SONG;
         }
-      }
-    }else{
-      if(PlayButtonFlags == OPEN_BUTTON_SOUND){
-        //open button sound
-        if(OpenWavFile(&g_sButtonFileObject,"0:/SYS/button.wav",&g_sButtonHeader)==FR_OK){
-          
-          // Set the format of the playback in the sound driver.
-          SoundSetFormat(g_sButtonHeader.ulSampleRate,g_sButtonHeader.usBitsPerSample,
-                       g_sButtonHeader.usNumChannels);
+        if(PlaySongState == START_SONG){
+          //setting for codec: bits/s, Hz, channels
+          setupAudioCodecForSong(g_sSongHeader);
+          //set state for PLAY
           g_ulFlags=(BUFFER_BOTTOM_EMPTY | BUFFER_TOP_EMPTY|BUFFER_PLAYING);
-          PlayButtonFlags = PLAY_BUTTON_SOUND;
-        }else{
-          //stop the button sound
-          PlayButtonFlags = RETORE_SONG;
+          //switch to PLAY the song
+          PlaySongState = PLAY_SONG;
+          StartBufferSignal(0);
         }
-      }else if(PlayButtonFlags == PLAY_BUTTON_SOUND){
-        if(UpdateBufferForPlay(&g_sButtonFileObject, &g_sButtonHeader,WAV_FILE)==0){
-          PlayButtonFlags = RETORE_SONG;
-        }
-      }else if(PlayButtonFlags == RETORE_SONG){
-        if(FileExt == WAV_FILE){
-
-            //restore the format of the playback in the sound driver.
-            SoundSetFormat(g_sSongHeader.ulSampleRate,g_sSongHeader.usBitsPerSample,
-                         g_sSongHeader.usNumChannels);
-        }else if(FileExt == MP3_FILE){
-          
-            //restore the format of the playback in the sound driver.
-            SoundSetFormat(g_sSongHeader.ulSampleRate,g_sSongHeader.usBitsPerSample,
-                         g_sSongHeader.usNumChannels);
-        }
-        
-        PlayButtonFlags = STOP_BUTTON_SOUND;
+      
       }
+      }else if(PlayButtonState == PLAY_BUTTON_STATE){
+        //-Enter critical section
+         vTaskSuspendScheduler();
+        playButtonSound(g_sSongHeader);
+        //-Exit critical section
+         xTaskResumeScheduler();
+      //Switch to PLAY_SONG
+      PlayButtonState = PLAY_SONG_STATE;
+      StartBufferSignal(0);
     }
-
     WaitBufferSignal(SoundPlayerDelay);
     //
     // Wait for the required amount of time.
     //
-    //xTaskDelayUntil(&ulLastTime, 10);
+    //xTaskDelayUntil(&ulLastTime, 0);
   }
 }
 /**
@@ -210,13 +266,21 @@ SoundPlayerTask(void *pvParameters){
 */
 char initSoundPlayerTask(void){
     
-  init_play_sound();
+  initAudioCodec(70);
   //
-  if(xQueueCreate( (signed portCHAR *)cSoundCtrlQueueBuffer,SOUND_CTRL_BUFFER_SIZE,
-                  SOUND_CTRL_QUEUE_LENGTH, SOUND_CTRL_QUEUE_ITEM_SIZE, &xSoundCtrlQueue ) != pdPASS){
+  if(xQueueCreate( (signed portCHAR *)cPlayCtrlQueueBuffer,PLAY_CTRL_BUFFER_SIZE,
+                  PLAY_CTRL_QUEUE_LENGTH, PLAY_CTRL_QUEUE_ITEM_SIZE, &xPlayCtrlQueue ) != pdPASS)
+  {
                     //FAIL;
-                    while(1);
-                  }
+                    return(1);
+   }
+  //
+  if(xQueueCreate( (signed portCHAR *)cPlayEvntQueueBuffer,PLAY_EVNT_BUFFER_SIZE,
+                  PLAY_EVNT_QUEUE_LENGTH, PLAY_EVNT_QUEUE_ITEM_SIZE, &xPlayEvntQueue ) != pdPASS)
+  {
+                    //FAIL;
+                    return(1);
+  }
   //
   // Create the Play task.
   //
