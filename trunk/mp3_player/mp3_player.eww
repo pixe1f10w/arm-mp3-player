@@ -2,6 +2,9 @@
 
 <workspace>
   <project>
+    <path>$WS_DIR$\..\..\..\thesis_code\trunk\motor_MCU\motor_MCU.ewp</path>
+  </project>
+  <project>
     <path>$WS_DIR$\mp3_player.ewp</path>
   </project>
   <batchBuild/>
