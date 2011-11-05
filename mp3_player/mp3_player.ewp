@@ -938,6 +938,24 @@
       <name>$PROJ_DIR$\sources\HAL\StellarisWare\third_party\fatfs\src\ff.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\sources\drivers\LCD\font_angsana14x32.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\sources\drivers\LCD\font_angsana32x64.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\sources\drivers\LCD\font_angsana_eng32x48.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\sources\drivers\LCD\font_engine_v1_00.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\sources\drivers\LCD\font_vrinda11x16.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\sources\drivers\LCD\font_vrinda18x16.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\sources\drivers\LCD\LCD.c</name>
     </file>
     <file>
@@ -948,6 +966,9 @@
     </file>
     <file>
       <name>$PROJ_DIR$\sources\HAL\StellarisWare\drivers\sound.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\sources\drivers\LCD\tslcd_elt240320tp.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\sources\drivers\USB\usb_host_msc.c</name>
