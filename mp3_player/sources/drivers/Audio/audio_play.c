@@ -363,6 +363,7 @@ unsigned long s_ulBytesPlayed;
 unsigned long s_ulFlags;
 
 void playButtonSound(SoundInfoHeader SongInfoHeader){
+  unsigned char ucCount;
   //Store pre song
   s_ulMaxBufferSize= g_ulMaxBufferSize;
   s_ulBytesRemaining= g_ulBytesRemaining;
@@ -376,7 +377,9 @@ void playButtonSound(SoundInfoHeader SongInfoHeader){
     //set state for PLAY
     g_ulFlags=(BUFFER_BOTTOM_EMPTY | BUFFER_TOP_EMPTY|BUFFER_PLAYING);
     //Play the button song
-    while(UpdateBufferForPlay(&g_sButtonFileObject,&g_sButtonHeader,WAV_FILE)!=0);
+    ucCount = 2;
+    while(UpdateBufferForPlay(&g_sButtonFileObject,&g_sButtonHeader,WAV_FILE)!=0 && ucCount > 0);
+      ucCount--;
   }
   g_ulFlags &= ~BUFFER_PLAYING;
   //Wait for DMA TX is done

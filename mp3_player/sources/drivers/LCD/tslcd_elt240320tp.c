@@ -9,9 +9,9 @@
 #include "inc/hw_types.h"
 #include "driverlib/gpio.h"
 #include "tslcd_elt240320tp.h"
-#include "font_thai_plugin_v1_02.h"
+//#include "font_thai_plugin_v1_02.h"
 #include "font_engine_v1_00.h"
-#include "utils_custom_v1_02.h"
+//#include "utils_custom_v1_02.h"
 //  _____________________
 // | _______________	 |
 // ||<-- origin in software

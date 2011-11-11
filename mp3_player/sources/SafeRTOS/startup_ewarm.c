@@ -41,6 +41,7 @@ static void IntDefaultHandler(void);
 extern void ButtonsIntHandler(void);
 extern void AudioCodecIntHandler(void);
 extern void Timer0IntHandler(void);
+extern void USB0OTGModeIntHandler(void);
 //*****************************************************************************
 //
 //! The entry point for the application startup code.
@@ -142,7 +143,7 @@ __root const uVectorEntry __vector_table[] @ ".intvec" =
     IntDefaultHandler,                      // CAN2
     IntDefaultHandler,                 // Ethernet
     IntDefaultHandler,                      // Hibernate
-    IntDefaultHandler,                      // USB0
+    USB0OTGModeIntHandler,                      // USB0
     IntDefaultHandler,                      // PWM Generator 3
     IntDefaultHandler,                      // uDMA Software Transfer
     IntDefaultHandler,                      // uDMA Error
