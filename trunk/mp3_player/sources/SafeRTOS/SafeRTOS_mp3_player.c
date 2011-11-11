@@ -24,6 +24,7 @@
 #include "button_event_task.h"
 #include "player_control_task.h"
 #include "sound_player_task.h"
+#include "usbotg_task.h"
 #include "inc/hw_nvic.h"
 #include "inc/hw_types.h"
 #include "driverlib/sysctl.h"
@@ -180,51 +181,6 @@ main(void)
     //
     //! Create the LED task.
     //
-    //+++++++++++++++++++++++++++++
-    //LCD test
-    //++++++++++++++++++++++++++++++
-    	//Clrb(BL_CTL_PRTC,BL_CTL_PIN);
-        TS_LCD_RST_CLR();
-	//Setb(BL_CTL_PRTS,BL_CTL_PIN);
-        TS_LCD_RST_SET();
-	TSLCDRst();
-	TSLCDInit();
-	TSLCDSetFontColor(TS_COL_WHITE);
-//	TSLCDSetBackColor(COL_BACK);
-	TSLCDSetBackColor(TS_COL_BLUE);
-	TSLCDCfgFont(font_vrinda11x16,11,2,2);
-	TSLCDSetVaryWidth(1);
-	TSLCDSetBold(0);
-	TSLCDFillRect(0,TS_SIZE_X-1,0,TS_SIZE_Y-1,TS_COL_BLUE,TS_MODE_NORMAL);
-	TSLCDSetBold(1);
-	TSLCDCfgFont(font_vrinda11x16,11,2,2);
-	TSLCDSetOffset((TS_SIZE_X-TSLCDGetStringWidth("BlueScreen")) >> 1,0);
-	TSLCDPrintStr( 2,0,"BlueScreen",TS_MODE_FULL);
-	delay_1ms(1000);
-	TSLCDSetBold(0);
-	TSLCDSetOffset((TS_SIZE_X-TSLCDGetStringWidth("with multi-font supported")) >> 1,0);
-	TSLCDPrintStr( 4,0,"with multi-font supported",TS_MODE_FULL);
-	delay_1ms(1000);
-	TSLCDSetOffset((TS_SIZE_X-TSLCDGetStringWidth("bold character")) >> 1,0);
-	TSLCDPrintStr( 6,0,"bold character",TS_MODE_FULL);
-	delay_1ms(1000);
-	TSLCDSetOffset((TS_SIZE_X-TSLCDGetStringWidth("easier calibration")) >> 1,0);
-	TSLCDPrintStr( 8,0,"easier calibration",TS_MODE_FULL);
-	delay_1ms(1000);
-	TSLCDSetBold(1);
-	TSLCDCfgFont(font_vrinda18x16,18,2,2);
-	TSLCDSetOffset((TS_SIZE_X-TSLCDGetStringWidth("Available NOW!!!")) >> 1,0);
-	TSLCDPrintStr( 10,0,"available now!!!",TS_MODE_FULL);
-	delay_1ms(1000);
-	TSLCDSetBold(0);
-	TSLCDSetOffset((TS_SIZE_X-TSLCDGetStringWidth("at www.ThaiEasyElec.com")) >> 1,0);
-	TSLCDPrintStr( 12,0,"at www.ThaiEasyElec.com",TS_MODE_FULL);
-	delay_1ms(2000);
-	TSLCDCfgFont(font_vrinda11x16,11,2,2);
-	TSLCDSetVaryWidth(1);
-	TSLCDSetBold(0);
-    while (1);
-    //++++++++++++++++++++++++++++++
     if(LEDTaskInit() != 0)
     {
         while(1)
@@ -240,6 +196,9 @@ main(void)
     }
    
     if(initSoundPlayerTask() !=0){
+      while(1);
+    }
+   if(USBOTGTaskInit() != 0){
       while(1);
     }
     //

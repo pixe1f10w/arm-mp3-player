@@ -1531,7 +1531,16 @@ typedef unsigned long (* tUSBCallback)(void *pvCBData, unsigned long ulEvent,
 //! descriptor for the device instance.
 //
 #define USB_EVENT_COMP_CONFIG        (USB_EVENT_BASE + 17)
-
+//
+//! An unknown device is now attached to a USB host.  This value is only valid
+//! for the generic event handler and not other device handlers.  It is
+//! useful for applications that want to know when an unknown device is
+//! connected and what the class is of the unknown device.
+//!
+//! The \e ulInstance is actually the class of the unsupported
+//! device that was connected.
+//
+#define USB_EVENT_UNKNOWN_CONNECTED  (USB_EVENT_BASE + 18)
 //*****************************************************************************
 //
 // Error sources reported via USB_EVENT_ERROR.

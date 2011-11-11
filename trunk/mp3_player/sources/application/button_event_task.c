@@ -15,54 +15,34 @@
 #include "third_party/fatfs/src/diskio.h"
 #include "priorities.h"
 #include "conf.h"
+#include "player_control_task.h"
 #include "button_event_task.h"
 //*****************************************************************************
 //----------DEFINES
 //*****************************************************************************
-#define BUTTON_PORT    GPIO_PORTJ_BASE
+#define BUTTON_PORT         GPIO_PORTJ_BASE
 #define SYSCTL_BUTTON_PORT  SYSCTL_PERIPH_GPIOJ
-#define UP_BUTTON      GPIO_PIN_3
-#define DOWN_BUTTON    GPIO_PIN_7
-#define RIGHT_BUTTON   GPIO_PIN_6
-#define LEFT_BUTTON    GPIO_PIN_4
-#define CENTER_BUTTON  GPIO_PIN_5
+#define UP_BUTTON           GPIO_PIN_3
+#define DOWN_BUTTON         GPIO_PIN_7
+#define RIGHT_BUTTON        GPIO_PIN_6
+#define LEFT_BUTTON         GPIO_PIN_4
+#define CENTER_BUTTON       GPIO_PIN_5
 
-#define BUTTON_EVENT_QUEUE_LENGTH 1
-#define BUTTON_EVENT_QUEUE_ITEM_SIZE 0
-#define BUTTON_EVENT_BUFFER_SIZE    ( ( BUTTON_EVENT_QUEUE_LENGTH * BUTTON_EVENT_QUEUE_ITEM_SIZE ) + portQUEUE_OVERHEAD_BYTES )
-
-//*****************************************************************************
-//----------VARIABLES
-//*****************************************************************************
-portCHAR cButtonEventQueueBuffer[ BUTTON_EVENT_BUFFER_SIZE ];
-xQueueHandle  xButtonEventQueue;
 // The stack for the Button Event task.
 static unsigned long ButtonEventTaskStack[128];
 // The period of the Button Event task.
-unsigned long ButtonEventDelay = 100;
-long Button =0x0ff;
-long OldButton =0x0ff;
-char ButtonEvent = 0xff;
-char Delay =0;
-/**
-*
-*/
-portBASE_TYPE  takeButtonEvntCode(portTickType Timeout,char *x){
-  portBASE_TYPE rt ;
-  rt = xQueueReceive(xButtonEventQueue, NULL, Timeout);
-  *x = ButtonEvent;
-  return rt;
-}
-char giveButtonEvntCode(char e){
-  ButtonEvent = e;
-  xQueueSend(xButtonEventQueue, NULL, 0);
-  return 0;
-}
+static unsigned long ButtonEventDelay = 100;
+static unsigned long Button;
+static unsigned long OldButton;
+static unsigned char ButtonEvent;
+static unsigned char ucFlag;
+static unsigned char Delay =0;
+
 /**
 *
 */
 void ButtonsIntHandler(void){
-  portBASE_TYPE xTaskWoken = pdFALSE;
+
   GPIOPinIntClear(BUTTON_PORT, UP_BUTTON|DOWN_BUTTON|RIGHT_BUTTON|LEFT_BUTTON|CENTER_BUTTON);
   if(Delay > 1){
     Button = GPIOPinRead(BUTTON_PORT, UP_BUTTON|DOWN_BUTTON|RIGHT_BUTTON|LEFT_BUTTON|CENTER_BUTTON);
@@ -100,12 +80,9 @@ void ButtonsIntHandler(void){
     if(((Button & UP_BUTTON)==0)||((Button & DOWN_BUTTON)==0)||((Button & RIGHT_BUTTON)==0)||
         ((Button & LEFT_BUTTON)==0)||((Button & CENTER_BUTTON)==0))
       Delay =0;
-    else //Wakeup in_gate task
-      xQueueSendFromISR( xButtonEventQueue,NULL,&xTaskWoken);
+    else//Have a button pressed
+      ucFlag=1;
   }
-  /* If the peripheral handler task has a priority higher than the interrupted
-  task request a switch to the handler task. */
-  taskYIELD_FROM_ISR( xTaskWoken );
 }
 /**
 *
@@ -118,6 +95,7 @@ ButtonEventTask(void *pvParameters)
     // Get the current tick count.
     //
     ulLastTime = xTaskGetTickCount();
+    ucFlag =0;
     //
     // Loop forever.
     //
@@ -127,14 +105,22 @@ ButtonEventTask(void *pvParameters)
     //
     disk_timerproc();
     
+    //
     if(Delay > 5)
       Delay = 10;
     else
       Delay++;
+    //Check a button pressed
+    if(ucFlag)
+    {
+      //Send Event to Player Control Task
+      givePlayerCtrlEvent((unsigned char *)&ButtonEvent,0);
+      ucFlag = 0;
+    }
     //
     // Wait for the required amount of time.
     //
-    xTaskDelayUntil(&ulLastTime, 100);
+    xTaskDelayUntil(&ulLastTime, ButtonEventDelay);
   }
 }
 /**
@@ -152,12 +138,10 @@ char initButtonEventTask(void){
   GPIOPinIntEnable(BUTTON_PORT,UP_BUTTON|DOWN_BUTTON|RIGHT_BUTTON|LEFT_BUTTON|CENTER_BUTTON);
   IntPrioritySet(INT_I2S0,5<<5);
   IntEnable(INT_GPIOJ);
-  //Create Queues (semaphore)
-  if(xQueueCreate( (signed portCHAR *)cButtonEventQueueBuffer,BUTTON_EVENT_BUFFER_SIZE,
-                  BUTTON_EVENT_QUEUE_LENGTH, BUTTON_EVENT_QUEUE_ITEM_SIZE, &xButtonEventQueue ) != pdPASS){
-                    //FAIL;
-                    return(2);
-                  }
+  
+  //Init all Buttons not pressed
+  Button = UP_BUTTON | DOWN_BUTTON| RIGHT_BUTTON| LEFT_BUTTON |CENTER_BUTTON;
+  OldButton = Button;
   //
   // Create the InGate task.
   //

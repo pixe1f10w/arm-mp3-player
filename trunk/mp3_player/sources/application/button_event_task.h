@@ -4,7 +4,7 @@
 /**
 *
 */
-portBASE_TYPE  takeButtonEvntCode(portTickType Timeout,char *x);
-char giveButtonEvntCode(char e);
+portBASE_TYPE  takeButtonEvntCode(portTickType Timeout,unsigned char *x);
+char giveButtonEvntCode(unsigned char e);
 char initButtonEventTask(void);
 #endif //_BUTTON_EVENT_TASK_H_

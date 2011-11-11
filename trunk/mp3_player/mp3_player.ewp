@@ -39,20 +39,20 @@
         <option>
           <name>Input variant</name>
           <version>3</version>
-          <state>1</state>
+          <state>6</state>
         </option>
         <option>
           <name>Input description</name>
-          <state>Full formatting.</state>
+          <state>No specifier n, no float nor long long, no scan set, no assignment suppressing.</state>
         </option>
         <option>
           <name>Output variant</name>
           <version>2</version>
-          <state>1</state>
+          <state>7</state>
         </option>
         <option>
           <name>Output description</name>
-          <state>Full formatting.</state>
+          <state>No specifier a, A, no specifier n, no float nor long long, no flags.</state>
         </option>
         <option>
           <name>GOutputBinary</name>
@@ -229,7 +229,7 @@
         <option>
           <name>CCAllowList</name>
           <version>1</version>
-          <state>0000000</state>
+          <state>1111111</state>
         </option>
         <option>
           <name>CCDebugInfo</name>
@@ -303,6 +303,8 @@
           <state>$PROJ_DIR$\sources\drivers</state>
           <state>$PROJ_DIR$\sources\drivers\Audio</state>
           <state>$PROJ_DIR$\sources\drivers\LCD</state>
+          <state>$PROJ_DIR$\sources\drivers\USB\dev_msc</state>
+          <state>$PROJ_DIR$\sources\drivers\USB\host_msc</state>
           <state>$PROJ_DIR$\sources\SafeRTOS</state>
           <state>$PROJ_DIR$\sources\Utils</state>
           <state>$PROJ_DIR$\sources\mad</state>
@@ -325,16 +327,16 @@
         </option>
         <option>
           <name>CCOptLevel</name>
-          <state>1</state>
+          <state>3</state>
         </option>
         <option>
           <name>CCOptStrategy</name>
           <version>0</version>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>CCOptLevelSlave</name>
-          <state>1</state>
+          <state>3</state>
         </option>
         <option>
           <name>CompilerMisraRules98</name>
@@ -914,6 +916,9 @@
       <name>$PROJ_DIR$\sources\application\button_event_task.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\sources\application\file_management.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\sources\application\idle_task.c</name>
     </file>
     <file>
@@ -928,9 +933,63 @@
     <file>
       <name>$PROJ_DIR$\sources\application\usb_control_task.c</name>
     </file>
+    <file>
+      <name>$PROJ_DIR$\sources\application\usbotg_task.c</name>
+    </file>
   </group>
   <group>
     <name>Drivers</name>
+    <group>
+      <name>USB</name>
+      <group>
+        <name>dev</name>
+        <file>
+          <name>$PROJ_DIR$\sources\drivers\USB\dev_msc\usb_dev_msc.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\sources\drivers\USB\dev_msc\usb_msc_structs.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\sources\drivers\USB\dev_msc\usbdsdcard.c</name>
+        </file>
+      </group>
+      <group>
+        <name>host</name>
+        <file>
+          <name>$PROJ_DIR$\sources\drivers\USB\host_msc\usb_host_msc.c</name>
+        </file>
+      </group>
+      <file>
+        <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\device\usbdcdesc.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\device\usbdconfig.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\device\usbdenum.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\usbdesc.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\device\usbdmsc.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\host\usbhmsc.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\host\usbhostenum.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\host\usbhscsi.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\usbmode.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\usbtick.c</name>
+      </file>
+    </group>
     <file>
       <name>$PROJ_DIR$\sources\drivers\Audio\audio_play.c</name>
     </file>
@@ -969,9 +1028,6 @@
     </file>
     <file>
       <name>$PROJ_DIR$\sources\drivers\LCD\tslcd_elt240320tp.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\sources\drivers\USB\usb_host_msc.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\sources\drivers\Audio\wav_file.c</name>
@@ -1032,9 +1088,6 @@
     </file>
     <file>
       <name>$PROJ_DIR$\sources\HAL\StellarisWare\driverlib\gpio.h</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\sources\HAL\StellarisWare\grlib\ewarm\Exe\grlib.a</name>
     </file>
     <file>
       <name>$PROJ_DIR$\sources\HAL\StellarisWare\driverlib\hibernate.c</name>
@@ -1163,22 +1216,10 @@
       <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\device\usbdcdc.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\device\usbdcdesc.c</name>
-    </file>
-    <file>
       <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\device\usbdcomp.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\device\usbdcomp.h</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\device\usbdconfig.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\device\usbdenum.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\usbdesc.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\device\usbdevice.h</name>
@@ -1211,9 +1252,6 @@
       <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\device\usbdhidmouse.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\device\usbdmsc.c</name>
-    </file>
-    <file>
       <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\device\usbdmsc.h</name>
     </file>
     <file>
@@ -1232,15 +1270,6 @@
       <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\usbhid.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\host\usbhmsc.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\host\usbhostenum.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\host\usbhscsi.c</name>
-    </file>
-    <file>
       <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\usbkeyboardmap.c</name>
     </file>
     <file>
@@ -1253,16 +1282,10 @@
       <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\usblibpriv.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\usbmode.c</name>
-    </file>
-    <file>
       <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\usbmsc.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\usbringbuf.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\sources\HAL\StellarisWare\usblib\usbtick.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\sources\HAL\StellarisWare\driverlib\watchdog.c</name>

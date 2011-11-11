@@ -1,6 +1,7 @@
 //*****************************************************************************
 //
-// priorities.h - Priorities for the various SafeRTOS tasks.
+// usbdsdcard.h - Prototypes for functions supplied for use by the mass storage
+// class device.
 //
 // Copyright (c) 2009-2011 Texas Instruments Incorporated.  All rights reserved.
 // Software License Agreement
@@ -18,22 +19,25 @@
 // CIRCUMSTANCES, BE LIABLE FOR SPECIAL, INCIDENTAL, OR CONSEQUENTIAL
 // DAMAGES, FOR ANY REASON WHATSOEVER.
 // 
-// This is part of revision 7611 of the DK-LM3S9B96 Firmware Package.
+// This is part of revision 8049 of the DK-LM3S9B96 Firmware Package.
 //
 //*****************************************************************************
 
-#ifndef __PRIORITIES_H__
-#define __PRIORITIES_H__
+#ifndef __USBDSDCARD_H__
+#define __USBDSDCARD_H__
 
 //*****************************************************************************
 //
-// The priorities of the various tasks.
 //
 //*****************************************************************************
+extern void * USBDMSCStorageOpen(unsigned long ulDrive);
+extern void USBDMSCStorageClose(void * pvDrive);
+extern unsigned long USBDMSCStorageRead(void * pvDrive, unsigned char *pucData,
+                                        unsigned long ulSector,
+                                        unsigned long ulNumBlocks);
+extern unsigned long USBDMSCStorageWrite(void * pvDrive, unsigned char *pucData,
+                                         unsigned long ulSector,
+                                         unsigned long ulNumBlocks);
+unsigned long USBDMSCStorageNumBlocks(void * pvDrive);
 
-#define PRIORITY_LED_TASK             5
-#define PRIORITY_BUTTON_EVENT_TASK    4
-#define PRIORITY_PLAYER_CTRL_TASK     2
-#define PRIORITY_SOUND_PLAYER_TASK    3
-#define PRIORITY_USB_CTRL_TASK        2
-#endif // __PRIORITIES_H__
+#endif
