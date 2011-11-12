@@ -1,5 +1,14 @@
-//how to read data from program memory, depend on each compiler
-#define code(codemem)				codemem
+//#include "app_config.h"
+#include "inc/hw_memmap.h"
+#include "inc/hw_types.h"
+#include "inc/hw_nvic.h"
+#include "driverlib/sysctl.h"
+#include "driverlib/gpio.h"
+#include "driverlib/rom.h"
+#include "utils_custom_v1_02.h"
+#include "LCD_240x320.h"
+#include "font_engine_v1_00.h"
+#include "font_thai_plugin_v1_02.h"
 const unsigned char *font;
 unsigned char font_bit_width = 9;
 unsigned char font_byte_height = 2;
@@ -7,7 +16,7 @@ int font_size = 18;
 unsigned char font_width = 9;
 unsigned char font_height = 16;
 unsigned char char_gap = 2;
-
+#define FONT_EXT_PLUGIN
 #ifdef FONT_EXT_PLUGIN
 unsigned char font_ext_bit_width;
 unsigned char font_ext_byte_height;
@@ -139,7 +148,7 @@ unsigned char TSLCDGetBold(void)
 
 void TSLCDSetVaryWidth(unsigned char on)
 {
-//	vary_width_on = on;
+	//vary_width_on = on;
 }
 
 unsigned char TSLCDGetVaryWidth(void)
