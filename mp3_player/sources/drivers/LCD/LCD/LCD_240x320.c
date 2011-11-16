@@ -1121,7 +1121,31 @@ void TSLCDPrintStr(unsigned char line,unsigned char column,char *str,ts_mode_t m
 			return;
 	}
 }
+/////////////////////////////
+void TSLCDPrint(ts_pos_t x,ts_pos_t y,const char *str,ts_mode_t mode)
+{
+  int i = 0;
 
+	ts_pos_t posx,posy;
+	posx = x;
+	posy = y+80;
+
+
+	while(str[i])
+	{
+          font_mode = ENG;
+          buf_store(str[i] - 0x20);
+          display_buf(posx,posy,mode);
+
+          posx += last_non_zero-first_non_zero+1+char_gap;
+          i++;
+
+	  if ((print_limit) && (posx > print_limit_len))
+			return;
+	}
+}
+
+////////////////////////////
 void TSLCDPrintTxt(unsigned char line,unsigned char column,const char *txt,ts_mode_t mode) //print text from code memory
 {
 	TSLCDPrintStr(line,column,(char *)txt,mode);

@@ -371,7 +371,7 @@ void playButtonSound(SoundInfoHeader SongInfoHeader){
   // No longer playing audio.
   g_ulFlags &= ~BUFFER_PLAYING;
   //Open the button song
-  if(OpenWavFile(&g_sButtonFileObject,"0:/SYS/button.wav",&g_sButtonHeader) == FR_OK ){
+  if(OpenWavFile(&g_sButtonFileObject,"0:/SYS/button.wav",&g_sButtonHeader,0) == FR_OK ){
     //Setting for codec: bits/s, Hz, channels
     setupAudioCodecForSong(g_sButtonHeader);
     //set state for PLAY

@@ -4,10 +4,8 @@
 //
 static DIR sDirObject;
 static FILINFO sFileInfo;
-//Store Filenames for Play
-#define MAX_FILENAME_STRING_LEN (8 + 1 + 3 + 1)
-#define NUM_LIST_STRINGS 50
-static char pcFiles[NUM_LIST_STRINGS][MAX_FILENAME_STRING_LEN];
+
+char pcFiles[NUM_LIST_STRINGS][MAX_FILENAME_STRING_LEN];
 //the number of files
 unsigned char ucFileCount =0;
 //index of the file
@@ -16,14 +14,11 @@ unsigned char ucFileIndex =0;
 #define MAX_PATH_STRING_LEN 50
 static char pcPath[MAX_PATH_STRING_LEN]="0:/";
 static unsigned char ucEndDirPath=3;
-typedef struct ITEM{
-  unsigned char fattrib;
-  char fname[MAX_FILENAME_STRING_LEN];
-}Item;
+
 //Store for browsing
-static Item sItemList[NUM_LIST_STRINGS];
-static unsigned char ucItemCount=0;
-static unsigned char ucItemIndex =0;
+Item sItemList[NUM_LIST_STRINGS];
+unsigned char ucItemCount=0;
+unsigned char ucItemIndex =0;
 //File Path
 static char pcFilePath[MAX_PATH_STRING_LEN+MAX_FILENAME_STRING_LEN];
 static unsigned char ucEndFilePath=3;

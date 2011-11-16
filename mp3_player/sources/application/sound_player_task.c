@@ -30,6 +30,7 @@
 #include "conf.h"
 #include "audio_play.h"
 #include "player_control_task.h"
+#include "lcd_print.h"
 #include "sound_player_task.h"
 /**
 * Define Queue receiving control event from external
@@ -174,7 +175,7 @@ SoundPlayerTask(void *pvParameters){
         //===Open song
         FileExt = CheckExtension(sFilePath);
         if(FileExt == WAV_FILE){
-          if(OpenWavFile(&g_sSongFileObject,sFilePath,&g_sSongHeader) != FR_OK ){
+          if(OpenWavFile(&g_sSongFileObject,sFilePath,&g_sSongHeader,1) != FR_OK ){
             //announce opening fail
             ucOutputEvent = OPEN_ERR;
             givePlayerCtrlEvent((unsigned char *)&ucOutputEvent,100);
@@ -229,7 +230,7 @@ SoundPlayerTask(void *pvParameters){
 */
 char initSoundPlayerTask(void){
   //Intialize Hardware controled  
-  initAudioCodec(70);
+  initAudioCodec(VolumeValue);
   
   //Create Queue
   if(xQueueCreate( (signed portCHAR *)cSoundCtrlQueueBuffer,SOUND_CTRL_BUFFER_SIZE,

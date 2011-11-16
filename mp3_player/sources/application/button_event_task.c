@@ -17,6 +17,7 @@
 #include "conf.h"
 #include "player_control_task.h"
 #include "button_event_task.h"
+#include "lcd_print.h"
 //*****************************************************************************
 //----------DEFINES
 //*****************************************************************************
@@ -36,7 +37,7 @@ static unsigned long Button;
 static unsigned long OldButton;
 static unsigned char ButtonEvent;
 static unsigned char ucFlag;
-static unsigned char Delay =0;
+static unsigned char Delay =0,i;
 
 /**
 *
@@ -96,6 +97,7 @@ ButtonEventTask(void *pvParameters)
     //
     ulLastTime = xTaskGetTickCount();
     ucFlag =0;
+    i=0;
     //
     // Loop forever.
     //
@@ -116,6 +118,17 @@ ButtonEventTask(void *pvParameters)
       //Send Event to Player Control Task
       givePlayerCtrlEvent((unsigned char *)&ButtonEvent,0);
       ucFlag = 0;
+    }
+    i++;
+    if(i==10)
+    {
+      SecondCurrent++;
+      if(SecondCurrent==60)
+      {
+        MinsCurrent++;
+        SecondCurrent=0;
+      }
+      i=0;
     }
     //
     // Wait for the required amount of time.
