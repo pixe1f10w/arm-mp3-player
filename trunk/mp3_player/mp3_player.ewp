@@ -305,6 +305,9 @@
           <state>$PROJ_DIR$\sources\drivers\LCD</state>
           <state>$PROJ_DIR$\sources\drivers\USB\dev_msc</state>
           <state>$PROJ_DIR$\sources\drivers\USB\host_msc</state>
+          <state>$PROJ_DIR$\sources\drivers\LCD</state>
+          <state>$PROJ_DIR$\sources\drivers\LCD\LCD</state>
+          <state>$PROJ_DIR$\sources\drivers\LCD\fonts</state>
           <state>$PROJ_DIR$\sources\SafeRTOS</state>
           <state>$PROJ_DIR$\sources\Utils</state>
           <state>$PROJ_DIR$\sources\mad</state>
@@ -940,6 +943,30 @@
   <group>
     <name>Drivers</name>
     <group>
+      <name>LCD</name>
+      <file>
+        <name>$PROJ_DIR$\sources\drivers\LCD\fonts\font_engine_v1_00.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\sources\drivers\LCD\fonts\font_thai_plugin_v1_02.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\sources\drivers\LCD\fonts\font_vrinda18x16.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\sources\drivers\LCD\LCD\LCD_240x320.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\sources\drivers\LCD\lcd_print.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\sources\drivers\LCD\utils.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\sources\drivers\LCD\fonts\utils_custom_v1_02.c</name>
+      </file>
+    </group>
+    <group>
       <name>USB</name>
       <group>
         <name>dev</name>
@@ -997,27 +1024,6 @@
       <name>$PROJ_DIR$\sources\HAL\StellarisWare\third_party\fatfs\src\ff.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\sources\drivers\LCD\font_angsana14x32.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\sources\drivers\LCD\font_angsana32x64.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\sources\drivers\LCD\font_angsana_eng32x48.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\sources\drivers\LCD\font_engine_v1_00.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\sources\drivers\LCD\font_vrinda11x16.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\sources\drivers\LCD\font_vrinda18x16.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\sources\drivers\LCD\LCD.c</name>
-    </file>
-    <file>
       <name>$PROJ_DIR$\sources\HAL\StellarisWare\third_party\fatfs\port\mmc-dk-lm3s9b96.c</name>
     </file>
     <file>
@@ -1025,9 +1031,6 @@
     </file>
     <file>
       <name>$PROJ_DIR$\sources\HAL\StellarisWare\drivers\sound.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\sources\drivers\LCD\tslcd_elt240320tp.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\sources\drivers\Audio\wav_file.c</name>

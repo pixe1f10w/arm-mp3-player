@@ -20,7 +20,7 @@
 #include "drivers/sound.h"
 #include "audio_play.h"
 #include "wav_file.h"
-
+#include "lcd_print.h"
 
 //******************************************************************************
 //
@@ -51,7 +51,7 @@
 //******************************************************************************
 static unsigned char buff[16];
 FRESULT
-OpenWavFile(FIL *psFileObject, char *pcFileName, SoundInfoHeader *pSoundInfoHeader)
+OpenWavFile(FIL *psFileObject, char *pcFileName, SoundInfoHeader *pSoundInfoHeader, char flag)
 {
   
     unsigned long *pulBuffer=(unsigned long *)buff;
@@ -99,7 +99,10 @@ OpenWavFile(FIL *psFileObject, char *pcFileName, SoundInfoHeader *pSoundInfoHead
         f_close(psFileObject);
         return(FR_INVALID_NAME);
     }
-
+    //
+    // Save the size of the data.
+    //
+    pSoundInfoHeader->ulDataSize = pulBuffer[1];
     //
     // Read the format chunk size.
     //
@@ -126,7 +129,7 @@ OpenWavFile(FIL *psFileObject, char *pcFileName, SoundInfoHeader *pSoundInfoHead
     pSoundInfoHeader->ulSampleRate = pulBuffer[1];
     pSoundInfoHeader->ulAvgByteRate = pulBuffer[2];
     pSoundInfoHeader->usBitsPerSample = pusBuffer[7];
-
+    
     //
     // Only mono and stereo supported.
     //
@@ -156,7 +159,13 @@ OpenWavFile(FIL *psFileObject, char *pcFileName, SoundInfoHeader *pSoundInfoHead
     // Save the size of the data.
     //
     pSoundInfoHeader->ulDataSize = pulBuffer[1];
- 
+    if(flag){
+      SecondPlay = pSoundInfoHeader->ulDataSize/pSoundInfoHeader->ulAvgByteRate;
+      MinsPlay = SecondPlay/60;
+      SecondPlay -= MinsPlay*60;
+      MinsCurrent=0;
+      SecondCurrent=0;
+    }
     //
     // Adjust the average bit rate for 8 bit mono files.
     //

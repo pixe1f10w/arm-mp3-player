@@ -30,8 +30,8 @@
 #include "driverlib/sysctl.h"
 #include "inc/hw_memmap.h"
 #include "inc/hw_types.h"
-#include "tslcd_elt240320tp.h"
-#include "font_engine_v1_00.h"
+//#include "tslcd_elt240320tp.h"
+//#include "font_engine_v1_00.h"
 //*****************************************************************************
 //
 //! The error routine that is called if the driver library encounters an error.
