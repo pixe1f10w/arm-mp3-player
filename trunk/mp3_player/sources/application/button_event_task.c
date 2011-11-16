@@ -119,7 +119,8 @@ ButtonEventTask(void *pvParameters)
       givePlayerCtrlEvent((unsigned char *)&ButtonEvent,0);
       ucFlag = 0;
     }
-    i++;
+    if(PlayState==PLAY_STATE)
+      i++;
     if(i==10)
     {
       SecondCurrent++;

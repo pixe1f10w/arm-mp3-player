@@ -233,6 +233,16 @@ void Info(unsigned char iii)
     TSLCDPrint((320-TSLCDGetStringWidth("INFO"))>>1,215,"INFO",TS_MODE_FULL);
     //;
 }
+void USBTransfer(void)
+{
+  //Fill background
+  TSLCDFillRect(0,239,0,319,TS_COL_BLACK,TS_MODE_NORMAL);
+  //Fill title
+  TSLCDFillRect(100,140,0,319,TS_COL_BLUE,TS_MODE_NORMAL);
+  TSLCDSetFontColor(TS_COL_WHITE);
+  TSLCDSetBackColor(TS_COL_BLUE);
+  TSLCDPrint((320-TSLCDGetStringWidth("USB MASS STORAGE"))>>1,110,"USB MASS STORAGE",TS_MODE_FULL);
+}
 void initLCD(void)
 {
 //

@@ -38,5 +38,6 @@ extern unsigned char Selected;
 void Settings(unsigned char iii);
 //************************
 void Info(unsigned char iii);
+void USBTransfer(void);
 void initLCD(void);
 #endif //_LCD_PRINT_H_

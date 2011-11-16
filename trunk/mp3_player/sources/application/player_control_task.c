@@ -102,12 +102,18 @@ PlayerCtrlTask(void *pvParameters){
       //Events from USB
       if(usEventCode == STOP_PLAYER)
       {
+        PlayState=PAUSE_STATE;
         usStopPlayerCtrl = 1;//*Stop Player Ctrl
         soundCtrl = STOP;//*Stop Sound Player
         giveSoundCtrlEvent((unsigned char*)&soundCtrl,portMAX_DELAY);
       }
       else if (usEventCode == START_PLAYER)
+      {
         usStopPlayerCtrl = 0;//*Start Player Ctrl
+        Root = MENU;
+        ChooseItem = NOWPLAY;
+        DisplayMenu(0x03);
+      }
       
       //USB not pluged in
       if(usStopPlayerCtrl == 0)
@@ -296,6 +302,7 @@ PlayerCtrlTask(void *pvParameters){
         }
       }else{
         //USB mass storage
+        USBTransfer();
       }
         
     }
