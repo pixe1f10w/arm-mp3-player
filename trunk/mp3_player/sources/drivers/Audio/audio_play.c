@@ -266,6 +266,7 @@ initAudioCodec(unsigned long volume)
     //
     // Configure the I2S peripheral.
     //
+    IntPrioritySet(INT_I2S0,6<<5);
     SoundInit(0);
     //
     // Set the initial volume to something sensible.  Beware - if you make the

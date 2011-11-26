@@ -417,7 +417,6 @@ SoundInit(unsigned long ulEnableReceive)
     //
     // Enable the I2S interrupt on the NVIC
     //
-    IntPrioritySet(INT_I2S0,6<<5);
     IntEnable(INT_I2S0);
 }
 

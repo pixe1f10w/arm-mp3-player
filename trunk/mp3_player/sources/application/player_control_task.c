@@ -91,7 +91,7 @@ PlayerCtrlTask(void *pvParameters){
   //List files in root
   ListFiles();
   sFilePath=getCurrentFile();
-  DisplayMenu(0x03);
+  //DisplayMenu(0x03);
     //
     // Loop forever.
     //
@@ -151,6 +151,8 @@ PlayerCtrlTask(void *pvParameters){
             soundCtrl = START;
             giveSoundCtrlEvent((unsigned char*)&soundCtrl,100);;
           }
+          NowPlay(STATE_UPDATE);
+          NowPlay(SELECTED_UPDATE);
         }
         
         //Events form user buttons
