@@ -10,6 +10,7 @@
 #include "font_thai_plugin_v1_02.h"
 #include "utils.h"
 #include "file_management.h"
+#include "audio_codec.h"
 #include "lcd_print.h"
 
 
@@ -53,16 +54,13 @@ static char FileStateStr[]="00/00";
 //static unsigned char FileNum;
 //static unsigned char SelectedFile;
 static char PlayTime[]="00:00/00:00";
-unsigned long  MinsPlay;
-unsigned long  SecondPlay;
-unsigned long  MinsCurrent;
-unsigned long  SecondCurrent;
+
 const char PauseStr[]="|| ";
 const char PlayStr[]=">";
 unsigned char PlayState;
 static char *PlayStateStr; //">" or "||"
 static char PlayedPercent=0;
-unsigned char VolumeValue;
+
 void NowPlay(unsigned char iii)
 {
     unsigned char i,tmp;
@@ -102,14 +100,16 @@ void NowPlay(unsigned char iii)
         else
             tmp =0;
         
-        for(i=tmp; i< ucFileCount && i-tmp < DISPLAY_FILE_MAX; i++)
+        for(i=tmp;  (i-tmp) < DISPLAY_FILE_MAX; i++)
         {
             if(i == ucFileIndex)
                 TSLCDSetFontColor(TS_COL_RED);
             else
                 TSLCDSetFontColor(TS_COL_WHITE);
-            TSLCDPrint(20,190-((i-(tmp))*18),"               ",TS_MODE_FULL);
-            TSLCDPrint(20,190-((i-(tmp))*18),pcFiles[i],TS_MODE_FULL);
+            if(i< ucFileCount)
+              TSLCDFixedPrint(20,190-((i-(tmp))*18),240,pcFiles[i],TS_MODE_FULL);
+            else
+              TSLCDFixedPrint(20,190-((i-(tmp))*18),240," ",TS_MODE_FULL);
         }
     }
     if(iii&TIME_UPDATE)
@@ -119,11 +119,11 @@ void NowPlay(unsigned char iii)
         //Play Time
         NumToString(MinsCurrent,&PlayTime[0],2);
         NumToString(SecondCurrent,&PlayTime[3],2);
-        NumToString(MinsPlay,&PlayTime[6],2);
-        NumToString(SecondPlay,&PlayTime[9],2);
+        NumToString(sSongInfoHeader.ulMins,&PlayTime[6],2);
+        NumToString(sSongInfoHeader.ulSecond,&PlayTime[9],2);
         TSLCDPrint((320-TSLCDGetStringWidth(PlayTime)>>1),20,PlayTime,TS_MODE_FULL);
         //Time line
-        PlayedPercent = ((MinsCurrent*60+SecondCurrent)*100)/(MinsPlay*60+SecondPlay);
+        PlayedPercent = ((MinsCurrent*60+SecondCurrent)*100)/(sSongInfoHeader.ulMins*60+sSongInfoHeader.ulSecond);
         TSLCDFillRect(228,232,20,319,TS_COL_WHITE,TS_MODE_NORMAL);
         TSLCDFillRect(228,232,20,20+PlayedPercent*3,TS_COL_RED,TS_MODE_NORMAL);
     }
@@ -133,9 +133,9 @@ void NowPlay(unsigned char iii)
         TSLCDSetFontColor(TS_COL_WHITE);
         //Display State
         if(PlayState == PLAY_STATE)
-            PlayStateStr=(char*)PauseStr;
-        else if(PlayState == PAUSE_STATE)
             PlayStateStr=(char*)PlayStr;
+        else if(PlayState == PAUSE_STATE)
+            PlayStateStr=(char*)PauseStr;
         TSLCDPrint(5,2,PlayStateStr,TS_MODE_FULL);
     }
 }
@@ -172,8 +172,11 @@ void Browse(unsigned char iii)
                 TSLCDSetFontColor(TS_COL_RED);
             else
                 TSLCDSetFontColor(TS_COL_WHITE);
-            TSLCDPrint(20,190-((i-(tmp))*18),"               ",TS_MODE_FULL);
-            TSLCDPrint(20,190-((i-(tmp))*18),sItemList[i].fname,TS_MODE_FULL);
+            if(i< ucItemCount)
+              TSLCDFixedPrint(20,190-((i-(tmp))*18),240,sItemList[i].fname,TS_MODE_FULL);
+            else
+              TSLCDFixedPrint(20,190-((i-(tmp))*18),240," ",TS_MODE_FULL);
+            
         }
     }
 }
@@ -232,6 +235,12 @@ void Info(unsigned char iii)
     TSLCDSetBackColor(TS_COL_BLUE);
     TSLCDPrint((320-TSLCDGetStringWidth("INFO"))>>1,215,"INFO",TS_MODE_FULL);
     //;
+    TSLCDSetFontColor(TS_COL_RED);
+    TSLCDSetBackColor(TS_COL_BLACK);
+    TSLCDPrint((320-TSLCDGetStringWidth("PANDORA Player"))>>1,130,"PANDORA Player",TS_MODE_FULL);
+    TSLCDPrint((320-TSLCDGetStringWidth("Version 1.0"))>>1,110,"Version 1.0",TS_MODE_FULL);
+    TSLCDPrint((320-TSLCDGetStringWidth("Copyright@2011"))>>1,90,"Copyright@2011",TS_MODE_FULL);
+    
 }
 void USBTransfer(void)
 {
@@ -265,8 +274,8 @@ void initLCD(void)
     //NowPlay
     ucFileCount=0;
     ucFileIndex=0;
-    MinsPlay=0;
-    SecondPlay=0;
+    sSongInfoHeader.ulMins=0;
+    sSongInfoHeader.ulSecond=0;
     MinsCurrent=0;
     SecondCurrent=0;
     PlayState=PAUSE_STATE;
@@ -276,6 +285,6 @@ void initLCD(void)
     ucItemCount=0;
     //Settingd
     PlayMode=0;
-    SoundButton=1;
+    SoundButton=0;
     Selected=PLAY_MODE;
 }

@@ -16,8 +16,6 @@
 #include "driverlib/interrupt.h"
 #include "SafeRTOS/SafeRTOS_API.h"
 #include "priorities.h"
-#include "mp3_file.h"
-#include "wav_file.h"
 #include <string.h>
 
 #include "driverlib/flash.h"
@@ -44,9 +42,8 @@ static unsigned long PlayerCtrlTaskStack[128];
 // The period of the Process Event task.
 unsigned long PlayerCtrlDelay = 100;
 //
-char *sFilePath;
-//Save file system
-static FATFS g_sFatFs;
+
+
 /**
 * menu
 */
@@ -63,7 +60,7 @@ unsigned char sleep_time = 0;
 //record: enter, pause, exit
 
 //nowplay
-//unsigned char volume = 60;
+unsigned char clock=0;
 unsigned char play_mode =REPEAT_ALL;
 
 //Save Event for processing
@@ -136,11 +133,10 @@ PlayerCtrlTask(void *pvParameters){
             {
              soundCtrl = START;
              giveSoundCtrlEvent((unsigned char*)&soundCtrl,100);;
-            }else
-              PlayState=PAUSE_STATE;
+            }
           }else if(PlayMode == 1)//Single
           {
-            PlayState=PAUSE_STATE;
+            ;
           }else if(PlayMode ==2)//repeate
           {
             soundCtrl = START;
@@ -151,73 +147,84 @@ PlayerCtrlTask(void *pvParameters){
             soundCtrl = START;
             giveSoundCtrlEvent((unsigned char*)&soundCtrl,100);;
           }
-          NowPlay(STATE_UPDATE);
-          NowPlay(SELECTED_UPDATE);
+          //
+          if(ChooseItem == NOWPLAY)
+          {
+            NowPlay(STATE_UPDATE);
+            NowPlay(SELECTED_UPDATE);
+          }
         }
         
         //Events form user buttons
         if(Root == ITEM)
         {
           if(ChooseItem == NOWPLAY){
-            if(usEventCode == L_CENTER){
+            if(usEventCode == L_CENTER)
+            {
               Root = MENU;//*back ROOT
               DisplayMenu(0x03);
-            }else if(usEventCode == S_CENTER){
-              if(PlayState==PLAY_STATE)
-              {
-                PlayState=PAUSE_STATE;
-                soundCtrl=PAUSE;
-              }else
-              {
-                PlayState=PLAY_STATE;
-                soundCtrl=PLAY;
-              }
+            }else if(usEventCode == S_CENTER)
+            {
+              soundCtrl=PAUSE_PLAY;
               giveSoundCtrlEvent((unsigned char*)&soundCtrl,100);
               NowPlay(STATE_UPDATE);
-            }else if(usEventCode == S_RIGHT){
+              
+            }else if(usEventCode == S_RIGHT)
+            {     
               soundCtrl = VLM_UP;
               giveSoundCtrlEvent((unsigned char*)&soundCtrl,100);
-              VolumeValue +=2;
               NowPlay(VOLUME_UPDATE);
-            }else if(usEventCode == S_LEFT){
+            }
+            else if(usEventCode == S_LEFT)
+            {
               soundCtrl = VLM_DOWN;
               giveSoundCtrlEvent((unsigned char*)&soundCtrl,100);
-              VolumeValue -=2;
               NowPlay(VOLUME_UPDATE);
-            }else if(usEventCode == S_UP){
+            }
+            else if(usEventCode == S_UP)
+            {
               //Play next song
-              sFilePath = nextFile();
-              NowPlay(SELECTED_UPDATE);
-              PlayState=PLAY_STATE;
-              soundCtrl = START;
-              giveSoundCtrlEvent((unsigned char*)&soundCtrl,100);
-            }else if(usEventCode == S_DOWN){
-              //Play previous song
               sFilePath = preFile();
               NowPlay(SELECTED_UPDATE);
-              PlayState=PLAY_STATE;
+              
               soundCtrl = START;
               giveSoundCtrlEvent((unsigned char*)&soundCtrl,100);
             }
-          }else if(ChooseItem == BROWSE){
-            if(usEventCode == L_CENTER){
+            else if(usEventCode == S_DOWN)
+            {
+              //Play previous song
+              sFilePath = nextFile();
+              NowPlay(SELECTED_UPDATE);
+              
+              soundCtrl = START;
+              giveSoundCtrlEvent((unsigned char*)&soundCtrl,100);
+            }
+          }
+          else if(ChooseItem == BROWSE)
+          {
+            if(usEventCode == L_CENTER)
+            {
                 //back ROOT/parent's Dir
               vTaskSuspendScheduler();
               if(BackParentDir())
               {
                 Root = MENU;
                 DisplayMenu(0x03);
-              }else
+              }
+              else
                 Browse(BROWSE_UPDATE);
               xTaskResumeScheduler();
-            }else if(usEventCode == S_CENTER){
+            }
+            else if(usEventCode == S_CENTER)
+            {
                //open dir if it's dir, else file and play;
               vTaskSuspendScheduler();
               ListFiles();
               xTaskResumeScheduler();
               ChooseItem = NOWPLAY;
               NowPlay(0x1f);
-            }else if(usEventCode == S_UP){
+            }
+            else if(usEventCode == S_UP){
               PreItem();
               Browse(BROWSE_UPDATE);
             }else if(usEventCode == S_DOWN){
@@ -312,8 +319,11 @@ PlayerCtrlTask(void *pvParameters){
     {
         if(ChooseItem == NOWPLAY){
             //Update time playing
-            if(PlayState==PLAY_STATE)
+            if(clock)
+            {
               NowPlay(TIME_UPDATE);
+              clock=0;
+            }
         }
      }
   }
@@ -322,15 +332,9 @@ PlayerCtrlTask(void *pvParameters){
 *
 */
 char initPlayerControlTask(void){
-  FRESULT fresult;
-  //
-    // Mount the file system, using logical disk 0.
-    //
-    fresult = f_mount(0, &g_sFatFs);
-    if(fresult != FR_OK)
-    {
-        return(1);
-    }
+  
+  if(InitFileManagement())
+    return 1;
   initLCD();
   
   if(xQueueCreate( (signed portCHAR *)cPlayerCtrlQueueBuffer,PLAYER_CTRL_BUFFER_SIZE,

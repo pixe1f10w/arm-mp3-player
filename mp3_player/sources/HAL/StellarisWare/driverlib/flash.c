@@ -2,7 +2,7 @@
 //
 // flash.c - Driver for programming the on-chip flash.
 //
-// Copyright (c) 2005-2010 Texas Instruments Incorporated.  All rights reserved.
+// Copyright (c) 2005-2011 Texas Instruments Incorporated.  All rights reserved.
 // Software License Agreement
 // 
 // Texas Instruments (TI) is supplying this software for use solely and
@@ -18,7 +18,7 @@
 // CIRCUMSTANCES, BE LIABLE FOR SPECIAL, INCIDENTAL, OR CONSEQUENTIAL
 // DAMAGES, FOR ANY REASON WHATSOEVER.
 // 
-// This is part of revision 6459 of the Stellaris Peripheral Driver Library.
+// This is part of revision 8049 of the Stellaris Peripheral Driver Library.
 //
 //*****************************************************************************
 
@@ -114,8 +114,8 @@ FlashUsecSet(unsigned long ulClocks)
 //! \param ulAddress is the start address of the flash block to be erased.
 //!
 //! This function will erase a 1 kB block of the on-chip flash.  After erasing,
-//! the block will be filled with 0xFF bytes.  Read-only and execute-only
-//! blocks cannot be erased.
+//! the block is filled with 0xFF bytes.  Read-only and execute-only blocks
+//! cannot be erased.
 //!
 //! This function will not return until the block has been erased.
 //!
@@ -132,9 +132,10 @@ FlashErase(unsigned long ulAddress)
     ASSERT(!(ulAddress & (FLASH_ERASE_SIZE - 1)));
 
     //
-    // Clear the flash access interrupt.
+    // Clear the flash access and error interrupts.
     //
-    HWREG(FLASH_FCMISC) = FLASH_FCMISC_AMISC;
+    HWREG(FLASH_FCMISC) = (FLASH_FCMISC_AMISC | FLASH_FCMISC_VOLTMISC |
+                           FLASH_FCMISC_ERMISC);
 
     //
     // Erase the block.
@@ -150,9 +151,10 @@ FlashErase(unsigned long ulAddress)
     }
 
     //
-    // Return an error if an access violation occurred.
+    // Return an error if an access violation or erase error occurred.
     //
-    if(HWREG(FLASH_FCRIS) & FLASH_FCRIS_ARIS)
+    if(HWREG(FLASH_FCRIS) & (FLASH_FCRIS_ARIS | FLASH_FCRIS_VOLTRIS |
+                             FLASH_FCRIS_ERRIS))
     {
         return(-1);
     }
@@ -174,12 +176,9 @@ FlashErase(unsigned long ulAddress)
 //! of four.
 //!
 //! This function will program a sequence of words into the on-chip flash.
-//! Programming each location consists of the result of an AND operation
-//! of the new data and the existing data; in other words bits that contain
-//! 1 can remain 1 or be changed to 0, but bits that are 0 cannot be changed
-//! to 1.  Therefore, a word can be programmed multiple times as long as these
-//! rules are followed; if a program operation attempts to change a 0 bit to
-//! a 1 bit, that bit will not have its value changed.
+//! Each word in a page of flash can only be programmed one time between an
+//! erase of that page; programming a word multiple times will result in an
+//! unpredictable value in that word of flash.
 //!
 //! Since the flash is programmed one word at a time, the starting address and
 //! byte count must both be multiples of four.  It is up to the caller to
@@ -201,9 +200,10 @@ FlashProgram(unsigned long *pulData, unsigned long ulAddress,
     ASSERT(!(ulCount & 3));
 
     //
-    // Clear the flash access interrupt.
+    // Clear the flash access and error interrupts.
     //
-    HWREG(FLASH_FCMISC) = FLASH_FCMISC_AMISC;
+    HWREG(FLASH_FCMISC) = (FLASH_FCMISC_AMISC | FLASH_FCMISC_VOLTMISC |
+                           FLASH_FCMISC_INVDMISC | FLASH_FCMISC_PROGMISC);
 
     //
     // See if this device has a write buffer.
@@ -280,7 +280,8 @@ FlashProgram(unsigned long *pulData, unsigned long ulAddress,
     //
     // Return an error if an access violation occurred.
     //
-    if(HWREG(FLASH_FCRIS) & FLASH_FCRIS_ARIS)
+    if(HWREG(FLASH_FCRIS) & (FLASH_FCRIS_ARIS | FLASH_FCRIS_VOLTRIS |
+                             FLASH_FCRIS_INVDRIS | FLASH_FCRIS_PROGRIS))
     {
         return(-1);
     }
@@ -536,7 +537,7 @@ FlashProtectSet(unsigned long ulAddress, tFlashProtection eProtect)
     {
         ulProtectRE &= ~(FLASH_FMP_BLOCK_31 | FLASH_FMP_BLOCK_30);
         ulProtectRE |= (HWREG(g_pulFMPRERegs[ulBank]) &
-                (FLASH_FMP_BLOCK_31 | FLASH_FMP_BLOCK_30));
+                        (FLASH_FMP_BLOCK_31 | FLASH_FMP_BLOCK_30));
     }
 
     //
@@ -567,7 +568,7 @@ FlashProtectSet(unsigned long ulAddress, tFlashProtection eProtect)
 long
 FlashProtectSave(void)
 {
-    int ulTemp, ulLimit;
+    unsigned long ulTemp, ulLimit;
 
     //
     // If running on a Sandstorm-class device, only trigger a save of the first
@@ -743,8 +744,8 @@ FlashUserSave(void)
 //! flash controller can generate an interrupt when an invalid flash access
 //! occurs, such as trying to program or erase a read-only block, or trying to
 //! read from an execute-only block.  It can also generate an interrupt when a
-//! program or erase operation has completed.  The interrupt will be
-//! automatically enabled when the handler is registered.
+//! program or erase operation has completed.  The interrupt is automatically
+//! enabled when the handler is registered.
 //!
 //! \sa IntRegister() for important information about registering interrupt
 //! handlers.
@@ -883,14 +884,14 @@ FlashIntStatus(tBoolean bMasked)
 //! no longer assert.  This must be done in the interrupt handler to keep it
 //! from being called again immediately upon exit.
 //!
-//! \note Since there is a write buffer in the Cortex-M3 processor, it may take
-//! several clock cycles before the interrupt source is actually cleared.
+//! \note Because there is a write buffer in the Cortex-M3 processor, it may
+//! take several clock cycles before the interrupt source is actually cleared.
 //! Therefore, it is recommended that the interrupt source be cleared early in
 //! the interrupt handler (as opposed to the very last action) to avoid
 //! returning from the interrupt handler before the interrupt source is
 //! actually cleared.  Failure to do so may result in the interrupt handler
-//! being immediately reentered (since NVIC still sees the interrupt source
-//! asserted).
+//! being immediately reentered (because the interrupt controller still sees
+//! the interrupt source asserted).
 //!
 //! \return None.
 //

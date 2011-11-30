@@ -2,7 +2,7 @@
 //
 // ssi.c - Driver for Synchronous Serial Interface.
 //
-// Copyright (c) 2005-2010 Texas Instruments Incorporated.  All rights reserved.
+// Copyright (c) 2005-2011 Texas Instruments Incorporated.  All rights reserved.
 // Software License Agreement
 // 
 // Texas Instruments (TI) is supplying this software for use solely and
@@ -18,7 +18,7 @@
 // CIRCUMSTANCES, BE LIABLE FOR SPECIAL, INCIDENTAL, OR CONSEQUENTIAL
 // DAMAGES, FOR ANY REASON WHATSOEVER.
 // 
-// This is part of revision 6459 of the Stellaris Peripheral Driver Library.
+// This is part of revision 8049 of the Stellaris Peripheral Driver Library.
 //
 //*****************************************************************************
 
@@ -36,6 +36,83 @@
 #include "driverlib/debug.h"
 #include "driverlib/interrupt.h"
 #include "driverlib/ssi.h"
+
+//*****************************************************************************
+//
+// A mapping of timer base address to interupt number.
+//
+//*****************************************************************************
+static const unsigned long g_ppulSSIIntMap[][2] =
+{
+    { SSI0_BASE, INT_SSI0 },
+    { SSI1_BASE, INT_SSI1 },
+    { SSI2_BASE, INT_SSI2 },
+    { SSI3_BASE, INT_SSI3 },
+};
+
+//*****************************************************************************
+//
+//! \internal
+//! Checks a SSI base address.
+//!
+//! \param ulBase specifies the SSI module base address.
+//!
+//! This function determines if a SSI module base address is valid.
+//!
+//! \return Returns \b true if the base address is valid and \b false
+//! otherwise.
+//
+//*****************************************************************************
+#ifdef DEBUG
+static tBoolean
+SSIBaseValid(unsigned long ulBase)
+{
+    return((ulBase == SSI0_BASE) || (ulBase == SSI1_BASE) ||
+           (ulBase == SSI2_BASE) || (ulBase == SSI3_BASE));
+}
+#endif
+
+//*****************************************************************************
+//
+//! \internal
+//! Gets the SSI interrupt number.
+//!
+//! \param ulBase specifies the SSI module base address.
+//!
+//! Given a SSI base address, returns the corresponding interrupt number.
+//!
+//! \return Returns a SSI interrupt number, or -1 if \e ulBase is invalid.
+//
+//*****************************************************************************
+static long
+SSIIntNumberGet(unsigned long ulBase)
+{
+    unsigned long ulIdx;
+
+    //
+    // Loop through the table that maps SSI base addresses to interrupt
+    // numbers.
+    //
+    for(ulIdx = 0; ulIdx < (sizeof(g_ppulSSIIntMap) /
+                            sizeof(g_ppulSSIIntMap[0])); ulIdx++)
+    {
+        //
+        // See if this base address matches.
+        //
+        if(g_ppulSSIIntMap[ulIdx][0] == ulBase)
+        {
+            //
+            // Return the corresponding interrupt number.
+            //
+            return(g_ppulSSIIntMap[ulIdx][1]);
+        }
+    }
+
+    //
+    // The base address could not be found, so return an error.
+    //
+    return(-1);
+}
 
 //*****************************************************************************
 //
@@ -82,10 +159,10 @@
 //! The \e ulDataWidth parameter defines the width of the data transfers, and
 //! can be a value between 4 and 16, inclusive.
 //!
-//! The peripheral clock will be the same as the processor clock.  This will be
-//! the value returned by SysCtlClockGet(), or it can be explicitly hard coded
-//! if it is constant and known (to save the code/execution overhead of a call
-//! to SysCtlClockGet()).
+//! The peripheral clock is the same as the processor clock.  This is the value
+//! returned by SysCtlClockGet(), or it can be explicitly hard coded if it is
+//! constant and known (to save the code/execution overhead of a call to
+//! SysCtlClockGet()).
 //!
 //! This function replaces the original SSIConfig() API and performs the same
 //! actions.  A macro is provided in <tt>ssi.h</tt> to map the original API to
@@ -108,7 +185,7 @@ SSIConfigSetExpClk(unsigned long ulBase, unsigned long ulSSIClk,
     //
     // Check the arguments.
     //
-    ASSERT((ulBase == SSI0_BASE) || (ulBase == SSI1_BASE));
+    ASSERT(SSIBaseValid(ulBase));
     ASSERT((ulProtocol == SSI_FRF_MOTO_MODE_0) ||
            (ulProtocol == SSI_FRF_MOTO_MODE_1) ||
            (ulProtocol == SSI_FRF_MOTO_MODE_2) ||
@@ -170,7 +247,7 @@ SSIEnable(unsigned long ulBase)
     //
     // Check the arguments.
     //
-    ASSERT((ulBase == SSI0_BASE) || (ulBase == SSI1_BASE));
+    ASSERT(SSIBaseValid(ulBase));
 
     //
     // Read-modify-write the enable bit.
@@ -195,7 +272,7 @@ SSIDisable(unsigned long ulBase)
     //
     // Check the arguments.
     //
-    ASSERT((ulBase == SSI0_BASE) || (ulBase == SSI1_BASE));
+    ASSERT(SSIBaseValid(ulBase));
 
     //
     // Read-modify-write the enable bit.
@@ -231,12 +308,12 @@ SSIIntRegister(unsigned long ulBase, void (*pfnHandler)(void))
     //
     // Check the arguments.
     //
-    ASSERT((ulBase == SSI0_BASE) || (ulBase == SSI1_BASE));
+    ASSERT(SSIBaseValid(ulBase));
 
     //
     // Determine the interrupt number based on the SSI port.
     //
-    ulInt = (ulBase == SSI0_BASE) ? INT_SSI0 : INT_SSI1;
+    ulInt = SSIIntNumberGet(ulBase);
 
     //
     // Register the interrupt handler, returning an error if an error occurs.
@@ -273,12 +350,12 @@ SSIIntUnregister(unsigned long ulBase)
     //
     // Check the arguments.
     //
-    ASSERT((ulBase == SSI0_BASE) || (ulBase == SSI1_BASE));
+    ASSERT(SSIBaseValid(ulBase));
 
     //
     // Determine the interrupt number based on the SSI port.
     //
-    ulInt = (ulBase == SSI0_BASE) ? INT_SSI0 : INT_SSI1;
+    ulInt = SSIIntNumberGet(ulBase);
 
     //
     // Disable the interrupt.
@@ -312,7 +389,7 @@ SSIIntEnable(unsigned long ulBase, unsigned long ulIntFlags)
     //
     // Check the arguments.
     //
-    ASSERT((ulBase == SSI0_BASE) || (ulBase == SSI1_BASE));
+    ASSERT(SSIBaseValid(ulBase));
 
     //
     // Enable the specified interrupts.
@@ -340,7 +417,7 @@ SSIIntDisable(unsigned long ulBase, unsigned long ulIntFlags)
     //
     // Check the arguments.
     //
-    ASSERT((ulBase == SSI0_BASE) || (ulBase == SSI1_BASE));
+    ASSERT(SSIBaseValid(ulBase));
 
     //
     // Disable the specified interrupts.
@@ -370,7 +447,7 @@ SSIIntStatus(unsigned long ulBase, tBoolean bMasked)
     //
     // Check the arguments.
     //
-    ASSERT((ulBase == SSI0_BASE) || (ulBase == SSI1_BASE));
+    ASSERT(SSIBaseValid(ulBase));
 
     //
     // Return either the interrupt status or the raw interrupt status as
@@ -399,14 +476,14 @@ SSIIntStatus(unsigned long ulBase, tBoolean bMasked)
 //! \e ulIntFlags parameter can consist of either or both the \b SSI_RXTO and
 //! \b SSI_RXOR values.
 //!
-//! \note Since there is a write buffer in the Cortex-M3 processor, it may take
-//! several clock cycles before the interrupt source is actually cleared.
+//! \note Because there is a write buffer in the Cortex-M3 processor, it may
+//! take several clock cycles before the interrupt source is actually cleared.
 //! Therefore, it is recommended that the interrupt source be cleared early in
 //! the interrupt handler (as opposed to the very last action) to avoid
 //! returning from the interrupt handler before the interrupt source is
 //! actually cleared.  Failure to do so may result in the interrupt handler
-//! being immediately reentered (since NVIC still sees the interrupt source
-//! asserted).
+//! being immediately reentered (because the interrupt controller still sees
+//! the interrupt source asserted).
 //!
 //! \return None.
 //
@@ -417,7 +494,7 @@ SSIIntClear(unsigned long ulBase, unsigned long ulIntFlags)
     //
     // Check the arguments.
     //
-    ASSERT((ulBase == SSI0_BASE) || (ulBase == SSI1_BASE));
+    ASSERT(SSIBaseValid(ulBase));
 
     //
     // Clear the requested interrupt sources.
@@ -449,7 +526,7 @@ SSIDataPut(unsigned long ulBase, unsigned long ulData)
     //
     // Check the arguments.
     //
-    ASSERT((ulBase == SSI0_BASE) || (ulBase == SSI1_BASE));
+    ASSERT(SSIBaseValid(ulBase));
     ASSERT((ulData & (0xfffffffe << (HWREG(ulBase + SSI_O_CR0) &
                                      SSI_CR0_DSS_M))) == 0);
 
@@ -495,7 +572,7 @@ SSIDataPutNonBlocking(unsigned long ulBase, unsigned long ulData)
     //
     // Check the arguments.
     //
-    ASSERT((ulBase == SSI0_BASE) || (ulBase == SSI1_BASE));
+    ASSERT(SSIBaseValid(ulBase));
     ASSERT((ulData & (0xfffffffe << (HWREG(ulBase + SSI_O_CR0) &
                                      SSI_CR0_DSS_M))) == 0);
 
@@ -540,7 +617,7 @@ SSIDataGet(unsigned long ulBase, unsigned long *pulData)
     //
     // Check the arguments.
     //
-    ASSERT((ulBase == SSI0_BASE) || (ulBase == SSI1_BASE));
+    ASSERT(SSIBaseValid(ulBase));
 
     //
     // Wait until there is data to be read.
@@ -565,7 +642,7 @@ SSIDataGet(unsigned long ulBase, unsigned long *pulData)
 //!
 //! This function gets received data from the receive FIFO of the specified SSI
 //! module and places that data into the location specified by the \e ulData
-//! parameter.  If there is no data in the FIFO, then this function  returns a
+//! parameter.  If there is no data in the FIFO, then this function returns a
 //! zero.
 //!
 //! This function replaces the original SSIDataNonBlockingGet() API and
@@ -587,7 +664,7 @@ SSIDataGetNonBlocking(unsigned long ulBase, unsigned long *pulData)
     //
     // Check the arguments.
     //
-    ASSERT((ulBase == SSI0_BASE) || (ulBase == SSI1_BASE));
+    ASSERT(SSIBaseValid(ulBase));
 
     //
     // Check for data to read.
@@ -630,10 +707,10 @@ SSIDMAEnable(unsigned long ulBase, unsigned long ulDMAFlags)
     //
     // Check the arguments.
     //
-    ASSERT((ulBase == SSI0_BASE) || (ulBase == SSI1_BASE));
+    ASSERT(SSIBaseValid(ulBase));
 
     //
-    // Set the requested bits in the UART DMA control register.
+    // Set the requested bits in the SSI DMA control register.
     //
     HWREG(ulBase + SSI_O_DMACTL) |= ulDMAFlags;
 }
@@ -661,10 +738,10 @@ SSIDMADisable(unsigned long ulBase, unsigned long ulDMAFlags)
     //
     // Check the arguments.
     //
-    ASSERT((ulBase == SSI0_BASE) || (ulBase == SSI1_BASE));
+    ASSERT(SSIBaseValid(ulBase));
 
     //
-    // Clear the requested bits in the UART DMA control register.
+    // Clear the requested bits in the SSI DMA control register.
     //
     HWREG(ulBase + SSI_O_DMACTL) &= ~ulDMAFlags;
 }
@@ -690,12 +767,80 @@ SSIBusy(unsigned long ulBase)
     //
     // Check the arguments.
     //
-    ASSERT((ulBase == SSI0_BASE) || (ulBase == SSI1_BASE));
+    ASSERT(SSIBaseValid(ulBase));
 
     //
     // Determine if the SSI is busy.
     //
     return((HWREG(ulBase + SSI_O_SR) & SSI_SR_BSY) ? true : false);
+}
+
+//*****************************************************************************
+//
+//! Sets the data clock source for the specified SSI peripheral.
+//!
+//! \param ulBase is the base address of the SSI port.
+//! \param ulSource is the baud clock source for the SSI.
+//!
+//! This function allows the baud clock source for the SSI to be selected.
+//! The possible clock source are the system clock (\b SSI_CLOCK_SYSTEM) or
+//! the precision internal oscillator (\b SSI_CLOCK_PIOSC).
+//!
+//! Changing the baud clock source will change the data rate generated by the
+//! SSI.  Therefore, the data rate should be reconfigured after any change to
+//! the SSI clock source.
+//!
+//! \note The ability to specify the SSI baud clock source varies with the
+//! Stellaris part and SSI in use.  Please consult the data sheet for the part
+//! you are using to determine whether this support is available.
+//!
+//! \return None.
+//
+//*****************************************************************************
+void
+SSIClockSourceSet(unsigned long ulBase, unsigned long ulSource)
+{
+    //
+    // Check the arguments.
+    //
+    ASSERT(SSIBaseValid(ulBase));
+    ASSERT((ulSource == SSI_CLOCK_SYSTEM) || (ulSource == SSI_CLOCK_PIOSC));
+
+    //
+    // Set the SSI clock source.
+    //
+    HWREG(ulBase + SSI_O_CC) = ulSource;
+}
+
+//*****************************************************************************
+//
+//! Gets the data clock source for the specified SSI peripheral.
+//!
+//! \param ulBase is the base address of the SSI port.
+//!
+//! This function returns the data clock source for the specified SSI.  The
+//! possible data clock source are the system clock (\b SSI_CLOCK_SYSTEM) or
+//! the precision internal oscillator (\b SSI_CLOCK_PIOSC).
+//!
+//! \note The ability to specify the SSI data clock source varies with the
+//! Stellaris part and SSI in use.  Please consult the data sheet for the part
+//! you are using to determine whether this support is available.
+//!
+//! \return None.
+//
+//*****************************************************************************
+unsigned long
+SSIClockSourceGet(unsigned long ulBase)
+{
+    //
+    // Check the arguments.
+    //
+    ASSERT(SSIBaseValid(ulBase));
+
+    //
+    // Return the SSI clock source.
+    //
+    return(HWREG(ulBase + SSI_O_CC));
 }
 
 //*****************************************************************************

@@ -2,7 +2,7 @@
 //
 // adc.c - Driver for the ADC.
 //
-// Copyright (c) 2005-2010 Texas Instruments Incorporated.  All rights reserved.
+// Copyright (c) 2005-2011 Texas Instruments Incorporated.  All rights reserved.
 // Software License Agreement
 // 
 // Texas Instruments (TI) is supplying this software for use solely and
@@ -18,7 +18,7 @@
 // CIRCUMSTANCES, BE LIABLE FOR SPECIAL, INCIDENTAL, OR CONSEQUENTIAL
 // DAMAGES, FOR ANY REASON WHATSOEVER.
 // 
-// This is part of revision 6459 of the Stellaris Peripheral Driver Library.
+// This is part of revision 8049 of the Stellaris Peripheral Driver Library.
 //
 //*****************************************************************************
 
@@ -33,6 +33,7 @@
 #include "inc/hw_ints.h"
 #include "inc/hw_memmap.h"
 #include "inc/hw_types.h"
+#include "inc/hw_sysctl.h"
 #include "driverlib/adc.h"
 #include "driverlib/debug.h"
 #include "driverlib/interrupt.h"
@@ -46,6 +47,7 @@
 #define ADC_SEQ                 (ADC_O_SSMUX0)
 #define ADC_SEQ_STEP            (ADC_O_SSMUX1 - ADC_O_SSMUX0)
 #define ADC_SSMUX               (ADC_O_SSMUX0 - ADC_O_SSMUX0)
+#define ADC_SSEMUX              (ADC_O_SSEMUX0 - ADC_O_SSMUX0)
 #define ADC_SSCTL               (ADC_O_SSCTL0 - ADC_O_SSMUX0)
 #define ADC_SSFIFO              (ADC_O_SSFIFO0 - ADC_O_SSMUX0)
 #define ADC_SSFSTAT             (ADC_O_SSFSTAT0 - ADC_O_SSMUX0)
@@ -257,7 +259,7 @@ ADCIntStatus(unsigned long ulBase, unsigned long ulSequenceNum,
         ulTemp = HWREG(ulBase + ADC_O_RIS) & (0x10000 | (1 << ulSequenceNum));
 
         //
-        // If the digital comparator status bit is set, reflect it to the 
+        // If the digital comparator status bit is set, reflect it to the
         // appropriate sequence bit.
         //
         if(ulTemp & 0x10000)
@@ -284,14 +286,14 @@ ADCIntStatus(unsigned long ulBase, unsigned long ulSequenceNum,
 //! asserts.  This must be done in the interrupt handler to keep it from being
 //! called again immediately upon exit.
 //!
-//! \note Since there is a write buffer in the Cortex-M3 processor, it may take
-//! several clock cycles before the interrupt source is actually cleared.
+//! \note Because there is a write buffer in the Cortex-M3 processor, it may
+//! take several clock cycles before the interrupt source is actually cleared.
 //! Therefore, it is recommended that the interrupt source be cleared early in
 //! the interrupt handler (as opposed to the very last action) to avoid
 //! returning from the interrupt handler before the interrupt source is
 //! actually cleared.  Failure to do so may result in the interrupt handler
-//! being immediately reentered (since NVIC still sees the interrupt source
-//! asserted).
+//! being immediately reentered (because the interrupt controller still sees
+//! the interrupt source asserted).
 //!
 //! \return None.
 //
@@ -472,12 +474,9 @@ ADCSequenceConfigure(unsigned long ulBase, unsigned long ulSequenceNum,
 //! \param ulSequenceNum is the sample sequence number.
 //! \param ulStep is the step to be configured.
 //! \param ulConfig is the configuration of this step; must be a logical OR of
-//! \b ADC_CTL_TS, \b ADC_CTL_IE, \b ADC_CTL_END, \b ADC_CTL_D, and one of the
-//! input channel selects (\b ADC_CTL_CH0 through \b ADC_CTL_CH15).  For parts
-//! with the digital comparator feature, the follow values may also be OR'd
-//! into the \e ulConfig value to enable the digital comparater feature:
-//! \b ADC_CTL_CE and one of the comparater selects (\b ADC_CTL_CMP0 through
-//! \b ADC_CTL_CMP7).
+//! \b ADC_CTL_TS, \b ADC_CTL_IE, \b ADC_CTL_END, \b ADC_CTL_D, one of the
+//! input channel selects (\b ADC_CTL_CH0 through \b ADC_CTL_CH15), and one of
+//! the digital comparator selects (\b ADC_CTL_CMP0 through \b ADC_CTL_CMP7).
 //!
 //! This function will set the configuration of the ADC for one step of a
 //! sample sequence.  The ADC can be configured for single-ended or
@@ -488,14 +487,14 @@ ADCSequenceConfigure(unsigned long ulBase, unsigned long ulSequenceNum,
 //! this step can be defined as the last in the sequence (the \b ADC_CTL_END
 //! bit) and it can be configured to cause an interrupt when the step is
 //! complete (the \b ADC_CTL_IE bit).  If the digital comparators are present
-//! on the device, this step may also be configured send the ADC sample to
-//! the selected comparator (the \b ADC_CTL_CMP0 through \b ADC_CTL_CMP7
-//! values) by using the \b ADC_CTL_CE bit.  The configuration is used by the
-//! ADC at the appropriate time when the trigger for this sequence occurs.
+//! on the device, this step may also be configured to send the ADC sample to
+//! the selected comparator using \b ADC_CTL_CMP0 through \b ADC_CTL_CMP7.
+//! The configuration is used by the ADC at the appropriate time when the
+//! trigger for this sequence occurs.
 //!
 //! \note If the Digitial Comparator is present and enabled using the
-//! \b ADC_CTL_CE bit, the ADC sample will NOT be written into the ADC
-//! sequence data FIFO.
+//! \b ADC_CTL_CMP0 through \b ADC_CTL_CMP7 selects, the ADC sample will NOT be
+//! written into the ADC sequence data FIFO.
 //!
 //! The \e ulStep parameter determines the order in which the samples are
 //! captured by the ADC when the trigger occurs.  It can range from zero to
@@ -505,9 +504,9 @@ ADCSequenceConfigure(unsigned long ulBase, unsigned long ulSequenceNum,
 //! Differential mode only works with adjacent channel pairs (for example, 0
 //! and 1).  The channel select must be the number of the channel pair to
 //! sample (for example, \b ADC_CTL_CH0 for 0 and 1, or \b ADC_CTL_CH1 for 2
-//! and 3) or undefined results will be returned by the ADC.  Additionally, if
+//! and 3) or undefined results are returned by the ADC.  Additionally, if
 //! differential mode is selected when the temperature sensor is being sampled,
-//! undefined results will be returned by the ADC.
+//! undefined results are returned by the ADC.
 //!
 //! It is the responsibility of the caller to ensure that a valid configuration
 //! is specified; this function does not check the validity of the specified
@@ -548,6 +547,13 @@ ADCSequenceStepConfigure(unsigned long ulBase, unsigned long ulSequenceNum,
     HWREG(ulBase + ADC_SSMUX) = ((HWREG(ulBase + ADC_SSMUX) &
                                   ~(0x0000000f << ulStep)) |
                                  ((ulConfig & 0x0f) << ulStep));
+
+    //
+    // Set the upper bits of the analog mux value for this step.
+    //
+    HWREG(ulBase + ADC_SSEMUX) = ((HWREG(ulBase + ADC_SSEMUX) &
+                                  ~(0x0000000f << ulStep)) |
+                                  (((ulConfig & 0xf00) >> 8) << ulStep));
 
     //
     // Set the control value for this step.
@@ -794,8 +800,8 @@ ADCProcessorTrigger(unsigned long ulBase, unsigned long ulSequenceNum)
     //
     // Generate a processor trigger for this sample sequence.
     //
-    HWREG(ulBase + ADC_O_PSSI) = ((ulSequenceNum & 0xffff0000) |
-                                  (1 << (ulSequenceNum & 0xf)));
+    HWREG(ulBase + ADC_O_PSSI) |= ((ulSequenceNum & 0xffff0000) |
+                                   (1 << (ulSequenceNum & 0xf)));
 }
 
 //*****************************************************************************
@@ -906,6 +912,13 @@ ADCSoftwareOversampleStepConfigure(unsigned long ulBase,
                                      ((ulConfig & 0x0f) << ulStep));
 
         //
+        // Set the upper bits of the analog mux value for this step.
+        //
+        HWREG(ulBase + ADC_SSEMUX) = ((HWREG(ulBase + ADC_SSEMUX) &
+                                      ~(0x0000000f << ulStep)) |
+                                      (((ulConfig & 0xf00) >> 8) << ulStep));
+
+        //
         // Set the control value for this step.
         //
         HWREG(ulBase + ADC_SSCTL) = ((HWREG(ulBase + ADC_SSCTL) &
@@ -937,8 +950,8 @@ ADCSoftwareOversampleStepConfigure(unsigned long ulBase,
 //! a memory resident buffer with software oversampling applied.  The requested
 //! number of samples are copied into the data buffer; if there are not enough
 //! samples in the hardware FIFO to satisfy this many oversampled data items
-//! then incorrect results will be returned.  It is the caller's responsibility
-//! to read only the samples that are available and wait until enough data is
+//! then incorrect results are returned.  It is the caller's responsibility to
+//! read only the samples that are available and wait until enough data is
 //! available, for example as a result of receiving an interrupt.
 //!
 //! \return None.
@@ -1326,10 +1339,12 @@ ADCComparatorIntClear(unsigned long ulBase, unsigned long ulStatus)
 //! \param ulRef is the reference to use.
 //!
 //! The ADC reference is set as specified by \e ulRef.  It must be one of
-//! \b ADC_REF_INT or \b ADC_REF_EXT_3V, for internal or external reference.
-//! If \b ADC_REF_INT is chosen, then an internal 3V reference is used and
-//! no external reference is needed.  If \b ADC_REF_EXT_3V is chosen, then a 3V
-//! reference must be supplied to the AVREF pin.
+//! \b ADC_REF_INT, \b ADC_REF_EXT_3V, or \b ADC_REF_EXT_1V for internal or
+//! external reference.  If \b ADC_REF_INT is chosen, then an internal 3V
+//! reference is used and no external reference is needed.  If
+//! \b ADC_REF_EXT_3V is chosen, then a 3V reference must be supplied to the
+//! AVREF pin.  If \b ADC_REF_EXT_1V is chosen, then a 1V external referece
+//! must be supplied to the AVREF pin.
 //!
 //! \note The ADC reference can only be selected on parts that have an external
 //! reference.  Consult the data sheet for your part to determine if there is
@@ -1345,7 +1360,8 @@ ADCReferenceSet(unsigned long ulBase, unsigned long ulRef)
     // Check the arguments.
     //
     ASSERT((ulBase == ADC0_BASE) || (ulBase == ADC1_BASE));
-    ASSERT((ulRef == ADC_REF_INT) || (ulRef == ADC_REF_EXT_3V));
+    ASSERT((ulRef == ADC_REF_INT) || (ulRef == ADC_REF_EXT_3V) ||
+           (ulRef == ADC_REF_EXT_1V));
 
     //
     // Set the reference.
@@ -1360,8 +1376,8 @@ ADCReferenceSet(unsigned long ulBase, unsigned long ulRef)
 //!
 //! \param ulBase is the base address of the ADC module.
 //!
-//! Returns the value of the ADC reference setting.  The returned value will be
-//! one of \b ADC_REF_INT or \b ADC_REF_EXT_3V.
+//! Returns the value of the ADC reference setting.  The returned value is one
+//! of \b ADC_REF_INT, \b ADC_REF_EXT_3V, or \b ADC_REF_EXT_1V.
 //!
 //! \note The value returned by this function is only meaningful if used on a
 //! part that is capable of using an external reference.  Consult the data
@@ -1382,6 +1398,70 @@ ADCReferenceGet(unsigned long ulBase)
     // Return the value of the reference.
     //
     return(HWREG(ulBase + ADC_O_CTL) & ADC_CTL_VREF);
+}
+
+//*****************************************************************************
+//
+//! Selects the ADC resolution.
+//!
+//! \param ulBase is the base address of the ADC module.
+//! \param ulResolution is the ADC bit resolution.
+//!
+//! The ADC resolution is set as specified by \e ulResolution.  It must be one
+//! of \b ADC_RES_12BIT or \b ADC_RES_10BIT.
+//!
+//! \note The ADC resolution can only be set on parts that are capable of
+//! greater than 10-bit conversions.  Consult the data sheet for your part to
+//! determine if it is capable of 12-bit conversions.
+//!
+//! \return None.
+//
+//*****************************************************************************
+void
+ADCResolutionSet(unsigned long ulBase, unsigned long ulResolution)
+{
+    //
+    // Check the arguments.
+    //
+    ASSERT((ulBase == ADC0_BASE) || (ulBase == ADC1_BASE));
+    ASSERT((ulResolution == ADC_RES_10BIT) || (ulResolution == ADC_RES_12BIT));
+
+    //
+    // Set the resolution.
+    //
+    HWREG(ulBase + ADC_O_CTL) = (HWREG(ulBase + ADC_O_CTL) & ~ADC_CTL_RES) |
+                                ulResolution;
+}
+
+//*****************************************************************************
+//
+//! Gets the setting of ADC resolution.
+//!
+//! \param ulBase is the base address of the ADC module.
+//!
+//! The ADC resolution is returned as one of \b ADC_RES_12BIT or
+//! \b ADC_RES_10BIT.
+//!
+//! \note The value returned by this function is only meaningful if used on a
+//! part that is capable of higher than 10-bit ADC resolution.  Consult the
+//! data sheet for your part to determine if it is capable of 12-bit
+//! conversions.
+//!
+//! \return The current setting of the ADC resolution.
+//
+//*****************************************************************************
+unsigned long
+ADCResolutionGet(unsigned long ulBase)
+{
+    //
+    // Check the arguments.
+    //
+    ASSERT((ulBase == ADC0_BASE) || (ulBase == ADC1_BASE));
+
+    //
+    // Get the resolution and return it to the caller.
+    //
+    return(HWREG(ulBase + ADC_O_CTL) & ADC_CTL_RES);
 }
 
 //*****************************************************************************

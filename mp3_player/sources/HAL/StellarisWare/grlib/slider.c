@@ -2,7 +2,7 @@
 //
 // slider.c - A simple slider widget class.
 //
-// Copyright (c) 2008-2010 Texas Instruments Incorporated.  All rights reserved.
+// Copyright (c) 2008-2011 Texas Instruments Incorporated.  All rights reserved.
 // Software License Agreement
 // 
 // Texas Instruments (TI) is supplying this software for use solely and
@@ -18,7 +18,7 @@
 // CIRCUMSTANCES, BE LIABLE FOR SPECIAL, INCIDENTAL, OR CONSEQUENTIAL
 // DAMAGES, FOR ANY REASON WHATSOEVER.
 // 
-// This is part of revision 6459 of the Stellaris Graphics Library.
+// This is part of revision 8049 of the Stellaris Graphics Library.
 //
 //*****************************************************************************
 
@@ -199,7 +199,7 @@ SliderValueToPosition(tSliderWidget *pSlider, long lValue)
     // Now we can determine the relevant position relative to the start of the
     // slider.
     //
-    lPos = ((lValue * (long)usSize) / lRange);
+    lPos = (((lValue - pSlider->lMin) * (long)usSize) / lRange);
 
     //
     // Clip the calculated position to the valid range based on the slider

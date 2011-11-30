@@ -2,7 +2,7 @@
 //
 // systick.c - Driver for the SysTick timer in NVIC.
 //
-// Copyright (c) 2005-2010 Texas Instruments Incorporated.  All rights reserved.
+// Copyright (c) 2005-2011 Texas Instruments Incorporated.  All rights reserved.
 // Software License Agreement
 // 
 // Texas Instruments (TI) is supplying this software for use solely and
@@ -18,7 +18,7 @@
 // CIRCUMSTANCES, BE LIABLE FOR SPECIAL, INCIDENTAL, OR CONSEQUENTIAL
 // DAMAGES, FOR ANY REASON WHATSOEVER.
 // 
-// This is part of revision 6459 of the Stellaris Peripheral Driver Library.
+// This is part of revision 8049 of the Stellaris Peripheral Driver Library.
 //
 //*****************************************************************************
 
@@ -41,7 +41,7 @@
 //! Enables the SysTick counter.
 //!
 //! This will start the SysTick counter.  If an interrupt handler has been
-//! registered, it will be called when the SysTick counter rolls over.
+//! registered, it is called when the SysTick counter rolls over.
 //!
 //! \note Calling this function will cause the SysTick counter to (re)commence
 //! counting from its current value.  The counter is not automatically reloaded

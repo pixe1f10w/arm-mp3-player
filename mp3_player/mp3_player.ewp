@@ -166,9 +166,10 @@
           <name>CCDefines</name>
           <state>ewarm</state>
           <state>PART_LM3S9B96</state>
-          <state>TARGET_IS_TEMPEST_RB1</state>
+          <state>TARGET_IS_TEMPEST_RC5</state>
           <state>DISK0_DK_LM3S9B96</state>
           <state>DISK1_USB_MSC</state>
+          <state>FPM_DEFAULT</state>
         </option>
         <option>
           <name>CCPreprocFile</name>
@@ -310,7 +311,7 @@
           <state>$PROJ_DIR$\sources\drivers\LCD\fonts</state>
           <state>$PROJ_DIR$\sources\SafeRTOS</state>
           <state>$PROJ_DIR$\sources\Utils</state>
-          <state>$PROJ_DIR$\sources\mad</state>
+          <state>$PROJ_DIR$\sources\libmad</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -928,6 +929,9 @@
       <name>$PROJ_DIR$\sources\application\led_task.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\sources\drivers\Audio\mp3_decoder_task.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\sources\application\player_control_task.c</name>
     </file>
     <file>
@@ -938,6 +942,9 @@
     </file>
     <file>
       <name>$PROJ_DIR$\sources\application\usbotg_task.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\sources\drivers\Audio\wav_decoder_task.c</name>
     </file>
   </group>
   <group>
@@ -964,6 +971,42 @@
       </file>
       <file>
         <name>$PROJ_DIR$\sources\drivers\LCD\fonts\utils_custom_v1_02.c</name>
+      </file>
+    </group>
+    <group>
+      <name>libmad</name>
+      <file>
+        <name>$PROJ_DIR$\sources\libmad\bit.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\sources\libmad\decoder.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\sources\libmad\fixed.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\sources\libmad\frame.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\sources\libmad\huffman.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\sources\libmad\layer12.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\sources\libmad\layer3.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\sources\libmad\mad_timer.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\sources\libmad\stream.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\sources\libmad\synth.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\sources\libmad\version.c</name>
       </file>
     </group>
     <group>
@@ -1018,7 +1061,7 @@
       </file>
     </group>
     <file>
-      <name>$PROJ_DIR$\sources\drivers\Audio\audio_play.c</name>
+      <name>$PROJ_DIR$\sources\drivers\Audio\audio_codec.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\sources\HAL\StellarisWare\third_party\fatfs\src\ff.c</name>
@@ -1031,9 +1074,6 @@
     </file>
     <file>
       <name>$PROJ_DIR$\sources\HAL\StellarisWare\drivers\sound.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\sources\drivers\Audio\wav_file.c</name>
     </file>
   </group>
   <group>
@@ -1160,12 +1200,6 @@
     </file>
     <file>
       <name>$PROJ_DIR$\sources\HAL\StellarisWare\driverlib\systick.h</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\sources\HAL\StellarisWare\driverlib\timer.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\sources\HAL\StellarisWare\driverlib\timer.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\sources\HAL\StellarisWare\drivers\tlv320aic23b.c</name>

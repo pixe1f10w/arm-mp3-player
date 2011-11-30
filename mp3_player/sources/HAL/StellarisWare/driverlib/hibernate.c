@@ -2,7 +2,7 @@
 //
 // hibernate.c - Driver for the Hibernation module
 //
-// Copyright (c) 2007-2010 Texas Instruments Incorporated.  All rights reserved.
+// Copyright (c) 2007-2011 Texas Instruments Incorporated.  All rights reserved.
 // Software License Agreement
 // 
 // Texas Instruments (TI) is supplying this software for use solely and
@@ -18,7 +18,7 @@
 // CIRCUMSTANCES, BE LIABLE FOR SPECIAL, INCIDENTAL, OR CONSEQUENTIAL
 // DAMAGES, FOR ANY REASON WHATSOEVER.
 // 
-// This is part of revision 6459 of the Stellaris Peripheral Driver Library.
+// This is part of revision 8049 of the Stellaris Peripheral Driver Library.
 //
 //*****************************************************************************
 
@@ -80,10 +80,24 @@ void
 HibernateWriteComplete(void)
 {
     //
-    // Spin until the write complete bit is set.
+    // Add a delay here to enforce the required delay between write accesses to
+    // certain Hibernation module registers.
     //
-    while(!(HWREG(HIB_CTL) & HIB_CTL_WRC))
+    if(CLASS_IS_FURY)
     {
+        //
+        // Delay a fixed time on Fury-class devices
+        //
+        SysCtlDelay(g_ulWriteDelay);
+    }
+    else
+    {
+        //
+        // Spin until the write complete bit is set, for later devices.
+        //
+        while(!(HWREG(HIB_CTL) & HIB_CTL_WRC))
+        {
+        }
     }
 }
 
@@ -97,10 +111,10 @@ HibernateWriteComplete(void)
 //! Enables the Hibernation module for operation.  This function should be
 //! called before any of the Hibernation module features are used.
 //!
-//! The peripheral clock will be the same as the processor clock.  This will be
-//! the value returned by SysCtlClockGet(), or it can be explicitly hard-coded
-//! if it is constant and known (to save the code/execution overhead of a call
-//! to SysCtlClockGet()).
+//! The peripheral clock is the same as the processor clock.  This is the value
+//! returned by SysCtlClockGet(), or it can be explicitly hard-coded if it is
+//! constant and known (to save the code/execution overhead of a call to
+//! SysCtlClockGet()).
 //!
 //! This function replaces the original HibernateEnable() API and performs the
 //! same actions.  A macro is provided in <tt>hibernate.h</tt> to map the
@@ -128,6 +142,14 @@ HibernateEnableExpClk(unsigned long ulHibClk)
                           (1000L * LOOP_CYCLES));
         g_ulWriteDelay++;
     }
+    else
+    {
+        //
+        // Non-fury parts must wait for write complete following register
+        // load (above).
+        //
+        HibernateWriteComplete();
+    }
 }
 
 //*****************************************************************************
@@ -147,6 +169,11 @@ HibernateDisable(void)
     // Turn off the clock enable bit.
     //
     HWREG(HIB_CTL) &= ~HIB_CTL_CLK32EN;
+
+    //
+    // Wait for write completion
+    //
+    HibernateWriteComplete();
 }
 
 //*****************************************************************************
@@ -164,6 +191,11 @@ HibernateDisable(void)
 //!   oscillator.
 //! - \b HIBERNATE_CLOCK_SEL_DIV128 - use the crystal input, divided by 128.
 //!
+//! \note The \b HIBERNATE_CLOCK_SEL_DIV128 setting is not available on all
+//! Stellaris devices.  Please consult the data sheet to determine if the
+//! device that you are using supports the 4.194304 crystal as a source for the
+//! Hibernation module.
+//!
 //! \return None.
 //
 //*****************************************************************************
@@ -180,6 +212,77 @@ HibernateClockSelect(unsigned long ulClockInput)
     // Set the clock selection bit according to the parameter.
     //
     HWREG(HIB_CTL) = ulClockInput | (HWREG(HIB_CTL) & ~HIB_CTL_CLKSEL);
+
+    //
+    // Wait for write completion
+    //
+    HibernateWriteComplete();
+}
+
+//*****************************************************************************
+//
+//! Configures the clock input for the Hibernation module.
+//!
+//! \param ulConfig is one of the possible configuration options for the clock
+//! input listed below.
+//!
+//! This function is used to configure the clock input for the Hibernation
+//! module.  The \e ulConfig parameter can be one of the following values:
+//!
+//! - \b HIBERNATE_OSC_DISABLE specifies that the internal oscillator
+//! is powered off and either an externally supplied clock source or no clock
+//! source is being used.
+//! - \b HIBERNATE_OSC_HIGHDRIVE specifies a higher drive strength when a 24pF
+//! filter capacitor is used with a crystal.
+//! - \b HIBERNATE_OSC_LOWDRIVE specifies a lower drive strength when a 12pF
+//! filter capacitor is used with a crystal.
+//!
+//! The \b HIBERNATE_OSC_DISABLE option is used to disable and power down the
+//! internal oscillator if an external clock source or no clock source is used
+//! instead of a 32.768 kHz crystal.  In the case where an external crystal is
+//! used, either the \b HIBERNATE_OSC_HIGHDRIVE or \b HIBERNATE_OSC_LOWDRIVE is
+//! used.  This optimizes the oscillator drive strength to match the size of
+//! the filter capacitor that is used with the external crystal circuit.
+//!
+//! \note The ability to configure the clock input in the Hibernation
+//! module is not available on all Stellaris devices.  Please consult the data
+//! sheet for the Stellaris device that you are using to determine if this
+//! feature is available.
+//!
+//! \return None.
+//
+//*****************************************************************************
+void
+HibernateClockConfig(unsigned long ulConfig)
+{
+    unsigned long ulHIBCtl;
+
+    ASSERT((ulConfig & (HIBERNATE_OSC_HIGHDRIVE | HIBERNATE_OSC_LOWDRIVE |
+                        HIBERNATE_OSC_DISABLE)) == 0);
+
+    ulHIBCtl = HWREG(HIB_CTL);
+
+    //
+    // Clear the current configuration bits.
+    //
+    ulHIBCtl &= ~(HIBERNATE_OSC_HIGHDRIVE | HIBERNATE_OSC_LOWDRIVE |
+                  HIBERNATE_OSC_DISABLE);
+
+    //
+    // Set the new configuration bits.
+    //
+    ulHIBCtl |= ulConfig & (HIBERNATE_OSC_HIGHDRIVE | HIBERNATE_OSC_LOWDRIVE |
+                            HIBERNATE_OSC_DISABLE);
+
+    //
+    // Set the hibernation clocking configuration.
+    //
+    HWREG(HIB_CTL) = ulHIBCtl;
+
+    //
+    // Wait for write completion
+    //
+    HibernateWriteComplete();
 }
 
 //*****************************************************************************
@@ -201,6 +304,11 @@ HibernateRTCEnable(void)
     // Turn on the RTC enable bit.
     //
     HWREG(HIB_CTL) |= HIB_CTL_RTCEN;
+
+    //
+    // Wait for write completion
+    //
+    HibernateWriteComplete();
 }
 
 //*****************************************************************************
@@ -220,6 +328,69 @@ HibernateRTCDisable(void)
     // Turn off the RTC enable bit.
     //
     HWREG(HIB_CTL) &= ~HIB_CTL_RTCEN;
+
+    //
+    // Wait for write completion
+    //
+    HibernateWriteComplete();
+}
+
+//*****************************************************************************
+//
+//! Forces the Hibernation module to initiate a check of the battery voltage.
+//!
+//! This function forces the Hibernation module to initiate a check of the
+//! battery voltage immediately rather than waiting for the next check interval
+//! to pass.  After calling this function, the application should call the
+//! () function and wait for the function to return a zero
+//! value before calling the HibernateIntStatus() to check if the return code
+//! has the \b HIBERNATE_INT_LOW_BAT set.  If \b HIBERNATE_INT_LOW_BAT is set
+//! this indicates that battery level is low.  The application can also enable
+//! the \b HIBERNATE_INT_LOW_BAT interrupt and wait for an interrupt to
+//! indicate that the battery level is low.
+//!
+//! \note A hibernation request is held off if a battery check is in progress.
+//!
+//! \return None.
+//
+//*****************************************************************************
+void
+HibernateBatCheckStart(void)
+{
+    //
+    // Initiated a forced battery check.
+    //
+    HWREG(HIB_CTL) |= HIB_CTL_BATCHK;
+
+    //
+    // Wait for write completion
+    //
+    HibernateWriteComplete();
+}
+
+//*****************************************************************************
+//
+//! Returns if a forced battery check has completed.
+//!
+//! This function returns if the forced battery check initiated by a call to
+//! the HibernateBatCheckStart() function has completed.  This function will
+//! return a non-zero value until the battery level check has completed.  Once
+//! this function returns a value of zero, the hibernation module has completed
+//! the battery check and the HibernateIntStatus() function can be used to
+//! check if the battery was low by checking if the value returned has the
+//! \b HIBERNATE_INT_LOW_BAT set.
+//!
+//! \return The value is zero when the battery level check has completed or
+//! non-zero if the check is still in process.
+//
+//*****************************************************************************
+unsigned long
+HibernateBatCheckDone(void)
+{
+    //
+    // Read the current state of the batter check.
+    //
+    return(HWREG(HIB_CTL) & HIB_CTL_BATCHK);
 }
 
 //*****************************************************************************
@@ -234,6 +405,8 @@ HibernateRTCDisable(void)
 //!
 //! - \b HIBERNATE_WAKE_PIN - wake when the external wake pin is asserted.
 //! - \b HIBERNATE_WAKE_RTC - wake when one of the RTC matches occurs.
+//! - \b HIBERNATE_WAKE_LOW_BAT - wake from hibernate due to a low battery
+//! level being detected.
 //!
 //! \return None.
 //
@@ -244,14 +417,21 @@ HibernateWakeSet(unsigned long ulWakeFlags)
     //
     // Check the arguments.
     //
-    ASSERT(!(ulWakeFlags & ~(HIBERNATE_WAKE_PIN | HIBERNATE_WAKE_RTC)));
+    ASSERT(!(ulWakeFlags & ~(HIBERNATE_WAKE_PIN | HIBERNATE_WAKE_RTC |
+                            HIBERNATE_WAKE_LOW_BAT)));
 
     //
     // Set the specified wake flags in the control register.
     //
     HWREG(HIB_CTL) = (ulWakeFlags |
-                      (HWREG(HIB_CTL) &
-                       ~(HIBERNATE_WAKE_PIN | HIBERNATE_WAKE_RTC)));
+                      (HWREG(HIB_CTL) & ~(HIBERNATE_WAKE_PIN
+                                          | HIBERNATE_WAKE_RTC |
+                                          HIBERNATE_WAKE_LOW_BAT)));
+
+    //
+    // Wait for write completion
+    //
+    HibernateWriteComplete();
 }
 
 //*****************************************************************************
@@ -259,10 +439,12 @@ HibernateWakeSet(unsigned long ulWakeFlags)
 //! Gets the currently configured wake conditions for the Hibernation module.
 //!
 //! Returns the flags representing the wake configuration for the Hibernation
-//! module.  The return value will be a combination of the following flags:
+//! module.  The return value is a combination of the following flags:
 //!
 //! - \b HIBERNATE_WAKE_PIN - wake when the external wake pin is asserted.
 //! - \b HIBERNATE_WAKE_RTC - wake when one of the RTC matches occurs.
+//! - \b HIBERNATE_WAKE_LOW_BAT - wake from hibernate due to a low battery
+//! level being detected.
 //!
 //! \return Returns flags indicating the configured wake conditions.
 //
@@ -274,7 +456,8 @@ HibernateWakeGet(void)
     // Read the wake bits from the control register and return
     // those bits to the caller.
     //
-    return(HWREG(HIB_CTL) & (HIBERNATE_WAKE_PIN | HIBERNATE_WAKE_RTC));
+    return(HWREG(HIB_CTL) & (HIBERNATE_WAKE_PIN | HIBERNATE_WAKE_RTC
+                             | HIBERNATE_WAKE_LOW_BAT));
 }
 
 //*****************************************************************************
@@ -285,15 +468,29 @@ HibernateWakeGet(void)
 //!
 //! Enables the low battery detection and whether hibernation is allowed if a
 //! low battery is detected.  If low battery detection is enabled, then a low
-//! battery condition will be indicated in the raw interrupt status register,
-//! and can also trigger an interrupt.  Optionally, hibernation can be aborted
-//! if a low battery is detected.
+//! battery condition is indicated in the raw interrupt status register, and
+//! can also trigger an interrupt.  Optionally, hibernation can be aborted if a
+//! low battery is detected.
 //!
 //! The \e ulLowBatFlags parameter is one of the following values:
 //!
 //! - \b HIBERNATE_LOW_BAT_DETECT - detect a low battery condition.
 //! - \b HIBERNATE_LOW_BAT_ABORT - detect a low battery condition, and abort
 //!   hibernation if low battery is detected.
+//!
+//! The other setting in the \e ulLowBatFlags allows the caller to set one of
+//! the following voltage level trigger values :
+//!
+//! - \b HIBERNATE_LOW_BAT_1_9V - voltage low level is 1.9V
+//! - \b HIBERNATE_LOW_BAT_2_1V - voltage low level is 2.1V
+//! - \b HIBERNATE_LOW_BAT_2_3V - voltage low level is 2.3V
+//! - \b HIBERNATE_LOW_BAT_2_5V - voltage low level is 2.5V
+//!
+//! \b Example: Abort hibernate if the voltage level is below 2.1V.
+//!
+//! \verbatim
+//! HibernateLowBatSet(HIBERNATE_LOW_BAT_ABORT | HIBERNATE_LOW_BAT_2_1V);
+//! \endverbatim
 //!
 //! \return None.
 //
@@ -304,15 +501,20 @@ HibernateLowBatSet(unsigned long ulLowBatFlags)
     //
     // Check the arguments.
     //
-    ASSERT((ulLowBatFlags == HIBERNATE_LOW_BAT_DETECT) ||
-           (ulLowBatFlags == HIBERNATE_LOW_BAT_ABORT));
+    ASSERT(!(ulLowBatFlags & ~(HIB_CTL_VBATSEL_M | HIBERNATE_LOW_BAT_ABORT)));
 
     //
     // Set the low battery detect and abort bits in the control register,
     // according to the parameter.
     //
     HWREG(HIB_CTL) = (ulLowBatFlags |
-                      (HWREG(HIB_CTL) & ~HIBERNATE_LOW_BAT_ABORT));
+                      (HWREG(HIB_CTL) & ~(HIB_CTL_VBATSEL_M
+                                          | HIBERNATE_LOW_BAT_ABORT)));
+
+    //
+    // Wait for write completion
+    //
+    HibernateWriteComplete();
 }
 
 //*****************************************************************************
@@ -320,11 +522,10 @@ HibernateLowBatSet(unsigned long ulLowBatFlags)
 //! Gets the currently configured low battery detection behavior.
 //!
 //! Returns a value representing the currently configured low battery detection
-//! behavior.  The return value will be one of the following:
+//! behavior.
 //!
-//! - \b HIBERNATE_LOW_BAT_DETECT - detect a low battery condition.
-//! - \b HIBERNATE_LOW_BAT_ABORT - detect a low battery condition, and abort
-//! hibernation if low battery is detected.
+//! The return value is a combination of the values described in the
+//! HibernateLowBatSet() function.
 //!
 //! \return Returns a value indicating the configured low battery detection.
 //
@@ -333,10 +534,10 @@ unsigned long
 HibernateLowBatGet(void)
 {
     //
-    // Read the low bat bits from the control register and return those bits to
-    // the caller.
+    // Read the supported low bat bits from the control register and return
+    // those bits to the caller.
     //
-    return(HWREG(HIB_CTL) & HIBERNATE_LOW_BAT_ABORT);
+    return(HWREG(HIB_CTL) & (HIB_CTL_VBATSEL_M | HIBERNATE_LOW_BAT_ABORT));
 }
 
 //*****************************************************************************
@@ -361,23 +562,9 @@ HibernateRTCSet(unsigned long ulRTCValue)
     HWREG(HIB_RTCLD) = ulRTCValue;
 
     //
-    // Add a delay here to enforce the required delay between write accesses to
-    // certain Hibernation module registers.
+    // Wait for write completion
     //
-    if(CLASS_IS_FURY)
-    {
-        //
-        // Delay a fixed time on Fury-class devices
-        //
-        SysCtlDelay(g_ulWriteDelay);
-    }
-    else
-    {
-        //
-        // Wait for write complete to be signaled on later devices.
-        //
-        HibernateWriteComplete();
-    }
+    HibernateWriteComplete();
 }
 
 //*****************************************************************************
@@ -420,23 +607,9 @@ HibernateRTCMatch0Set(unsigned long ulMatch)
     HWREG(HIB_RTCM0) = ulMatch;
 
     //
-    // Add a delay here to enforce the required delay between write accesses to
-    // certain Hibernation module registers.
+    // Wait for write completion
     //
-    if(CLASS_IS_FURY)
-    {
-        //
-        // Delay a fixed time on Fury-class devices
-        //
-        SysCtlDelay(g_ulWriteDelay);
-    }
-    else
-    {
-        //
-        // Wait for write complete to be signaled on later devices.
-        //
-        HibernateWriteComplete();
-    }
+    HibernateWriteComplete();
 }
 
 //*****************************************************************************
@@ -467,6 +640,10 @@ HibernateRTCMatch0Get(void)
 //! configured to wake from hibernation, and/or generate an interrupt when the
 //! value of the RTC counter is the same as the match register.
 //!
+//! \note The Hibernation RTC Match 1 feature is not available on all Stellaris
+//! devices.  Please consult the data sheet for the Stellaris device that you
+//! are using to determine if this feature is available.
+//!
 //! \return None.
 //
 //*****************************************************************************
@@ -479,23 +656,9 @@ HibernateRTCMatch1Set(unsigned long ulMatch)
     HWREG(HIB_RTCM1) = ulMatch;
 
     //
-    // Add a delay here to enforce the required delay between write accesses to
-    // certain Hibernation module registers.
+    // Wait for write completion
     //
-    if(CLASS_IS_FURY)
-    {
-        //
-        // Delay a fixed time on Fury-class devices
-        //
-        SysCtlDelay(g_ulWriteDelay);
-    }
-    else
-    {
-        //
-        // Wait for write complete to be signaled on later devices.
-        //
-        HibernateWriteComplete();
-    }
+    HibernateWriteComplete();
 }
 
 //*****************************************************************************
@@ -503,6 +666,10 @@ HibernateRTCMatch1Set(unsigned long ulMatch)
 //! Gets the value of the RTC match 1 register.
 //!
 //! Gets the value of the match 1 register for the RTC.
+//!
+//! \note The Hibernation RTC Match 1 feature is not available on all Stellaris
+//! devices.  Please consult the data sheet for the Stellaris device that you
+//! are using to determine if this feature is available.
 //!
 //! \return Returns the value of the match register.
 //
@@ -514,6 +681,84 @@ HibernateRTCMatch1Get(void)
     // Return the value of the match register to the caller.
     //
     return(HWREG(HIB_RTCM1));
+}
+
+//*****************************************************************************
+//
+//! Sets the value of the RTC sub second match 0 register.
+//!
+//! \param ulMatch is the value for the sub second match register.
+//!
+//! Sets the sub second match 0 register for the RTC in 1/32768 of a second
+//! increments.  The Hibernation module can be configured to wake from
+//! hibernation, and/or generate an interrupt when the value of the RTC counter
+//! is the same as the match combined with the sub second match register.
+//!
+//! \note The Hibernation sub second RTC Match 0 feature is not available on
+//! all Stellaris devices.  Please consult the data sheet for the Stellaris
+//! device that you are using to determine if this feature is available.
+//!
+//! \return None.
+//
+//*****************************************************************************
+void
+HibernateRTCSSMatch0Set(unsigned long ulMatch)
+{
+    //
+    // Write the new sub second match value to the sub second match register.
+    //
+    HWREG(HIB_RTCSS) = ulMatch << HIB_RTCSS_RTCSSM_S;
+
+    //
+    // Wait for write complete to be signaled on later devices.
+    //
+    HibernateWriteComplete();
+}
+
+//*****************************************************************************
+//
+//! Returns the value of the RTC sub second match 0 register.
+//!
+//! This function returns the current value of the sub second match 0 register
+//! for the RTC.  The value returned is in 1/32768 second increments.
+//!
+//! \note The Hibernation sub second RTC Match 0 feature is not available on
+//! all Stellaris devices.  Please consult the data sheet for the Stellaris
+//! device that you are using to determine if this feature is available.
+//!
+//! \return Returns the value of the sub section match register.
+//
+//*****************************************************************************
+unsigned long
+HibernateRTCSSMatch0Get(void)
+{
+    //
+    // Read the current second RTC count.
+    //
+    return(HWREG(HIB_RTCSS) >> HIB_RTCSS_RTCSSM_S);
+}
+
+//*****************************************************************************
+//
+//! Returns the current value of the RTC sub second count.
+//!
+//! This function will return the current value of the sub second count for the
+//! for the RTC in 1/32768 of a second increments.
+//!
+//! \note The Hibernation sub second RTC Match 0 feature is not available on
+//! all Stellaris devices.  Please consult the data sheet for the Stellaris
+//! device that you are using to determine if this feature is available.
+//!
+//! \return The current RTC sub second count in 1/32768 seconds.
+//
+//*****************************************************************************
+unsigned long
+HibernateRTCSSGet(void)
+{
+    //
+    // Read the current second RTC count.
+    //
+    return(HWREG(HIB_RTCSS) & HIB_RTCSS_RTCSSC_M);
 }
 
 //*****************************************************************************
@@ -548,23 +793,9 @@ HibernateRTCTrimSet(unsigned long ulTrim)
     HWREG(HIB_RTCT) = ulTrim;
 
     //
-    // Add a delay here to enforce the required delay between write accesses to
-    // certain Hibernation module registers.
+    // Wait for write completion
     //
-    if(CLASS_IS_FURY)
-    {
-        //
-        // Delay a fixed time on Fury-class devices
-        //
-        SysCtlDelay(g_ulWriteDelay);
-    }
-    else
-    {
-        //
-        // Wait for write complete to be signaled on later devices.
-        //
-        HibernateWriteComplete();
-    }
+    HibernateWriteComplete();
 }
 
 //*****************************************************************************
@@ -596,11 +827,16 @@ HibernateRTCTrimGet(void)
 //! \param ulCount is the count of 32-bit words to store.
 //!
 //! Stores a set of data in the Hibernation module non-volatile memory.  This
-//! memory will be preserved when the power to the processor is turned off, and
-//! can be used to store application state information which will be available
-//! when the processor wakes.  Up to 64 32-bit words can be stored in the
+//! memory is preserved when the power to the processor is turned off, and can
+//! be used to store application state information which will be available when
+//! the processor wakes.  Up to 64 32-bit words can be stored in the
 //! non-volatile memory.  The data can be restored by calling the
 //! HibernateDataGet() function.
+//!
+//! \note The amount of memory available in the Hibernation module varies
+//! across Stellaris devices.  Please consult the data sheet for the Stellaris
+//! device that you are using to determine the amount of memory available in
+//! the Hibernation module.
 //!
 //! \return None.
 //
@@ -608,7 +844,7 @@ HibernateRTCTrimGet(void)
 void
 HibernateDataSet(unsigned long *pulData, unsigned long ulCount)
 {
-    unsigned int uIdx;
+    unsigned long ulIdx;
 
     //
     // Check the arguments.
@@ -619,30 +855,17 @@ HibernateDataSet(unsigned long *pulData, unsigned long ulCount)
     //
     // Loop through all the words to be stored, storing one at a time.
     //
-    for(uIdx = 0; uIdx < ulCount; uIdx++)
+    for(ulIdx = 0; ulIdx < ulCount; ulIdx++)
     {
         //
         // Write a word to the non-volatile storage area.
         //
-        HWREG(HIB_DATA + (uIdx * 4)) = pulData[uIdx];
+        HWREG(HIB_DATA + (ulIdx * 4)) = pulData[ulIdx];
 
         //
-        // Add a delay between writes to the data area.
+        // Wait for write completion
         //
-        if(CLASS_IS_FURY)
-        {
-            //
-            // Delay a fixed time on Fury-class devices
-            //
-            SysCtlDelay(g_ulWriteDelay);
-        }
-        else
-        {
-            //
-            // Wait for write complete to be signaled on later devices.
-            //
-            HibernateWriteComplete();
-        }
+        HibernateWriteComplete();
     }
 }
 
@@ -659,13 +882,18 @@ HibernateDataSet(unsigned long *pulData, unsigned long ulCount)
 //! caller must ensure that \e pulData points to a large enough memory block to
 //! hold all the data that is read from the non-volatile memory.
 //!
+//! \note The amount of memory available in the Hibernation module varies
+//! across Stellaris devices.  Please consult the data sheet for the Stellaris
+//! device that you are using to determine the amount of memory available in
+//! the Hibernation module.
+//!
 //! \return None.
 //
 //*****************************************************************************
 void
 HibernateDataGet(unsigned long *pulData, unsigned long ulCount)
 {
-    unsigned int uIdx;
+    unsigned long ulIdx;
 
     //
     // Check the arguments.
@@ -676,13 +904,13 @@ HibernateDataGet(unsigned long *pulData, unsigned long ulCount)
     //
     // Loop through all the words to be restored, reading one at a time.
     //
-    for(uIdx = 0; uIdx < ulCount; uIdx++)
+    for(ulIdx = 0; ulIdx < ulCount; ulIdx++)
     {
         //
         // Read a word from the non-volatile storage area.  No delay is
         // required between reads.
         //
-        pulData[uIdx] = HWREG(HIB_DATA + (uIdx * 4));
+        pulData[ulIdx] = HWREG(HIB_DATA + (ulIdx * 4));
     }
 }
 
@@ -727,6 +955,11 @@ HibernateRequest(void)
     // Set the bit in the control register to cut main power to the processor.
     //
     HWREG(HIB_CTL) |= HIB_CTL_HIBREQ;
+
+    //
+    // Wait for write completion
+    //
+    HibernateWriteComplete();
 }
 
 //*****************************************************************************
@@ -740,10 +973,16 @@ HibernateRequest(void)
 //! The \e ulIntFlags parameter must be the logical OR of any combination of
 //! the following:
 //!
+//! - \b HIBERNATE_INT_WR_COMPLETE - write complete interrupt
 //! - \b HIBERNATE_INT_PIN_WAKE - wake from pin interrupt
 //! - \b HIBERNATE_INT_LOW_BAT - low battery interrupt
 //! - \b HIBERNATE_INT_RTC_MATCH_0 - RTC match 0 interrupt
 //! - \b HIBERNATE_INT_RTC_MATCH_1 - RTC match 1 interrupt
+//!
+//! \note The \b HIBERNATE_INT_RTC_MATCH_1 setting is not available on all
+//! Stellaris devices.  Please consult the data sheet for the Stellaris device
+//! that you are using to determine if the Hibernation RTC Match 1 feature is
+//! available.
 //!
 //! \return None.
 //
@@ -756,12 +995,18 @@ HibernateIntEnable(unsigned long ulIntFlags)
     //
     ASSERT(!(ulIntFlags & ~(HIBERNATE_INT_PIN_WAKE | HIBERNATE_INT_LOW_BAT |
                             HIBERNATE_INT_RTC_MATCH_0 |
-                            HIBERNATE_INT_RTC_MATCH_1)));
+                            HIBERNATE_INT_RTC_MATCH_1 |
+                            HIBERNATE_INT_WR_COMPLETE)));
 
     //
     // Set the specified interrupt mask bits.
     //
     HWREG(HIB_IM) |= ulIntFlags;
+
+    //
+    // Wait for write completion
+    //
+    HibernateWriteComplete();
 }
 
 //*****************************************************************************
@@ -786,12 +1031,18 @@ HibernateIntDisable(unsigned long ulIntFlags)
     //
     ASSERT(!(ulIntFlags & ~(HIBERNATE_INT_PIN_WAKE | HIBERNATE_INT_LOW_BAT |
                             HIBERNATE_INT_RTC_MATCH_0 |
-                            HIBERNATE_INT_RTC_MATCH_1)));
+                            HIBERNATE_INT_RTC_MATCH_1 |
+                            HIBERNATE_INT_WR_COMPLETE)));
 
     //
     // Clear the specified interrupt mask bits.
     //
     HWREG(HIB_IM) &= ~ulIntFlags;
+
+    //
+    // Wait for write completion
+    //
+    HibernateWriteComplete();
 }
 
 //*****************************************************************************
@@ -891,19 +1142,19 @@ HibernateIntStatus(tBoolean bMasked)
 //! \param ulIntFlags is the bit mask of the interrupts to be cleared.
 //!
 //! Clears the specified interrupt sources.  This must be done from within the
-//! interrupt handler or else the handler will be called again upon exit.
+//! interrupt handler or else the handler is called again upon exit.
 //!
 //! The \e ulIntFlags parameter has the same definition as the \e ulIntFlags
 //! parameter to the HibernateIntEnable() function.
 //!
-//! \note Since there is a write buffer in the Cortex-M3 processor, it may take
-//! several clock cycles before the interrupt source is actually cleared.
+//! \note Because there is a write buffer in the Cortex-M3 processor, it may
+//! take several clock cycles before the interrupt source is actually cleared.
 //! Therefore, it is recommended that the interrupt source be cleared early in
 //! the interrupt handler (as opposed to the very last action) to avoid
 //! returning from the interrupt handler before the interrupt source is
 //! actually cleared.  Failure to do so may result in the interrupt handler
-//! being immediately reentered (since NVIC still sees the interrupt source
-//! asserted).
+//! being immediately reentered (because the interrupt controller still sees
+//! the interrupt source asserted).
 //!
 //! \return None.
 //
@@ -922,6 +1173,11 @@ HibernateIntClear(unsigned long ulIntFlags)
     // Write the specified interrupt bits into the interrupt clear register.
     //
     HWREG(HIB_IC) |= ulIntFlags;
+
+    //
+    // Wait for write completion
+    //
+    HibernateWriteComplete();
 }
 
 //*****************************************************************************
@@ -945,7 +1201,7 @@ HibernateIntClear(unsigned long ulIntFlags)
 //! not.
 //
 //*****************************************************************************
-unsigned int
+unsigned long
 HibernateIsActive(void)
 {
     //

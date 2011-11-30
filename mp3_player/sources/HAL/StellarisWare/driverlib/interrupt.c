@@ -2,7 +2,7 @@
 //
 // interrupt.c - Driver for the NVIC Interrupt Controller.
 //
-// Copyright (c) 2005-2010 Texas Instruments Incorporated.  All rights reserved.
+// Copyright (c) 2005-2011 Texas Instruments Incorporated.  All rights reserved.
 // Software License Agreement
 // 
 // Texas Instruments (TI) is supplying this software for use solely and
@@ -18,7 +18,7 @@
 // CIRCUMSTANCES, BE LIABLE FOR SPECIAL, INCIDENTAL, OR CONSEQUENTIAL
 // DAMAGES, FOR ANY REASON WHATSOEVER.
 // 
-// This is part of revision 6459 of the Stellaris Peripheral Driver Library.
+// This is part of revision 8049 of the Stellaris Peripheral Driver Library.
 //
 //*****************************************************************************
 
@@ -59,7 +59,58 @@ static const unsigned long g_pulRegs[] =
 {
     0, NVIC_SYS_PRI1, NVIC_SYS_PRI2, NVIC_SYS_PRI3, NVIC_PRI0, NVIC_PRI1,
     NVIC_PRI2, NVIC_PRI3, NVIC_PRI4, NVIC_PRI5, NVIC_PRI6, NVIC_PRI7,
-    NVIC_PRI8, NVIC_PRI9, NVIC_PRI10, NVIC_PRI11, NVIC_PRI12, NVIC_PRI13
+    NVIC_PRI8, NVIC_PRI9, NVIC_PRI10, NVIC_PRI11, NVIC_PRI12, NVIC_PRI13,
+    NVIC_PRI14, NVIC_PRI15, NVIC_PRI16, NVIC_PRI17, NVIC_PRI18, NVIC_PRI19,
+    NVIC_PRI20, NVIC_PRI21, NVIC_PRI22, NVIC_PRI23, NVIC_PRI24, NVIC_PRI25,
+    NVIC_PRI26, NVIC_PRI27, NVIC_PRI28, NVIC_PRI29, NVIC_PRI30, NVIC_PRI31,
+    NVIC_PRI32
+};
+
+//*****************************************************************************
+//
+// This is a mapping between interrupt number (for the peripheral interrupts
+// only) and the register that contains the interrupt enable for that
+// interrupt.
+//
+//*****************************************************************************
+static const unsigned long g_pulEnRegs[] =
+{
+    NVIC_EN0, NVIC_EN1, NVIC_EN2, NVIC_EN3, NVIC_EN4
+};
+
+//*****************************************************************************
+//
+// This is a mapping between interrupt number (for the peripheral interrupts
+// only) and the register that contains the interrupt disable for that
+// interrupt.
+//
+//*****************************************************************************
+static const unsigned long g_pulDisRegs[] =
+{
+    NVIC_DIS0, NVIC_DIS1, NVIC_DIS2, NVIC_DIS3, NVIC_DIS4
+};
+
+//*****************************************************************************
+//
+// This is a mapping between interrupt number (for the peripheral interrupts
+// only) and the register that contains the interrupt pend for that interrupt.
+//
+//*****************************************************************************
+static const unsigned long g_pulPendRegs[] =
+{
+    NVIC_PEND0, NVIC_PEND1, NVIC_PEND2, NVIC_PEND3, NVIC_PEND4
+};
+
+//*****************************************************************************
+//
+// This is a mapping between interrupt number (for the peripheral interrupts
+// only) and the register that contains the interrupt unpend for that
+// interrupt.
+//
+//*****************************************************************************
+static const unsigned long g_pulUnpendRegs[] =
+{
+    NVIC_UNPEND0, NVIC_UNPEND1, NVIC_UNPEND2, NVIC_UNPEND3, NVIC_UNPEND4
 };
 
 //*****************************************************************************
@@ -97,16 +148,18 @@ IntDefaultHandler(void)
 //
 //*****************************************************************************
 #if defined(ewarm)
+#pragma data_alignment=1024
 static __no_init void (*g_pfnRAMVectors[NUM_INTERRUPTS])(void) @ "VTABLE";
 #elif defined(sourcerygxx)
 static __attribute__((section(".cs3.region-head.ram")))
-void (*g_pfnRAMVectors[NUM_INTERRUPTS])(void);
-#elif defined(ccs)
+void (*g_pfnRAMVectors[NUM_INTERRUPTS])(void) __attribute__ ((aligned(1024)));
+#elif defined(ccs) || defined(DOXYGEN)
+#pragma DATA_ALIGN(g_pfnRAMVectors, 1024)
 #pragma DATA_SECTION(g_pfnRAMVectors, ".vtable")
 void (*g_pfnRAMVectors[NUM_INTERRUPTS])(void);
 #else
 static __attribute__((section("vtable")))
-void (*g_pfnRAMVectors[NUM_INTERRUPTS])(void);
+void (*g_pfnRAMVectors[NUM_INTERRUPTS])(void) __attribute__ ((aligned(1024)));
 #endif
 
 //*****************************************************************************
@@ -172,7 +225,7 @@ IntMasterDisable(void)
 //!
 //! This function is used to specify the handler function to be called when the
 //! given interrupt is asserted to the processor.  When the interrupt occurs,
-//! if it is enabled (via IntEnable()), the handler function will be called in
+//! if it is enabled (via IntEnable()), the handler function is called in
 //! interrupt context.  Since the handler function can preempt other code, care
 //! must be taken to protect memory or peripherals that are accessed by the
 //! handler and other non-handler code.
@@ -183,11 +236,9 @@ IntMasterDisable(void)
 //! to ensure that the SRAM vector table is located at the beginning of SRAM;
 //! otherwise NVIC will not look in the correct portion of memory for the
 //! vector table (it requires the vector table be on a 1 kB memory alignment).
-//! Normally, the SRAM vector table is so placed via the use of linker scripts;
-//! some tool chains, such as the evaluation version of RV-MDK, do not support
-//! linker scripts and therefore will not produce a valid executable.  See the
-//! discussion of compile-time versus run-time interrupt handler registration
-//! in the introduction to this chapter.
+//! Normally, the SRAM vector table is so placed via the use of linker scripts.
+//! See the discussion of compile-time versus run-time interrupt handler
+//! registration in the introduction to this chapter.
 //!
 //! \return None.
 //
@@ -242,7 +293,7 @@ IntRegister(unsigned long ulInterrupt, void (*pfnHandler)(void))
 //! \param ulInterrupt specifies the interrupt in question.
 //!
 //! This function is used to indicate that no handler should be called when the
-//! given interrupt is asserted to the processor.  The interrupt source will be
+//! given interrupt is asserted to the processor.  The interrupt source is
 //! automatically disabled (via IntDisable()) if necessary.
 //!
 //! \sa IntRegister() for important information about registering interrupt
@@ -458,19 +509,13 @@ IntEnable(unsigned long ulInterrupt)
         //
         HWREG(NVIC_ST_CTRL) |= NVIC_ST_CTRL_INTEN;
     }
-    else if((ulInterrupt >= 16) && (ulInterrupt <= 47))
+    else if(ulInterrupt >= 16)
     {
         //
         // Enable the general interrupt.
         //
-        HWREG(NVIC_EN0) = 1 << (ulInterrupt - 16);
-    }
-    else if(ulInterrupt >= 48)
-    {
-        //
-        // Enable the general interrupt.
-        //
-        HWREG(NVIC_EN1) = 1 << (ulInterrupt - 48);
+        HWREG(g_pulEnRegs[(ulInterrupt - 16) / 32]) =
+            1 << ((ulInterrupt - 16) & 31);
     }
 }
 
@@ -526,19 +571,13 @@ IntDisable(unsigned long ulInterrupt)
         //
         HWREG(NVIC_ST_CTRL) &= ~(NVIC_ST_CTRL_INTEN);
     }
-    else if((ulInterrupt >= 16) && (ulInterrupt <= 47))
+    else if(ulInterrupt >= 16)
     {
         //
         // Disable the general interrupt.
         //
-        HWREG(NVIC_DIS0) = 1 << (ulInterrupt - 16);
-    }
-    else if(ulInterrupt >= 48)
-    {
-        //
-        // Disable the general interrupt.
-        //
-        HWREG(NVIC_DIS1) = 1 << (ulInterrupt - 48);
+        HWREG(g_pulDisRegs[(ulInterrupt - 16) / 32]) =
+            1 << ((ulInterrupt - 16) & 31);
     }
 }
 
@@ -591,19 +630,13 @@ IntPendSet(unsigned long ulInterrupt)
         //
         HWREG(NVIC_INT_CTRL) |= NVIC_INT_CTRL_PENDSTSET;
     }
-    else if((ulInterrupt >= 16) && (ulInterrupt <= 47))
+    else if(ulInterrupt >= 16)
     {
         //
         // Pend the general interrupt.
         //
-        HWREG(NVIC_PEND0) = 1 << (ulInterrupt - 16);
-    }
-    else if(ulInterrupt >= 48)
-    {
-        //
-        // Pend the general interrupt.
-        //
-        HWREG(NVIC_PEND1) = 1 << (ulInterrupt - 48);
+        HWREG(g_pulPendRegs[(ulInterrupt - 16) / 32]) =
+            1 << ((ulInterrupt - 16) & 31);
     }
 }
 
@@ -646,19 +679,13 @@ IntPendClear(unsigned long ulInterrupt)
         //
         HWREG(NVIC_INT_CTRL) |= NVIC_INT_CTRL_PENDSTCLR;
     }
-    else if((ulInterrupt >= 16) && (ulInterrupt <= 47))
+    else if(ulInterrupt >= 16)
     {
         //
         // Unpend the general interrupt.
         //
-        HWREG(NVIC_UNPEND0) = 1 << (ulInterrupt - 16);
-    }
-    else if(ulInterrupt >= 48)
-    {
-        //
-        // Unpend the general interrupt.
-        //
-        HWREG(NVIC_UNPEND1) = 1 << (ulInterrupt - 48);
+        HWREG(g_pulUnpendRegs[(ulInterrupt - 16) / 32]) =
+            1 << ((ulInterrupt - 16) & 31);
     }
 }
 
@@ -666,7 +693,7 @@ IntPendClear(unsigned long ulInterrupt)
 //
 //! Sets the priority masking level
 //!
-//! \param ulPriorityMask is the priority level that will be masked.
+//! \param ulPriorityMask is the priority level that is masked.
 //!
 //! This function sets the interrupt priority masking level so that all
 //! interrupts at the specified or lesser priority level is masked.  This
@@ -676,7 +703,7 @@ IntPendClear(unsigned long ulInterrupt)
 //!
 //! Smaller numbers correspond to higher interrupt priorities.  So for example
 //! a priority level mask of 4 will allow interrupts of priority level 0-3,
-//! and interrupts with a numerical priority of 4 and greater will be blocked.
+//! and interrupts with a numerical priority of 4 and greater is blocked.
 //!
 //! The hardware priority mechanism will only look at the upper N bits of the
 //! priority level (where N is 3 for the Stellaris family), so any
@@ -702,7 +729,7 @@ IntPriorityMaskSet(unsigned long ulPriorityMask)
 //!
 //! Smaller numbers correspond to higher interrupt priorities.  So for example
 //! a priority level mask of 4 will allow interrupts of priority level 0-3,
-//! and interrupts with a numerical priority of 4 and greater will be blocked.
+//! and interrupts with a numerical priority of 4 and greater is blocked.
 //!
 //! The hardware priority mechanism will only look at the upper N bits of the
 //! priority level (where N is 3 for the Stellaris family), so any

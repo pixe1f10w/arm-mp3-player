@@ -19,8 +19,6 @@
 #include "driverlib/interrupt.h"
 #include "SafeRTOS/SafeRTOS_API.h"
 #include "priorities.h"
-#include "mp3_file.h"
-#include "wav_file.h"
 #include <string.h>
 #include "driverlib/flash.h"
 #include "driverlib/udma.h"
@@ -28,10 +26,15 @@
 #include "drivers/sound.h"
 
 #include "conf.h"
-#include "audio_play.h"
+#include "audio_codec.h"
+#include "file_management.h"
 #include "player_control_task.h"
 #include "lcd_print.h"
+#include "wav_decoder_task.h"
+
 #include "sound_player_task.h"
+#include "mp3_decoder_task.h"
+#include "midmad.h"
 /**
 * Define Queue receiving control event from external
 */
@@ -43,10 +46,7 @@ static xQueueHandle  xSoundCtrlQueue;
 
 /**File name for input*/
 extern char *sFilePath;
-/**File Object for open/read file*/
-static FIL g_sSongFileObject;
-/** The wav file header information.*/
-static SoundInfoHeader g_sSongHeader;
+
 /** The stack for the Play task.*/
 static unsigned long SoundPlayerTaskStack[128];
 /**The period of the Play task.*/
@@ -67,6 +67,12 @@ static unsigned long PlayButtonState = PLAY_SONG_STATE;
 #define PLAY_SONG         2
 #define PAUSE_SONG        3
 static unsigned long PlaySongState = STOP_SONG;
+
+unsigned long (* GetStatusPlay)(void);
+void (*StartPlay)(void);
+void (*PausePlay)(void);
+void (*ContinuePlay)(void);
+void (*StopPlay)(void);
 /**
 * For external call that want to control Sound Play
 */
@@ -79,26 +85,27 @@ portBASE_TYPE giveSoundCtrlEvent(unsigned char *data, portTickType timeout){
 */
 static void
 SoundPlayerTask(void *pvParameters){
-  /** Test Events
-    PlayButtonState = PLAY_BUTTON_STATE;
-    PlaySongState = START_SONG;
-    SoundCtrlEvent = PLAY;
-  */
+  portTickType ulLastTime;
+
     //
     // Loop forever.
     //
+  ulLastTime=xTaskGetTickCount( );
   while(1){
     if(xQueueReceive(xSoundCtrlQueue,&SoundCtrlEvent, 0)==pdPASS)
     {
       //Play sound Button
       if(SoundCtrlEvent == PLAY_BTN_SND)
         PlayButtonState = PLAY_BUTTON_STATE;
-      //Volume up
+      //Volume up/Volume down
       else if(SoundCtrlEvent == VLM_UP)
-        SoundVolumeUp(2);
-      //Volume down
+      {
+        VolumeUp();
+      }
       else if(SoundCtrlEvent == VLM_DOWN)
-        SoundVolumeDown(2);
+      {
+        VolumeDown();
+      }
       //Pause or Play
       else if(SoundCtrlEvent == PAUSE_PLAY)
       {
@@ -111,6 +118,7 @@ SoundPlayerTask(void *pvParameters){
       //START playing the song from any state
       if(SoundCtrlEvent == START)
       {
+        
         PlaySongState = START_SONG;
       }
       //===PLAYING SONG state==============
@@ -119,17 +127,22 @@ SoundPlayerTask(void *pvParameters){
         //STOP playing the song
         if(SoundCtrlEvent == STOP)
         {
+          StopPlay();
           PlaySongState = STOP_SONG;
+          PlayState=PAUSE_STATE;
         }
         //PAUSE playing the song
         else if(SoundCtrlEvent == PAUSE)
         {
           PlaySongState = PAUSE_SONG;
+          PlayState=PAUSE_STATE;
+          PausePlay();
         }
       }
       //STOP state
       else if(PlaySongState == STOP_SONG)
       {
+        
         if(SoundCtrlEvent == PLAY)
           //Switch to START_SONG
           PlaySongState = START_SONG;
@@ -137,13 +150,17 @@ SoundPlayerTask(void *pvParameters){
       //PAUSE state
       else if(PlaySongState == PAUSE_SONG){
         if(SoundCtrlEvent == PLAY)
+        {
+          ContinuePlay();
           PlaySongState = PLAY_SONG;
+          PlayState=PLAY_STATE;
+        }
         else if(SoundCtrlEvent == STOP)
         {
-          //close the song
-          f_close(&g_sSongFileObject);
           //Switch to STOP_SONG
+          StopPlay();
           PlaySongState = STOP_SONG;
+          PlayState=PAUSE_STATE;
         }
       }
     }
@@ -153,12 +170,13 @@ SoundPlayerTask(void *pvParameters){
         //-Enter critical section
          //vTaskSuspendScheduler();
         //update buffer for play;
-         if( UpdateBufferForPlay(&g_sSongFileObject, &g_sSongHeader,FileExt)==0)
+         if(GetStatusPlay()==MP3_STOP)
          {
            //PLAY_DONE file
            PlaySongState = STOP_SONG;
+           PlayState=PAUSE_STATE;
            //close current file
-           f_close(&g_sSongFileObject);
+           f_close(&sSongFileObject);
            //PlayEvent
            ucOutputEvent = PLAY_DONE;
            givePlayerCtrlEvent((unsigned char *)&ucOutputEvent,portMAX_DELAY);
@@ -168,61 +186,52 @@ SoundPlayerTask(void *pvParameters){
          //xTaskResumeScheduler();
       }//==========START_SONG===============
       else if(PlaySongState == START_SONG){
-        // No longer playing audio.
-        g_ulFlags &= ~BUFFER_PLAYING;
-        //close the current song
-        f_close(&g_sSongFileObject);
-        //===Open song
-        FileExt = CheckExtension(sFilePath);
-        if(FileExt == WAV_FILE){
-          if(OpenWavFile(&g_sSongFileObject,sFilePath,&g_sSongHeader,1) != FR_OK ){
-            //announce opening fail
-            ucOutputEvent = OPEN_ERR;
-            givePlayerCtrlEvent((unsigned char *)&ucOutputEvent,100);
-            //switch STOP
-            
-            PlaySongState = STOP_SONG;
-          }
-        }else if(FileExt == MP3_FILE){
-          if(OpenMp3File(&g_sSongFileObject, sFilePath,&g_sSongHeader) != FR_OK ){
-            //announce opening fail
-            ucOutputEvent = OPEN_ERR;
-            givePlayerCtrlEvent((unsigned char *)&ucOutputEvent,100);
-            //switch STOP
-            PlaySongState = STOP_SONG;
-         }
-        }else{
-          //annouce not format correctly
-          ucOutputEvent = FORMAT_ERR;
-          givePlayerCtrlEvent((unsigned char *)&ucOutputEvent,100);
-          //switch STOP
-          PlaySongState = STOP_SONG;
-        }
-        
-        if(PlaySongState == START_SONG)
+        if(StopPlay)
+          StopPlay();
+        if(GetStatusPlay)
+          while(GetStatusPlay()!=MP3_STOP);
+         xTaskDelay(10);
+         
+        FileExt=CheckExtension(sFilePath);
+        if(FileExt == WAV_FILE)
         {
-          
-          //setting for codec: bits/s, Hz, channels
-          setupAudioCodecForSong(g_sSongHeader);
-          //set state for PLAY
-          g_ulFlags=(BUFFER_BOTTOM_EMPTY | BUFFER_TOP_EMPTY|BUFFER_PLAYING);
-          //switch to PLAY the song
+          GetStatusPlay=GetStatusWAVPlay;
+          StartPlay=StartWAVPlay;
+          PausePlay=PauseWAVPlay;
+          ContinuePlay=ContinueWAVPlay;
+          StopPlay=StopWAVPlay;
+          //
+          StartPlay();
           PlaySongState = PLAY_SONG;
-          StartBufferSignal(0);
+          PlayState=PLAY_STATE;
+        }
+        else if(FileExt == MP3_FILE)
+        {
+          GetStatusPlay=GetStatusMP3Play;
+          StartPlay=StartMP3Play;
+          PausePlay=PauseMP3Play;
+          ContinuePlay=ContinueMP3Play;
+          StopPlay=StopMP3Play;
+          //
+          StartPlay();
+          PlaySongState = PLAY_SONG;
+          PlayState=PLAY_STATE;
+        }else{
+          PlaySongState = STOP_SONG;
+           PlayState=PAUSE_STATE;
+           //PlayEvent
+           ucOutputEvent = FORMAT_ERR;
+           givePlayerCtrlEvent((unsigned char *)&ucOutputEvent,portMAX_DELAY);
         }
       }
+      else if(PlaySongState == STOP_SONG)
+      {
+        ;
+      }
     }else if(PlayButtonState == PLAY_BUTTON_STATE){
-      //-Enter critical section
-      vTaskSuspendScheduler();
-      playButtonSound(g_sSongHeader);
-      //-Exit critical section
-      xTaskResumeScheduler();
-      
-      //Switch to PLAY_SONG
       PlayButtonState = PLAY_SONG_STATE;
-      StartBufferSignal(0);
     }
-    WaitBufferSignal(SoundPlayerDelay);
+    xTaskDelayUntil(&ulLastTime,SoundPlayerDelay);
   }
 }
 /**
@@ -248,6 +257,10 @@ char initSoundPlayerTask(void){
   {
     return(1);//Fail
   }
-  
+  //
+  if(initWAVDecoderTask())
+    return 1;
+  if(initMP3DecoderTask())
+    return 1;
   return 0;//Success
 }
