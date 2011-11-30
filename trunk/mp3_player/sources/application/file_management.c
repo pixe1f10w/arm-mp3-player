@@ -1,9 +1,17 @@
 #include <string.h>
-#include "third_party/fatfs/src/ff.h"
+
 #include "file_management.h"
 //
+//Save file system
+static FATFS sFatFs;
 static DIR sDirObject;
 static FILINFO sFileInfo;
+/**File Object for open/read file*/
+FIL sSongFileObject;
+SongInfoHeader sSongInfoHeader;
+char *sFilePath;
+unsigned long  MinsCurrent;
+unsigned long  SecondCurrent;
 
 char pcFiles[NUM_LIST_STRINGS][MAX_FILENAME_STRING_LEN];
 //the number of files
@@ -22,7 +30,26 @@ unsigned char ucItemIndex =0;
 //File Path
 static char pcFilePath[MAX_PATH_STRING_LEN+MAX_FILENAME_STRING_LEN];
 static unsigned char ucEndFilePath=3;
+/**
+*
+*/
+char CheckExtension(char *fileName){
+  char i=0;
+  while(fileName[i]!='.'&&i<20)
+    i++;
+  if(i==20)
+    return NOT_SUPPORT_FORMAT;
 
+  if(strcmp(fileName+i,".wav")==0||
+                  strcmp(fileName,".WAV")==0)
+    return WAV_FILE;
+  else if(strcmp(fileName+i,".mp3")==0||
+                      strcmp(fileName+i,".MP3")==0)
+    return MP3_FILE;
+  else
+    return NOT_SUPPORT_FORMAT;
+    
+}
 //******************************************************************************
 //
 // This function is called to read the contents of the current directory on
@@ -93,9 +120,9 @@ int ListFiles(void)
                 while(sFileInfo.fname[i]!='.' && sFileInfo.fname[i] != 0)
                   i++;
                 if(strcmp(sFileInfo.fname+i,".wav")==0||
-                   strcmp(sFileInfo.fname+i,".WAV")==0)
-                     //strcmp(sFileInfo.fname+i,".mp3")==0||
-                      //strcmp(sFileInfo.fname+i,".MP3")==0)
+                   strcmp(sFileInfo.fname+i,".WAV")==0||
+                     strcmp(sFileInfo.fname+i,".mp3")==0||
+                      strcmp(sFileInfo.fname+i,".MP3")==0)
                 {
                   strcpy(pcFiles[ucFileCount], sFileInfo.fname);
                   ucFileCount++;
@@ -275,5 +302,18 @@ char * nextFile(void)
     return pcFilePath;
   }
   else
+    return 0;
+}
+char InitFileManagement(void)
+{
+  FRESULT fresult;
+  //
+    // Mount the file system, using logical disk 0.
+    //
+    fresult = f_mount(0, &sFatFs);
+    if(fresult != FR_OK)
+    {
+        return(1);
+    }
     return 0;
 }

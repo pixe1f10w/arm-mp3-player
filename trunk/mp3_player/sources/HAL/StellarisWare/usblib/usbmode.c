@@ -2,7 +2,7 @@
 //
 // usbmode.c - Functions related to dual mode USB device/host operation.
 //
-// Copyright (c) 2008-2010 Texas Instruments Incorporated.  All rights reserved.
+// Copyright (c) 2008-2011 Texas Instruments Incorporated.  All rights reserved.
 // Software License Agreement
 // 
 // Texas Instruments (TI) is supplying this software for use solely and
@@ -18,7 +18,7 @@
 // CIRCUMSTANCES, BE LIABLE FOR SPECIAL, INCIDENTAL, OR CONSEQUENTIAL
 // DAMAGES, FOR ANY REASON WHATSOEVER.
 // 
-// This is part of revision 6459 of the Stellaris USB Library.
+// This is part of revision 8049 of the Stellaris USB Library.
 //
 //*****************************************************************************
 
@@ -27,8 +27,9 @@
 #include "inc/hw_types.h"
 #include "inc/hw_usb.h"
 #include "driverlib/debug.h"
-#include "driverlib/gpio.h"
 #include "driverlib/interrupt.h"
+#include "driverlib/rom.h"
+#include "driverlib/rom_map.h"
 #include "driverlib/sysctl.h"
 #include "driverlib/usb.h"
 #include "usblib/usblib.h"
@@ -206,7 +207,8 @@ USBOTGSetMode(tUSBMode eUSBMode)
 
 //*****************************************************************************
 //
-//! Allows a dual-mode application to switch between USB device and host modes.
+//! Allows dual mode application to switch between USB device and host modes
+//! and provides a method to force the controller into the desired mode.
 //!
 //! \param ulIndex specifies the USB controller whose mode of operation is to
 //! be set.  This parameter must be set to 0.
@@ -219,10 +221,12 @@ USBOTGSetMode(tUSBMode eUSBMode)
 //! \b USB_MODE_HOST, the callback will be made immediately to allow the
 //! application to perform any host or device specific initialization.
 //!
-//! This function allows a USB application, which can operate in host
-//! or device mode, to indicate to the USB stack the mode that it wishes to
+//! This function allows a USB application that can operate in host
+//! or device mode to indicate to the USB stack the mode that it wishes to
 //! use.  The caller is responsible for cleaning up the interface and removing
 //! itself from the bus prior to making this call and reconfiguring afterwards.
+//! The \e pfnCallback function can be a NULL(0) value to indicate that no
+//! notification is required.
 //!
 //! For successful dual mode mode operation, an application must register
 //! USB0DualModeIntHandler() as the interrupt handler for the USB0 interrupt.
@@ -235,9 +239,14 @@ USBOTGSetMode(tUSBMode eUSBMode)
 //! included even though only one mode is required.
 //!
 //! Single mode applications (those offering exclusively USB device or USB
-//! host functionality) need not call this function since no interrupt
-//! steering is required if the appropriate single mode interrupt handler is
-//! installed.
+//! host functionality) are only required to call this function if they need to
+//! force the mode of the controller to Host or Device mode.  This is usually
+//! in the event that the application needs to reused the USBVBUS and/or USBID
+//! pins as GPIOs.
+//!
+//! \note Forcing of the USB controller mode feature is not available on all
+//! Stellaris microcontrollers.  Consult the data sheet for the microcontroller
+//! that the application is using to determine if this feature is available.
 //!
 //! \return None.
 //
@@ -269,7 +278,13 @@ USBStackModeSet(unsigned long ulIndex, tUSBMode eUSBMode,
     //
     if((eUSBMode == USB_MODE_DEVICE) || (eUSBMode == USB_MODE_HOST))
     {
-        g_pfnUSBModeCallback(0, eUSBMode);
+        //
+        // Make sure that a callback was provided.
+        //
+        if(g_pfnUSBModeCallback)
+        {
+            g_pfnUSBModeCallback(0, eUSBMode);
+        }
     }
 }
 
@@ -411,15 +426,19 @@ USBDualModeInit(unsigned long ulIndex)
     //
     // Enable USB Interrupts.
     //
-    USBIntEnableControl(USB0_BASE, USB_INTCTRL_RESET | USB_INTCTRL_DISCONNECT |
-                                   USB_INTCTRL_SESSION | USB_INTCTRL_BABBLE |
-                                   USB_INTCTRL_CONNECT | USB_INTCTRL_RESUME |
-                                   USB_INTCTRL_SUSPEND | USB_INTCTRL_VBUS_ERR);
+    MAP_USBIntEnableControl(USB0_BASE, USB_INTCTRL_RESET |
+                                       USB_INTCTRL_DISCONNECT |
+                                       USB_INTCTRL_SESSION |
+                                       USB_INTCTRL_BABBLE |
+                                       USB_INTCTRL_CONNECT |
+                                       USB_INTCTRL_RESUME |
+                                       USB_INTCTRL_SUSPEND |
+                                       USB_INTCTRL_VBUS_ERR);
 
     //
     // Enable all endpoint interrupts.
     //
-    USBIntEnableEndpoint(USB0_BASE, USB_INTEP_ALL);
+    MAP_USBIntEnableEndpoint(USB0_BASE, USB_INTEP_ALL);
 
     //
     // Initialize the USB tick module.
@@ -429,7 +448,7 @@ USBDualModeInit(unsigned long ulIndex)
     //
     // Enable the USB interrupt.
     //
-    IntEnable(INT_USB0);
+    MAP_IntEnable(INT_USB0);
 
     //
     // Turn on session request to enable ID pin checking.
@@ -480,11 +499,11 @@ USBDualModeTerm(unsigned long ulIndex)
     //
     // Disable the USB interrupt.
     //
-    IntDisable(INT_USB0);
+    MAP_IntDisable(INT_USB0);
 
-    USBIntDisableControl(USB0_BASE, USB_INTCTRL_ALL);
+    MAP_USBIntDisableControl(USB0_BASE, USB_INTCTRL_ALL);
 
-    USBIntDisableEndpoint(USB0_BASE, USB_INTEP_ALL);
+    MAP_USBIntDisableEndpoint(USB0_BASE, USB_INTEP_ALL);
 }
 
 //*****************************************************************************
@@ -524,17 +543,17 @@ USBOTGModeTerm(unsigned long ulIndex)
     //
     // Disable the USB interrupt.
     //
-    IntDisable(INT_USB0);
+    MAP_IntDisable(INT_USB0);
 
     //
     // Disable all control interrupts.
     //
-    USBIntDisableControl(USB0_BASE, USB_INTCTRL_ALL);
+    MAP_USBIntDisableControl(USB0_BASE, USB_INTCTRL_ALL);
 
     //
     // Disable all endpoint interrupts.
     //
-    USBIntDisableEndpoint(USB0_BASE, USB_INTEP_ALL);
+    MAP_USBIntDisableEndpoint(USB0_BASE, USB_INTEP_ALL);
 
     //
     // Set the mode to none if it is not already.
@@ -581,10 +600,20 @@ USBOTGModeInit(unsigned long ulIndex, unsigned long ulPollingRate,
     ASSERT(ulIndex == 0);
 
     //
+    // This should never be called if not in OTG mode.
+    //
+    ASSERT(g_eUSBMode == USB_MODE_OTG);
+
+    //
+    // Force OTG mode in all cases since anything else is invalid, but a DEBUG
+    // build will still ASSERT above if this value is incorrect.
+    //
+    g_eUSBMode = USB_MODE_OTG;
+
+    //
     // Remember that we have not yet determined whether we are device or
     // host.
     //
-    g_eUSBMode = USB_MODE_OTG;
     g_eDualMode = USB_MODE_NONE;
 
     //
@@ -595,12 +624,12 @@ USBOTGModeInit(unsigned long ulIndex, unsigned long ulPollingRate,
     //
     // Enable the USB controller.
     //
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_USB0);
+    MAP_SysCtlPeripheralEnable(SYSCTL_PERIPH_USB0);
 
     //
     // Turn on USB Phy clock.
     //
-    SysCtlUSBPLLEnable();
+    MAP_SysCtlUSBPLLEnable();
 
     //
     // Initialize the host controller stack.
@@ -617,16 +646,26 @@ USBOTGModeInit(unsigned long ulIndex, unsigned long ulPollingRate,
     //
     // Enable control interrupts.
     //
-    USBIntEnableControl(USB0_BASE, USB_INTCTRL_RESET | USB_INTCTRL_DISCONNECT |
-                                   USB_INTCTRL_SESSION | USB_INTCTRL_BABBLE |
-                                   USB_INTCTRL_CONNECT | USB_INTCTRL_RESUME |
-                                   USB_INTCTRL_SUSPEND | USB_INTCTRL_VBUS_ERR |
-                                   USB_INTCTRL_MODE_DETECT | USB_INTCTRL_SOF);
+    MAP_USBIntEnableControl(USB0_BASE, USB_INTCTRL_RESET |
+                                       USB_INTCTRL_DISCONNECT |
+                                       USB_INTCTRL_SESSION |
+                                       USB_INTCTRL_BABBLE |
+                                       USB_INTCTRL_CONNECT |
+                                       USB_INTCTRL_RESUME |
+                                       USB_INTCTRL_SUSPEND |
+                                       USB_INTCTRL_VBUS_ERR |
+                                       USB_INTCTRL_MODE_DETECT |
+                                       USB_INTCTRL_SOF);
+
+    //
+    // Make sure the mode OTG mode and not forced device or host.
+    //
+    USBOTGMode(USB0_BASE);
 
     //
     // Enable all endpoint interrupts.
     //
-    USBIntEnableEndpoint(USB0_BASE, USB_INTEP_ALL);
+    MAP_USBIntEnableEndpoint(USB0_BASE, USB_INTEP_ALL);
 
     //
     // Initialize the power configuration.
@@ -649,7 +688,7 @@ USBOTGModeInit(unsigned long ulIndex, unsigned long ulPollingRate,
     //
     // Enable the USB interrupt.
     //
-    IntEnable(INT_USB0);
+    MAP_IntEnable(INT_USB0);
 }
 
 //*****************************************************************************

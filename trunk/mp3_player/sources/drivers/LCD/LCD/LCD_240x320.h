@@ -25,13 +25,13 @@
 //control
 //
 #define  TS_LCD_CONTROL_PORT             GPIO_PORTD_BASE
-#define  TS_LCD_CS     		         GPIO_PIN_0				
-#define  TS_LCD_RS    			 GPIO_PIN_1   
-#define  TS_LCD_RD      		 GPIO_PIN_2  					
-#define  TS_LCD_WR     			 GPIO_PIN_3  						
+#define  TS_LCD_CS     		         GPIO_PIN_1				
+#define  TS_LCD_RS    			 GPIO_PIN_5   
+#define  TS_LCD_RD      		 GPIO_PIN_7  					
+#define  TS_LCD_WR     			 GPIO_PIN_6  						
 //#define  TS_LCD_RS      	          GPIO_PIN_4    						
-#define  TS_LCD_BL                       GPIO_PIN_5 
-#define  TS_LCD_RST                      GPIO_PIN_6  					
+#define  TS_LCD_BL                       GPIO_PIN_2 
+#define  TS_LCD_RST                      GPIO_PIN_3  					
 //
 //command define
 // number of data (in-out) + command code
@@ -228,5 +228,6 @@ void TSLCDOutIns8(unsigned char ins);
 void TSLCDOutDat8(unsigned char dat) ;//write data to LCD
 
 void TSLCDPrint(ts_pos_t x,ts_pos_t y,const char *str,ts_mode_t mode);
+void TSLCDFixedPrint(ts_pos_t x,ts_pos_t y,int PixelLength,const char *str,ts_mode_t mode);
 #endif
 

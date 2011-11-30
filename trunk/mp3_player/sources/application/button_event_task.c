@@ -18,23 +18,28 @@
 #include "player_control_task.h"
 #include "button_event_task.h"
 #include "lcd_print.h"
+#include "file_management.h"
 //*****************************************************************************
 //----------DEFINES
 //*****************************************************************************
 #define BUTTON_PORT         GPIO_PORTJ_BASE
 #define SYSCTL_BUTTON_PORT  SYSCTL_PERIPH_GPIOJ
-#define UP_BUTTON           GPIO_PIN_3
-#define DOWN_BUTTON         GPIO_PIN_7
-#define RIGHT_BUTTON        GPIO_PIN_6
-#define LEFT_BUTTON         GPIO_PIN_4
-#define CENTER_BUTTON       GPIO_PIN_5
+#define UP_BUTTON           GPIO_PIN_1 //PG
+#define DOWN_BUTTON         GPIO_PIN_0 //PA
+#define RIGHT_BUTTON        GPIO_PIN_5 //PB
+#define LEFT_BUTTON         GPIO_PIN_0 //PG
+#define CENTER_BUTTON       GPIO_PIN_1 //PA
 
 // The stack for the Button Event task.
 static unsigned long ButtonEventTaskStack[128];
 // The period of the Button Event task.
 static unsigned long ButtonEventDelay = 100;
-static unsigned long Button;
-static unsigned long OldButton;
+static unsigned long ButtonA;
+static unsigned long OldButtonA;
+static unsigned long ButtonB;
+static unsigned long OldButtonB;
+static unsigned long ButtonG;
+static unsigned long OldButtonG;
 static unsigned char ButtonEvent;
 static unsigned char ucFlag;
 static unsigned char Delay =0,i;
@@ -42,44 +47,71 @@ static unsigned char Delay =0,i;
 /**
 *
 */
-void ButtonsIntHandler(void){
+void GPIOAIntHandler(void){
 
-  GPIOPinIntClear(BUTTON_PORT, UP_BUTTON|DOWN_BUTTON|RIGHT_BUTTON|LEFT_BUTTON|CENTER_BUTTON);
+  GPIOPinIntClear(GPIO_PORTA_BASE, DOWN_BUTTON|CENTER_BUTTON);
   if(Delay > 1){
-    Button = GPIOPinRead(BUTTON_PORT, UP_BUTTON|DOWN_BUTTON|RIGHT_BUTTON|LEFT_BUTTON|CENTER_BUTTON);
-    if((Button& UP_BUTTON)&&((OldButton & UP_BUTTON)==0)){
-      if(Delay > 5)
-        ButtonEvent = L_UP;
-      else
-        ButtonEvent = S_UP;
-    }
-    if((Button& DOWN_BUTTON)&&((OldButton & DOWN_BUTTON)==0)){
+    ButtonA = GPIOPinRead(GPIO_PORTA_BASE, DOWN_BUTTON|CENTER_BUTTON);
+    
+    if((ButtonA& DOWN_BUTTON)&&((OldButtonA & DOWN_BUTTON)==0)){
       if(Delay > 5)
         ButtonEvent = L_DOWN;
       else
         ButtonEvent = S_DOWN;
     }
-    if((Button& RIGHT_BUTTON)&&((OldButton & RIGHT_BUTTON)==0)){
-      if(Delay > 5)
-        ButtonEvent = L_RIGHT;
-      else
-        ButtonEvent = S_RIGHT;
-    }
-    if((Button& LEFT_BUTTON)&&((OldButton & LEFT_BUTTON)==0)){
-      if(Delay > 5)
-        ButtonEvent = L_LEFT;
-      else
-        ButtonEvent = S_LEFT;
-    }
-    if((Button& CENTER_BUTTON)&&((OldButton & CENTER_BUTTON)==0)){
+    
+    if((ButtonA& CENTER_BUTTON)&&((OldButtonA & CENTER_BUTTON)==0)){
       if(Delay > 5)
         ButtonEvent = L_CENTER;
       else
         ButtonEvent = S_CENTER;
     }
-    OldButton = Button;
-    if(((Button & UP_BUTTON)==0)||((Button & DOWN_BUTTON)==0)||((Button & RIGHT_BUTTON)==0)||
-        ((Button & LEFT_BUTTON)==0)||((Button & CENTER_BUTTON)==0))
+    OldButtonA = ButtonA;
+    if(((ButtonA & DOWN_BUTTON)==0)||((ButtonA & CENTER_BUTTON)==0))
+      Delay =0;
+    else//Have a button pressed
+      ucFlag=1;
+  }
+}
+void GPIOBIntHandler(void){
+
+  GPIOPinIntClear(GPIO_PORTB_BASE, RIGHT_BUTTON);
+  if(Delay > 1){
+    ButtonB = GPIOPinRead(GPIO_PORTB_BASE, RIGHT_BUTTON);
+   
+    if((ButtonB& RIGHT_BUTTON)&&((OldButtonB & RIGHT_BUTTON)==0)){
+      if(Delay > 5)
+        ButtonEvent = L_RIGHT;
+      else
+        ButtonEvent = S_RIGHT;
+    }
+    
+    OldButtonB = ButtonB;
+    if((ButtonB & RIGHT_BUTTON)==0)
+      Delay =0;
+    else//Have a button pressed
+      ucFlag=1;
+  }
+}
+void GPIOGIntHandler(void){
+
+  GPIOPinIntClear(GPIO_PORTG_BASE, UP_BUTTON|LEFT_BUTTON);
+  if(Delay > 1){
+    ButtonG = GPIOPinRead(GPIO_PORTG_BASE, UP_BUTTON|LEFT_BUTTON);
+    if((ButtonG& UP_BUTTON)&&((OldButtonG & UP_BUTTON)==0)){
+      if(Delay > 5)
+        ButtonEvent = L_UP;
+      else
+        ButtonEvent = S_UP;
+    }
+    if((ButtonG& LEFT_BUTTON)&&((OldButtonG & LEFT_BUTTON)==0)){
+      if(Delay > 5)
+        ButtonEvent = L_LEFT;
+      else
+        ButtonEvent = S_LEFT;
+    }
+    OldButtonG = ButtonG;
+    if(((ButtonG & UP_BUTTON)==0)|| ((ButtonG & LEFT_BUTTON)==0))
       Delay =0;
     else//Have a button pressed
       ucFlag=1;
@@ -121,7 +153,7 @@ ButtonEventTask(void *pvParameters)
     }
     if(PlayState==PLAY_STATE)
       i++;
-    if(i==10)
+    if(i==12)
     {
       SecondCurrent++;
       if(SecondCurrent==60)
@@ -130,6 +162,7 @@ ButtonEventTask(void *pvParameters)
         SecondCurrent=0;
       }
       i=0;
+      clock=1;
     }
     //
     // Wait for the required amount of time.
@@ -142,20 +175,34 @@ ButtonEventTask(void *pvParameters)
 */
 char initButtonEventTask(void){
   //setup interrupt
-  SysCtlPeripheralEnable(SYSCTL_BUTTON_PORT);
-  //J7 for external interrupts
-  GPIOPinTypeGPIOInput(BUTTON_PORT, UP_BUTTON|DOWN_BUTTON|RIGHT_BUTTON|LEFT_BUTTON|CENTER_BUTTON);
-  GPIOIntTypeSet(BUTTON_PORT,UP_BUTTON|DOWN_BUTTON|RIGHT_BUTTON|LEFT_BUTTON|CENTER_BUTTON,GPIO_BOTH_EDGES);
+  SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
+  SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOB);
+  SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOG);
+  //Setup for external interrupts
+  GPIOPinTypeGPIOInput(GPIO_PORTA_BASE, DOWN_BUTTON|CENTER_BUTTON);
+  GPIOPinTypeGPIOInput(GPIO_PORTB_BASE, RIGHT_BUTTON);
+  GPIOPinTypeGPIOInput(GPIO_PORTG_BASE, UP_BUTTON|LEFT_BUTTON);
+  
+  GPIOIntTypeSet(GPIO_PORTA_BASE,DOWN_BUTTON|CENTER_BUTTON,GPIO_BOTH_EDGES);
+  GPIOIntTypeSet(GPIO_PORTB_BASE,RIGHT_BUTTON,GPIO_BOTH_EDGES);
+  GPIOIntTypeSet(GPIO_PORTG_BASE,UP_BUTTON|LEFT_BUTTON,GPIO_BOTH_EDGES);
   //
   // Enable the interrupts.
   //
-  GPIOPinIntEnable(BUTTON_PORT,UP_BUTTON|DOWN_BUTTON|RIGHT_BUTTON|LEFT_BUTTON|CENTER_BUTTON);
-  IntPrioritySet(INT_I2S0,5<<5);
-  IntEnable(INT_GPIOJ);
+  GPIOPinIntEnable(GPIO_PORTA_BASE,DOWN_BUTTON|CENTER_BUTTON);
+  GPIOPinIntEnable(GPIO_PORTB_BASE,RIGHT_BUTTON);
+  GPIOPinIntEnable(GPIO_PORTG_BASE,UP_BUTTON|LEFT_BUTTON);
   
+  IntEnable(INT_GPIOA);
+  IntEnable(INT_GPIOB);
+  IntEnable(INT_GPIOG);
   //Init all Buttons not pressed
-  Button = UP_BUTTON | DOWN_BUTTON| RIGHT_BUTTON| LEFT_BUTTON |CENTER_BUTTON;
-  OldButton = Button;
+  ButtonA = DOWN_BUTTON|CENTER_BUTTON;
+  OldButtonA = ButtonA;
+  ButtonB = RIGHT_BUTTON;
+  OldButtonB = ButtonB;
+  ButtonG = UP_BUTTON|LEFT_BUTTON;
+  OldButtonG = ButtonG;
   //
   // Create the InGate task.
   //

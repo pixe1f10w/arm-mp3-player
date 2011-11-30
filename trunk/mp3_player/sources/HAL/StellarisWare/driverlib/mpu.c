@@ -2,7 +2,7 @@
 //
 // mpu.c - Driver for the Cortex-M3 memory protection unit (MPU).
 //
-// Copyright (c) 2007-2010 Texas Instruments Incorporated.  All rights reserved.
+// Copyright (c) 2007-2011 Texas Instruments Incorporated.  All rights reserved.
 // Software License Agreement
 // 
 // Texas Instruments (TI) is supplying this software for use solely and
@@ -18,7 +18,7 @@
 // CIRCUMSTANCES, BE LIABLE FOR SPECIAL, INCIDENTAL, OR CONSEQUENTIAL
 // DAMAGES, FOR ANY REASON WHATSOEVER.
 // 
-// This is part of revision 6459 of the Stellaris Peripheral Driver Library.
+// This is part of revision 8049 of the Stellaris Peripheral Driver Library.
 //
 //*****************************************************************************
 
@@ -43,13 +43,12 @@
 //! \param ulMPUConfig is the logical OR of the possible configurations.
 //!
 //! This function enables the Cortex-M3 memory protection unit.  It also
-//! configures the default behavior when in privileged mode and while
-//! handling a hard fault or NMI.  Prior to enabling the MPU, at least one
-//! region must be set by calling MPURegionSet() or else by enabling the
-//! default region for privileged mode by passing the
-//! \b MPU_CONFIG_PRIV_DEFAULT flag to MPUEnable().
-//! Once the MPU is enabled, a memory management fault will be generated
-//! for any memory access violations.
+//! configures the default behavior when in privileged mode and while handling
+//! a hard fault or NMI.  Prior to enabling the MPU, at least one region must
+//! be set by calling MPURegionSet() or else by enabling the default region for
+//! privileged mode by passing the \b MPU_CONFIG_PRIV_DEFAULT flag to
+//! MPUEnable().  Once the MPU is enabled, a memory management fault are
+//! generated for any memory access violations.
 //!
 //! The \e ulMPUConfig parameter should be the logical OR of any of the
 //! following:
@@ -136,8 +135,8 @@ MPURegionCountGet(void)
 //!
 //! This function is used to enable a memory protection region.  The region
 //! should already be set up with the MPURegionSet() function.  Once enabled,
-//! the memory protection rules of the region will be applied and access
-//! violations will cause a memory management fault.
+//! the memory protection rules of the region are applied and access violations
+//! will cause a memory management fault.
 //!
 //! \return None.
 //
@@ -342,9 +341,9 @@ MPURegionSet(unsigned long ulRegion, unsigned long ulAddr,
 //! meanings and format of the parameters is the same as that of the
 //! MPURegionSet() function.
 //!
-//! This function can be used to save the configuration of a region for
-//! later use with the MPURegionSet() function.  The region's enable state
-//! will be preserved in the attributes that are saved.
+//! This function can be used to save the configuration of a region for later
+//! use with the MPURegionSet() function.  The region's enable state is
+//! preserved in the attributes that are saved.
 //!
 //! \return None.
 //

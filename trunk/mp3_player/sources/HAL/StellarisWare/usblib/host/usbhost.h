@@ -2,7 +2,7 @@
 //
 // usbhost.h - Host specific definitions for the USB host library.
 //
-// Copyright (c) 2008-2010 Texas Instruments Incorporated.  All rights reserved.
+// Copyright (c) 2008-2011 Texas Instruments Incorporated.  All rights reserved.
 // Software License Agreement
 // 
 // Texas Instruments (TI) is supplying this software for use solely and
@@ -18,7 +18,7 @@
 // CIRCUMSTANCES, BE LIABLE FOR SPECIAL, INCIDENTAL, OR CONSEQUENTIAL
 // DAMAGES, FOR ANY REASON WHATSOEVER.
 // 
-// This is part of revision 6459 of the Stellaris USB Library.
+// This is part of revision 8049 of the Stellaris USB Library.
 //
 //*****************************************************************************
 
@@ -60,7 +60,6 @@ extern "C"
 #define USBHCD_PIPE_ISOC_IN_DMA     0x01820000
 #define USBHCD_PIPE_BULK_OUT_DMA    0x01210000
 #define USBHCD_PIPE_BULK_IN_DMA     0x01220000
-
 
 //*****************************************************************************
 //
@@ -115,6 +114,38 @@ const tUSBHostClassDriver VarName =                                         \
 
 //*****************************************************************************
 //
+//! This structure is used to return generic event based information to an
+//! application.  The following events are currently supported:
+//! USB_EVENT_CONNECTED, USB_EVENT_DISCONNECTED, and USB_EVENT_POWER_FAULT.
+//
+//*****************************************************************************
+typedef struct
+{
+    unsigned long ulEvent;
+
+    unsigned long ulInstance;
+}
+tEventInfo;
+
+//*****************************************************************************
+//
+// This is the type definition a call back for events on USB Pipes allocated
+// by USBHCDPipeAlloc().
+//
+// \param ulPipe is well the pipe
+// \param ulEvent is well the event
+//
+// longer def thand may need more text in order to be recogized what should
+// this really say about ourselves.
+//
+// \return None.
+//
+//*****************************************************************************
+typedef void (* tHCDPipeCallback)(unsigned long ulPipe,
+                                  unsigned long ulEvent);
+
+//*****************************************************************************
+//
 //! This is the structure that holds all of the information for devices
 //! that are enumerated in the system.   It is passed in to Open function of
 //! USB host class drivers so that they can allocate any endpoints and parse
@@ -134,7 +165,7 @@ typedef struct
     unsigned long ulInterface;
 
     //
-    //! A pointer to the device descriptor for this device.
+    //! The device descriptor for this device.
     //
     tDeviceDescriptor DeviceDescriptor;
 
@@ -184,38 +215,6 @@ tUSBHostClassDriver;
 
 //*****************************************************************************
 //
-//! This structure is used to return generic event based information to an
-//! application.  The following events are currently supported:
-//! USB_EVENT_CONNECTED, USB_EVENT_DISCONNECTED, and USB_EVENT_POWER_FAULT.
-//
-//*****************************************************************************
-typedef struct
-{
-    unsigned long ulEvent;
-
-    unsigned long ulInstance;
-}
-tEventInfo;
-
-//*****************************************************************************
-//
-// This is the type definition a call back for events on USB Pipes allocated
-// by USBHCDPipeAlloc().
-//
-// \param ulPipe is well the pipe
-// \param ulEvent is well the event
-//
-// longer def thand may need more text in order to be recogized what should
-// this really say about ourselves.
-//
-// \return None.
-//
-//*****************************************************************************
-typedef void (* tHCDPipeCallback)(unsigned long ulPipe,
-                                  unsigned long ulEvent);
-
-//*****************************************************************************
-//
 // Close the Doxygen group.
 //! @}
 //
@@ -253,7 +252,6 @@ extern void USBHCDSetConfig(unsigned long ulIndex, unsigned long ulDevice,
 extern void USBHCDSetInterface(unsigned long ulIndex, unsigned long ulDevice,
                                unsigned long ulInterface,
                                unsigned ulAltSetting);
-
 extern void USBHCDSuspend(unsigned long ulIndex);
 extern void USBHCDResume(unsigned long ulIndex);
 extern void USBHCDReset(unsigned long ulIndex);

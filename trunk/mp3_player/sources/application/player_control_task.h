@@ -25,6 +25,8 @@
 #define PLAY_DONE       12
 #define FORMAT_ERR      13
 #define OPEN_ERR        14
+
+extern unsigned char clock;
 portBASE_TYPE givePlayerCtrlEvent(unsigned char *data, portTickType timeout);
 char get_play_event(void);
 char get_volume(void);

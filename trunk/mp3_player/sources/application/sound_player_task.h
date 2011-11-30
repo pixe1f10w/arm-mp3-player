@@ -1,6 +1,12 @@
 #ifndef _SOUND_PLAYER_TASK_H_
 #define _SOUND_PLAYER_TASK_H_
 
+#define     MP3_STOP        0x0000
+#define     MP3_START       0x0001
+#define     MP3_PAUSE       0x0002
+#define     MP3_CONTINUE    0x0003
+
+
 /**
 * Define Controls for Sound Player
 */

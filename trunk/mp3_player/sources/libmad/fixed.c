@@ -19,10 +19,6 @@
  * $Id: fixed.c,v 1.13 2004/01/23 09:41:32 rob Exp $
  */
 
-/* [NGK 08/05]: Enable use of Nios II FMUL custom instruction */
-#define FPM_NIOSII_CI
-
-
 # ifdef HAVE_CONFIG_H
 #  include "config.h"
 # endif

@@ -2,7 +2,7 @@
 //
 // usbdcomp.c - USB composite device class driver.
 //
-// Copyright (c) 2010 Texas Instruments Incorporated.  All rights reserved.
+// Copyright (c) 2010-2011 Texas Instruments Incorporated.  All rights reserved.
 // Software License Agreement
 // 
 // Texas Instruments (TI) is supplying this software for use solely and
@@ -18,17 +18,17 @@
 // CIRCUMSTANCES, BE LIABLE FOR SPECIAL, INCIDENTAL, OR CONSEQUENTIAL
 // DAMAGES, FOR ANY REASON WHATSOEVER.
 // 
-// This is part of revision 6459 of the Stellaris USB Library.
+// This is part of revision 8049 of the Stellaris USB Library.
 //
 //****************************************************************************
 
 #include "inc/hw_memmap.h"
 #include "inc/hw_types.h"
 #include "driverlib/debug.h"
-#include "driverlib/interrupt.h"
 #include "driverlib/sysctl.h"
+#include "driverlib/rom.h"
+#include "driverlib/rom_map.h"
 #include "driverlib/usb.h"
-#include "driverlib/udma.h"
 #include "usblib/usblib.h"
 #include "usblib/usb-ids.h"
 #include "usblib/usbcdc.h"
@@ -172,41 +172,41 @@ tFIFOConfig g_sUSBCompositeFIFOConfig =
     // IN endpoints.
     //
     {
-        { 1, false, USB_EP_DEV_IN },
-        { 1, false, USB_EP_DEV_IN },
-        { 1, false, USB_EP_DEV_IN },
-        { 1, false, USB_EP_DEV_IN },
-        { 1, false, USB_EP_DEV_IN },
-        { 1, false, USB_EP_DEV_IN },
-        { 1, false, USB_EP_DEV_IN },
-        { 1, false, USB_EP_DEV_IN },
-        { 1, false, USB_EP_DEV_IN },
-        { 1, false, USB_EP_DEV_IN },
-        { 1, false, USB_EP_DEV_IN },
-        { 1, false, USB_EP_DEV_IN },
-        { 1, false, USB_EP_DEV_IN },
-        { 1, false, USB_EP_DEV_IN },
-        { 1, false, USB_EP_DEV_IN }
+        { false, USB_EP_DEV_IN },
+        { false, USB_EP_DEV_IN },
+        { false, USB_EP_DEV_IN },
+        { false, USB_EP_DEV_IN },
+        { false, USB_EP_DEV_IN },
+        { false, USB_EP_DEV_IN },
+        { false, USB_EP_DEV_IN },
+        { false, USB_EP_DEV_IN },
+        { false, USB_EP_DEV_IN },
+        { false, USB_EP_DEV_IN },
+        { false, USB_EP_DEV_IN },
+        { false, USB_EP_DEV_IN },
+        { false, USB_EP_DEV_IN },
+        { false, USB_EP_DEV_IN },
+        { false, USB_EP_DEV_IN }
     },
     //
     // OUT endpoints.
     //
     {
-        { 1, false, USB_EP_DEV_OUT },
-        { 1, false, USB_EP_DEV_OUT },
-        { 1, false, USB_EP_DEV_OUT },
-        { 1, false, USB_EP_DEV_OUT },
-        { 1, false, USB_EP_DEV_OUT },
-        { 1, false, USB_EP_DEV_OUT },
-        { 1, false, USB_EP_DEV_OUT },
-        { 1, false, USB_EP_DEV_OUT },
-        { 1, false, USB_EP_DEV_OUT },
-        { 1, false, USB_EP_DEV_OUT },
-        { 1, false, USB_EP_DEV_OUT },
-        { 1, false, USB_EP_DEV_OUT },
-        { 1, false, USB_EP_DEV_OUT },
-        { 1, false, USB_EP_DEV_OUT },
-        { 1, false, USB_EP_DEV_OUT }
+        { false, USB_EP_DEV_OUT },
+        { false, USB_EP_DEV_OUT },
+        { false, USB_EP_DEV_OUT },
+        { false, USB_EP_DEV_OUT },
+        { false, USB_EP_DEV_OUT },
+        { false, USB_EP_DEV_OUT },
+        { false, USB_EP_DEV_OUT },
+        { false, USB_EP_DEV_OUT },
+        { false, USB_EP_DEV_OUT },
+        { false, USB_EP_DEV_OUT },
+        { false, USB_EP_DEV_OUT },
+        { false, USB_EP_DEV_OUT },
+        { false, USB_EP_DEV_OUT },
+        { false, USB_EP_DEV_OUT },
+        { false, USB_EP_DEV_OUT }
     },
 };
 
@@ -1005,9 +1005,6 @@ CompositeEPChange(tCompositeEntry *pCompDevice, unsigned char ucOld,
             g_sUSBCompositeFIFOConfig.sIn[ucNew].bDoubleBuffer =
                 pCompDevice->psDevice->psFIFOConfig->sIn[ucIndex].bDoubleBuffer;
 
-            g_sUSBCompositeFIFOConfig.sIn[ucNew].cMultiplier =
-                pCompDevice->psDevice->psFIFOConfig->sIn[ucIndex].cMultiplier;
-
             g_sUSBCompositeFIFOConfig.sIn[ucNew].usEPFlags =
                 pCompDevice->psDevice->psFIFOConfig->sIn[ucIndex].usEPFlags;
         }
@@ -1017,9 +1014,6 @@ CompositeEPChange(tCompositeEntry *pCompDevice, unsigned char ucOld,
 
             g_sUSBCompositeFIFOConfig.sOut[ucNew].bDoubleBuffer =
                pCompDevice->psDevice->psFIFOConfig->sOut[ucIndex].bDoubleBuffer;
-
-            g_sUSBCompositeFIFOConfig.sOut[ucNew].cMultiplier =
-                pCompDevice->psDevice->psFIFOConfig->sOut[ucIndex].cMultiplier;
 
             g_sUSBCompositeFIFOConfig.sOut[ucNew].usEPFlags =
                 pCompDevice->psDevice->psFIFOConfig->sOut[ucIndex].usEPFlags;
@@ -1079,7 +1073,7 @@ BuildCompositeDescriptor(tUSBDCompositeDevice *psCompDevice)
     psCompDevice->psPrivateData->ppsCompSections[0]->pucData =
         (unsigned char *)&psCompDevice->psPrivateData->sConfigDescriptor;
 
-    psCompDevice->psPrivateData->ppsCompSections[0]->ucSize =
+    psCompDevice->psPrivateData->ppsCompSections[0]->usSize =
         psCompDevice->psPrivateData->sConfigDescriptor.bLength;
 
     //
@@ -1100,7 +1094,7 @@ BuildCompositeDescriptor(tUSBDCompositeDevice *psCompDevice)
     // Copy the pointer to the application supplied space into the section
     // list.
     //
-    psCompDevice->psPrivateData->ppsCompSections[1]->ucSize = 0;
+    psCompDevice->psPrivateData->ppsCompSections[1]->usSize = 0;
     psCompDevice->psPrivateData->ppsCompSections[1]->pucData =
         psCompDevice->psPrivateData->pucData;
 
@@ -1157,7 +1151,7 @@ BuildCompositeDescriptor(tUSBDCompositeDevice *psCompDevice)
                 // If this section includes only the config descriptor, skip
                 // it entirely.
                 //
-                if(pConfigHeader->psSections[ulIdx]->ucSize <= usBytes)
+                if(pConfigHeader->psSections[ulIdx]->usSize <= usBytes)
                 {
                     continue;
                 }
@@ -1181,7 +1175,7 @@ BuildCompositeDescriptor(tUSBDCompositeDevice *psCompDevice)
             // Copy the descriptor from the device into the descriptor list.
             //
             for(ulCPIdx = 0;
-                ulCPIdx < pConfigHeader->psSections[ulIdx]->ucSize;
+                ulCPIdx < pConfigHeader->psSections[ulIdx]->usSize;
                 ulCPIdx++)
             {
                 pucData[ulCPIdx + ulOffset] = pucDescriptor[ulCPIdx];
@@ -1190,7 +1184,7 @@ BuildCompositeDescriptor(tUSBDCompositeDevice *psCompDevice)
             //
             // Read out the descriptors in this section.
             //
-            while(usBytes < pConfigHeader->psSections[ulIdx]->ucSize)
+            while(usBytes < pConfigHeader->psSections[ulIdx]->usSize)
             {
                 //
                 // Create a descriptor header pointer.
@@ -1316,7 +1310,7 @@ BuildCompositeDescriptor(tUSBDCompositeDevice *psCompDevice)
                 usBytes += psHeader->bLength;
             }
 
-            ulOffset += pConfigHeader->psSections[ulIdx]->ucSize;
+            ulOffset += pConfigHeader->psSections[ulIdx]->usSize;
 
             usTotalLength += usBytes;
         }
@@ -1350,11 +1344,12 @@ BuildCompositeDescriptor(tUSBDCompositeDevice *psCompDevice)
     // and the new total size.
     //
     psCompDevice->psPrivateData->sCompConfigHeader.ucNumSections = 2;
-    psCompDevice->psPrivateData->ppsCompSections[1]->ucSize = ulOffset;
+    psCompDevice->psPrivateData->ppsCompSections[1]->usSize = ulOffset;
     psCompDevice->psPrivateData->sConfigDescriptor.bNumInterfaces =
        ucInterface;
     psCompDevice->psPrivateData->sConfigDescriptor.wTotalLength =
        usTotalLength;
+
 
     return(0);
 }
@@ -1398,7 +1393,7 @@ USBDCompositeInit(unsigned long ulIndex, tUSBDCompositeDevice *psDevice,
         unsigned long ulSize, unsigned char *pucData)
 {
     tCompositeInstance *psInst;
-    int iIdx;
+    long lIdx;
     unsigned char *pucTemp;
 
     //
@@ -1444,9 +1439,9 @@ USBDCompositeInit(unsigned long ulIndex, tUSBDCompositeDevice *psDevice,
     //
     // Copy the default configuration descriptor into the instance data.
     //
-    for(iIdx = 0; iIdx < g_pCompConfigDescriptor[0]; iIdx++)
+    for(lIdx = 0; lIdx < g_pCompConfigDescriptor[0]; lIdx++)
     {
-        pucTemp[iIdx] = g_pCompConfigDescriptor[iIdx];
+        pucTemp[lIdx] = g_pCompConfigDescriptor[lIdx];
     }
 
     //
@@ -1457,9 +1452,9 @@ USBDCompositeInit(unsigned long ulIndex, tUSBDCompositeDevice *psDevice,
     //
     // Copy the default configuration descriptor into the instance data.
     //
-    for(iIdx = 0; iIdx < g_pCompDeviceDescriptor[0]; iIdx++)
+    for(lIdx = 0; lIdx < g_pCompDeviceDescriptor[0]; lIdx++)
     {
-        pucTemp[iIdx] = g_pCompDeviceDescriptor[iIdx];
+        pucTemp[lIdx] = g_pCompDeviceDescriptor[lIdx];
     }
 
     //
@@ -1490,7 +1485,7 @@ USBDCompositeInit(unsigned long ulIndex, tUSBDCompositeDevice *psDevice,
     // Enable Clocking to the USB controller so that changes to the USB
     // controller can be made in the BuildCompositeDescriptor() function.
     //
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_USB0);
+    MAP_SysCtlPeripheralEnable(SYSCTL_PERIPH_USB0);
 
     //
     // Create the combined descriptors.
@@ -1515,7 +1510,7 @@ USBDCompositeInit(unsigned long ulIndex, tUSBDCompositeDevice *psDevice,
     // Return the pointer to the instance indicating that everything went
     // well.
     //
-    return ((void *)psDevice);
+    return((void *)psDevice);
 }
 
 //****************************************************************************

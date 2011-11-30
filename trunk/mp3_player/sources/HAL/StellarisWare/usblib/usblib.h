@@ -1,7 +1,8 @@
+//*****************************************************************************
 //
 // usblib.h - Main header file for the USB Library.
 //
-// Copyright (c) 2008-2010 Texas Instruments Incorporated.  All rights reserved.
+// Copyright (c) 2008-2011 Texas Instruments Incorporated.  All rights reserved.
 // Software License Agreement
 // 
 // Texas Instruments (TI) is supplying this software for use solely and
@@ -17,7 +18,7 @@
 // CIRCUMSTANCES, BE LIABLE FOR SPECIAL, INCIDENTAL, OR CONSEQUENTIAL
 // DAMAGES, FOR ANY REASON WHATSOEVER.
 // 
-// This is part of revision 6459 of the Stellaris USB Library.
+// This is part of revision 8049 of the Stellaris USB Library.
 //
 //*****************************************************************************
 
@@ -82,7 +83,6 @@ extern "C"
 #else
 #error Unrecognized COMPILER!
 #endif
-
 //*****************************************************************************
 //
 // Assorted language IDs from the document "USB_LANGIDs.pdf" provided by the
@@ -107,6 +107,7 @@ extern "C"
 #define USB_LANG_SWAHILI        0x0441      // Swahili (Kenya)
 #define USB_LANG_URDU_IN        0x0820      // Urdu (India)
 #define USB_LANG_URDU_PK        0x0420      // Urdu (Pakistan)
+
 //*****************************************************************************
 //
 //! \addtogroup usbchap9_src
@@ -1025,15 +1026,6 @@ tCustomHandlers;
 typedef struct
 {
     //
-    //! The multiplier to apply to an endpoint's maximum packet size when
-    //! configuring the FIFO for that endpoint.  For example, setting this
-    //! value to 2 will result in a 128 byte FIFO being configured if
-    //! bDoubleBuffer is false and the associated endpoint is set to use a 64
-    //! byte maximum packet size.
-    //
-    unsigned char cMultiplier;
-
-    //
     //! This field indicates whether to configure an endpoint's FIFO to be
     //! double- or single-buffered.  If true, a double-buffered FIFO is
     //! created and the amount of required FIFO storage is multiplied by two.
@@ -1093,7 +1085,7 @@ typedef struct
     //
     //! The number of bytes of descriptor data pointed to by pucData.
     //
-    unsigned char ucSize;
+    unsigned short usSize;
 
     //
     //! A pointer to a block of data containing an integral number of
@@ -1281,7 +1273,19 @@ typedef enum
     //! A marker indicating that no USB mode has yet been set by the
     //! application.
     //
-    USB_MODE_NONE
+    USB_MODE_NONE,
+
+    //
+    //! The application is forcing host mode so that the VBUS and ID pins are
+    //! not used or seen by the USB controller.
+    //
+    USB_MODE_FORCE_HOST,
+
+    //
+    //! The application is forcing device mode so that the VBUS and ID pins are
+    //! not used or seen by the USB controller.
+    //
+    USB_MODE_FORCE_DEVICE,
 } tUSBMode;
 
 //*****************************************************************************
@@ -1363,6 +1367,7 @@ typedef unsigned long (* tUSBCallback)(void *pvCBData, unsigned long ulEvent,
 #define USBD_BULK_EVENT_BASE     (USB_CLASS_EVENT_BASE + 0x2000)
 #define USBD_MSC_EVENT_BASE      (USB_CLASS_EVENT_BASE + 0x3000)
 #define USBD_AUDIO_EVENT_BASE    (USB_CLASS_EVENT_BASE + 0x4000)
+#define USBD_DFU_EVENT_BASE      (USB_CLASS_EVENT_BASE + 0x5000)
 
 #define USBH_CDC_EVENT_BASE   (USBD_CDC_EVENT_BASE  + 0x800)
 #define USBH_HID_EVENT_BASE   (USBD_HID_EVENT_BASE  + 0x800)
@@ -1386,9 +1391,9 @@ typedef unsigned long (* tUSBCallback)(void *pvCBData, unsigned long ulEvent,
 //! The device has been disconnected from the USB host (used by device classes
 //! only).
 //!
-//! Note: Due to a hardware erratum in revision A of LM3S3748, this
-//! event is not posted to self-powered USB devices when they are disconnected
-//! from the USB host.
+//! \note In device mode, the USB_EVENT_DISCONNECTED will not be reported if the
+//! MCU's PB1/USB0VBUS pin is connected to a fixed +5 Volts rather than
+//! directly to the VBUS pin on the USB connector.
 //
 #define USB_EVENT_DISCONNECTED (USB_EVENT_BASE + 1)
 
@@ -1531,6 +1536,7 @@ typedef unsigned long (* tUSBCallback)(void *pvCBData, unsigned long ulEvent,
 //! descriptor for the device instance.
 //
 #define USB_EVENT_COMP_CONFIG        (USB_EVENT_BASE + 17)
+
 //
 //! An unknown device is now attached to a USB host.  This value is only valid
 //! for the generic event handler and not other device handlers.  It is
@@ -1541,6 +1547,8 @@ typedef unsigned long (* tUSBCallback)(void *pvCBData, unsigned long ulEvent,
 //! device that was connected.
 //
 #define USB_EVENT_UNKNOWN_CONNECTED  (USB_EVENT_BASE + 18)
+
+
 //*****************************************************************************
 //
 // Error sources reported via USB_EVENT_ERROR.

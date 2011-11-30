@@ -15,14 +15,11 @@ void DisplayMenu(unsigned char iii);
 #define     SELECTED_UPDATE 0x04
 #define     TIME_UPDATE     0x08
 #define     STATE_UPDATE    0x10
-extern unsigned char VolumeValue;
+
 #define     PLAY_STATE      0
 #define     PAUSE_STATE     1
 extern unsigned char PlayState;
-extern unsigned long  MinsPlay;
-extern unsigned long  SecondPlay;
-extern unsigned long  MinsCurrent;
-extern unsigned long  SecondCurrent;
+
 void NowPlay(unsigned char iii);
 //**********************
 #define     BROWSE_INITIAL_BACK    0x01

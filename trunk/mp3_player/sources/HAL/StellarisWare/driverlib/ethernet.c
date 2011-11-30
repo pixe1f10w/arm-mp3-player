@@ -2,7 +2,7 @@
 //
 // ethernet.c - Driver for the Integrated Ethernet Controller
 //
-// Copyright (c) 2006-2010 Texas Instruments Incorporated.  All rights reserved.
+// Copyright (c) 2006-2011 Texas Instruments Incorporated.  All rights reserved.
 // Software License Agreement
 // 
 // Texas Instruments (TI) is supplying this software for use solely and
@@ -18,7 +18,7 @@
 // CIRCUMSTANCES, BE LIABLE FOR SPECIAL, INCIDENTAL, OR CONSEQUENTIAL
 // DAMAGES, FOR ANY REASON WHATSOEVER.
 // 
-// This is part of revision 6459 of the Stellaris Peripheral Driver Library.
+// This is part of revision 8049 of the Stellaris Peripheral Driver Library.
 //
 //*****************************************************************************
 
@@ -48,10 +48,10 @@
 //! a given hardware/software configuration.  This function should be called
 //! before any other Ethernet API functions are called.
 //!
-//! The peripheral clock will be the same as the processor clock.  This will be
-//! the value returned by SysCtlClockGet(), or it can be explicitly hard-coded
-//! if it is constant and known (to save the code/execution overhead of a call
-//! to SysCtlClockGet()).
+//! The peripheral clock is the same as the processor clock.  This is the value
+//! returned by SysCtlClockGet(), or it can be explicitly hard-coded if it is
+//! constant and known (to save the code/execution overhead of a call to
+//! SysCtlClockGet()).
 //!
 //! This function replaces the original EthernetInit() API and performs the
 //! same actions.  A macro is provided in <tt>ethernet.h</tt> to map the
@@ -187,7 +187,7 @@ EthernetConfigSet(unsigned long ulBase, unsigned long ulConfig)
 //! and return a bit-mapped configuration value.
 //!
 //! \sa The description of the EthernetConfigSet() function provides detailed
-//! information for the bit-mapped configuration values that will be returned.
+//! information for the bit-mapped configuration values that is returned.
 //!
 //! \return Returns the bit-mapped Ethernet controller configuration value.
 //
@@ -416,8 +416,7 @@ EthernetDisable(unsigned long ulBase)
 //! packets available in the receive FIFO.  When the last bytes of a packet are
 //! successfully received (that is, the frame check sequence bytes), the packet
 //! count is incremented.  Once the packet has been fully read (including the
-//! frame check sequence bytes) from the FIFO, the packet count will be
-//! decremented.
+//! frame check sequence bytes) from the FIFO, the packet count is decremented.
 //!
 //! \return Returns \b true if there are one or more packets available in the
 //! receive FIFO, including the current packet being read, and \b false
@@ -1144,14 +1143,14 @@ EthernetIntStatus(unsigned long ulBase, tBoolean bMasked)
 //! The \e ulIntFlags parameter has the same definition as the \e ulIntFlags
 //! parameter to EthernetIntEnable().
 //!
-//! \note Since there is a write buffer in the Cortex-M3 processor, it may take
-//! several clock cycles before the interrupt source is actually cleared.
+//! \note Because there is a write buffer in the Cortex-M3 processor, it may
+//! take several clock cycles before the interrupt source is actually cleared.
 //! Therefore, it is recommended that the interrupt source be cleared early in
 //! the interrupt handler (as opposed to the very last action) to avoid
 //! returning from the interrupt handler before the interrupt source is
 //! actually cleared.  Failure to do so may result in the interrupt handler
-//! being immediately reentered (since NVIC still sees the interrupt source
-//! asserted).
+//! being immediately reentered (because the interrupt controller still sees
+//! the interrupt source asserted).
 //!
 //! \return None.
 //
@@ -1171,6 +1170,42 @@ EthernetIntClear(unsigned long ulBase, unsigned long ulIntFlags)
     // Clear the requested interrupt sources.
     //
     HWREG(ulBase + MAC_O_IACK) = ulIntFlags;
+}
+
+//*****************************************************************************
+//
+//! Sets the PHY address.
+//!
+//! \param ulBase is the base address of the controller.
+//! \param ucAddr is the address of the PHY.
+//!
+//! This function sets the address of the PHY that is accessed via
+//! EthernetPHYRead() and EthernePHYWrite().  This is only needed when
+//! connecting to an external PHY via MII, and should not be used on devices
+//! that have integrated PHYs.
+//!
+//! \return None.
+//
+//*****************************************************************************
+void
+EthernetPHYAddrSet(unsigned long ulBase, unsigned char ucAddr)
+{
+    //
+    // Check the arguments.
+    //
+    ASSERT(ulBase == ETH_BASE);
+
+    //
+    // Wait for any pending transaction to complete.
+    //
+    while(HWREG(ulBase + MAC_O_MCTL) & MAC_MCTL_START)
+    {
+    }
+
+    //
+    // Set the PHY address.
+    //
+    HWREG(ulBase + MAC_O_MADD) = ucAddr;
 }
 
 //*****************************************************************************
@@ -1267,6 +1302,56 @@ EthernetPHYRead(unsigned long ulBase, unsigned char ucRegAddr)
     // Return the PHY data that was read.
     //
     return(HWREG(ulBase + MAC_O_MRXD) & MAC_MRXD_MDRX_M);
+}
+
+//*****************************************************************************
+//
+//! Powers off the Ethernet PHY.
+//!
+//! \param ulBase is the base address of the controller.
+//!
+//! This function will power off the Ethernet PHY, reducing the current
+//! consuption of the device.  While in the powered off state, the Ethernet
+//! controller is unable to connect to the Ethernet.
+//!
+//! \return None.
+//
+//*****************************************************************************
+void
+EthernetPHYPowerOff(unsigned long ulBase)
+{
+    //
+    // Set the PWRDN bit and clear the ANEGEN bit in the PHY, putting it into
+    // its low power mode.
+    //
+    EthernetPHYWrite(ulBase, PHY_MR0,
+                     (EthernetPHYRead(ulBase, PHY_MR0) & ~PHY_MR0_ANEGEN) |
+                     PHY_MR0_PWRDN);
+}
+
+//*****************************************************************************
+//
+//! Powers on the Ethernet PHY.
+//!
+//! \param ulBase is the base address of the controller.
+//!
+//! This function will power on the Ethernet PHY, enabling it return to normal
+//! operation.  By default, the PHY is powered on, so this function only needs
+//! to be called if EthernetPHYPowerOff() has previously been called.
+//!
+//! \return None.
+//
+//*****************************************************************************
+void
+EthernetPHYPowerOn(unsigned long ulBase)
+{
+    //
+    // Clear the PWRDN bit and set the ANEGEN bit in the PHY, putting it into
+    // normal operating mode.
+    //
+    EthernetPHYWrite(ulBase, PHY_MR0,
+                     (EthernetPHYRead(ulBase, PHY_MR0) & ~PHY_MR0_PWRDN) |
+                     PHY_MR0_ANEGEN);
 }
 
 //*****************************************************************************

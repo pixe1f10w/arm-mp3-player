@@ -2,7 +2,7 @@
 //
 // usbhmsc.c - USB MSC host driver.
 //
-// Copyright (c) 2008-2010 Texas Instruments Incorporated.  All rights reserved.
+// Copyright (c) 2008-2011 Texas Instruments Incorporated.  All rights reserved.
 // Software License Agreement
 // 
 // Texas Instruments (TI) is supplying this software for use solely and
@@ -18,12 +18,11 @@
 // CIRCUMSTANCES, BE LIABLE FOR SPECIAL, INCIDENTAL, OR CONSEQUENTIAL
 // DAMAGES, FOR ANY REASON WHATSOEVER.
 // 
-// This is part of revision 6459 of the Stellaris USB Library.
+// This is part of revision 8049 of the Stellaris USB Library.
 //
 //*****************************************************************************
 
 #include "inc/hw_types.h"
-#include "driverlib/sysctl.h"
 #include "driverlib/usb.h"
 #include "usblib/usblib.h"
 #include "usblib/usbmsc.h"
@@ -132,7 +131,7 @@ const tUSBHostClassDriver g_USBHostMSCClassDriver =
 static void *
 USBHMSCOpen(tUSBHostDevice *pDevice)
 {
-    int iIdx;
+    long lIdx;
     tEndpointDescriptor *pEndpointDescriptor;
     tInterfaceDescriptor *pInterface;
 
@@ -157,13 +156,13 @@ USBHMSCOpen(tUSBHostDevice *pDevice)
     //
     // Loop through the endpoints of the device.
     //
-    for(iIdx = 0; iIdx < 3; iIdx++)
+    for(lIdx = 0; lIdx < 3; lIdx++)
     {
         //
         // Get the first endpoint descriptor.
         //
         pEndpointDescriptor =
-            USBDescGetInterfaceEndpoint(pInterface, iIdx,
+            USBDescGetInterfaceEndpoint(pInterface, lIdx,
                                         pDevice->ulConfigDescriptorSize);
 
         //
@@ -437,6 +436,22 @@ USBHMSCDriveReady(unsigned long ulInstance)
         ulSize = SCSI_REQUEST_SENSE_SZ;
         USBHSCSIRequestSense(pMSCDevice->ulBulkInPipe,
                              pMSCDevice->ulBulkOutPipe, pBuffer, &ulSize);
+
+        //
+        // If the read capacity failed then check if the drive is ready.
+        //
+        if(USBHSCSITestUnitReady(pMSCDevice->ulBulkInPipe,
+                                 pMSCDevice->ulBulkOutPipe) != SCSI_CMD_STATUS_PASS)
+        {
+            //
+            // Get the current sense data from the device to see why it failed
+            // the Test Unit Ready command.
+            //
+            ulSize = SCSI_REQUEST_SENSE_SZ;
+            USBHSCSIRequestSense(pMSCDevice->ulBulkInPipe,
+                                 pMSCDevice->ulBulkOutPipe, pBuffer, &ulSize);
+        }
+
         return(-1);
     }
     else
@@ -469,6 +484,7 @@ USBHMSCDriveReady(unsigned long ulInstance)
         ulSize = SCSI_REQUEST_SENSE_SZ;
         USBHSCSIRequestSense(pMSCDevice->ulBulkInPipe,
                              pMSCDevice->ulBulkOutPipe, pBuffer, &ulSize);
+
         return(-1);
     }
 

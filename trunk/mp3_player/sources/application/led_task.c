@@ -67,7 +67,7 @@ LEDTask(void *pvParameters)
         /**
         *Turn on the user LED.
         */
-        ROM_GPIOPinWrite(GPIO_PORTE_BASE, GPIO_PIN_3, GPIO_PIN_3);
+        ROM_GPIOPinWrite(GPIO_PORTJ_BASE, GPIO_PIN_1, GPIO_PIN_1);
 
         /**
         *Wait for the required amount of time.
@@ -77,7 +77,7 @@ LEDTask(void *pvParameters)
         /**
         * Turn off the user LED.
         */
-        ROM_GPIOPinWrite(GPIO_PORTE_BASE, GPIO_PIN_3, 0);
+        ROM_GPIOPinWrite(GPIO_PORTJ_BASE, GPIO_PIN_1, 0);
 
         /**
         * Wait for the required amount of time.
@@ -100,7 +100,7 @@ LEDTaskInit(void)
     /**
     *Initialize the GPIO used to drive the user LED.
     */
-    ROM_GPIOPinTypeGPIOOutput(GPIO_PORTE_BASE, GPIO_PIN_3);
+    ROM_GPIOPinTypeGPIOOutput(GPIO_PORTJ_BASE, GPIO_PIN_1);
     //! Create the LED task.
     if(xTaskCreate(LEDTask, (signed portCHAR *)"LED",
                    (signed portCHAR *)g_pulLEDTaskStack,

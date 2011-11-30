@@ -38,7 +38,9 @@ static void IntDefaultHandler(void);
 //*****************************************************************************
 //extern void UART0IntHandler(void);
 //extern void UART1IntHandler(void);
-extern void ButtonsIntHandler(void);
+extern void GPIOAIntHandler(void);
+extern void GPIOBIntHandler(void);
+extern void GPIOGIntHandler(void);
 extern void AudioCodecIntHandler(void);
 extern void Timer0IntHandler(void);
 extern void USB0OTGModeIntHandler(void);
@@ -99,8 +101,8 @@ __root const uVectorEntry __vector_table[] @ ".intvec" =
     0,                                      // Reserved
     { .ulPtr = vSafeRTOS_PendSV_Handler_Address }, // The PendSV handler
     { .ulPtr = vSafeRTOS_SysTick_Handler_Address }, // The SysTick handler
-    IntDefaultHandler,                      // GPIO Port A
-    IntDefaultHandler,                      // GPIO Port B
+    GPIOAIntHandler,                      // GPIO Port A
+    GPIOBIntHandler,                      // GPIO Port B
     IntDefaultHandler,                      // GPIO Port C
     IntDefaultHandler,                      // GPIO Port D
     IntDefaultHandler,                      // GPIO Port E
@@ -130,7 +132,7 @@ __root const uVectorEntry __vector_table[] @ ".intvec" =
     IntDefaultHandler,                      // System Control (PLL, OSC, BO)
     IntDefaultHandler,                      // FLASH Control
     IntDefaultHandler,                      // GPIO Port F
-    IntDefaultHandler,                      // GPIO Port G
+    GPIOGIntHandler,                      // GPIO Port G
     IntDefaultHandler,                      // GPIO Port H
     IntDefaultHandler,                      // UART2 Rx and Tx
     IntDefaultHandler,                      // SSI1 Rx and Tx
@@ -153,7 +155,7 @@ __root const uVectorEntry __vector_table[] @ ".intvec" =
     IntDefaultHandler,                      // ADC1 Sequence 3
     AudioCodecIntHandler,                      // I2S0
     IntDefaultHandler,                      // External Bus Interface 0
-    ButtonsIntHandler                       // GPIO Port J
+    IntDefaultHandler                       // GPIO Port J
 };
 
 //*****************************************************************************

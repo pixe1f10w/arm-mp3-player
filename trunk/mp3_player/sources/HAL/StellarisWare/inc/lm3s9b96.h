@@ -2,7 +2,7 @@
 //
 // lm3s9b96.h - LM3S9B96 Register Definitions
 //
-// Copyright (c) 2009-2010 Texas Instruments Incorporated.  All rights reserved.
+// Copyright (c) 2009-2011 Texas Instruments Incorporated.  All rights reserved.
 // Software License Agreement
 // 
 // Texas Instruments (TI) is supplying this software for use solely and
@@ -18,7 +18,7 @@
 // CIRCUMSTANCES, BE LIABLE FOR SPECIAL, INCIDENTAL, OR CONSEQUENTIAL
 // DAMAGES, FOR ANY REASON WHATSOEVER.
 // 
-// This is part of revision 6459 of the Stellaris Firmware Development Package.
+// This is part of revision 8049 of the Stellaris Firmware Development Package.
 //
 //*****************************************************************************
 
@@ -279,18 +279,11 @@
 //
 //*****************************************************************************
 #define I2C0_MASTER_MSA_R       (*((volatile unsigned long *)0x40020000))
-#define I2C0_MASTER_SOAR_R      (*((volatile unsigned long *)0x40020000))
-#define I2C0_MASTER_SCSR_R      (*((volatile unsigned long *)0x40020004))
 #define I2C0_MASTER_MCS_R       (*((volatile unsigned long *)0x40020004))
-#define I2C0_MASTER_SDR_R       (*((volatile unsigned long *)0x40020008))
 #define I2C0_MASTER_MDR_R       (*((volatile unsigned long *)0x40020008))
 #define I2C0_MASTER_MTPR_R      (*((volatile unsigned long *)0x4002000C))
-#define I2C0_MASTER_SIMR_R      (*((volatile unsigned long *)0x4002000C))
-#define I2C0_MASTER_SRIS_R      (*((volatile unsigned long *)0x40020010))
 #define I2C0_MASTER_MIMR_R      (*((volatile unsigned long *)0x40020010))
 #define I2C0_MASTER_MRIS_R      (*((volatile unsigned long *)0x40020014))
-#define I2C0_MASTER_SMIS_R      (*((volatile unsigned long *)0x40020014))
-#define I2C0_MASTER_SICR_R      (*((volatile unsigned long *)0x40020018))
 #define I2C0_MASTER_MMIS_R      (*((volatile unsigned long *)0x40020018))
 #define I2C0_MASTER_MICR_R      (*((volatile unsigned long *)0x4002001C))
 #define I2C0_MASTER_MCR_R       (*((volatile unsigned long *)0x40020020))
@@ -300,22 +293,13 @@
 // I2C registers (I2C0 SLAVE)
 //
 //*****************************************************************************
-#define I2C0_SLAVE_MSA_R        (*((volatile unsigned long *)0x40020800))
 #define I2C0_SLAVE_SOAR_R       (*((volatile unsigned long *)0x40020800))
 #define I2C0_SLAVE_SCSR_R       (*((volatile unsigned long *)0x40020804))
-#define I2C0_SLAVE_MCS_R        (*((volatile unsigned long *)0x40020804))
 #define I2C0_SLAVE_SDR_R        (*((volatile unsigned long *)0x40020808))
-#define I2C0_SLAVE_MDR_R        (*((volatile unsigned long *)0x40020808))
-#define I2C0_SLAVE_MTPR_R       (*((volatile unsigned long *)0x4002080C))
 #define I2C0_SLAVE_SIMR_R       (*((volatile unsigned long *)0x4002080C))
 #define I2C0_SLAVE_SRIS_R       (*((volatile unsigned long *)0x40020810))
-#define I2C0_SLAVE_MIMR_R       (*((volatile unsigned long *)0x40020810))
-#define I2C0_SLAVE_MRIS_R       (*((volatile unsigned long *)0x40020814))
 #define I2C0_SLAVE_SMIS_R       (*((volatile unsigned long *)0x40020814))
 #define I2C0_SLAVE_SICR_R       (*((volatile unsigned long *)0x40020818))
-#define I2C0_SLAVE_MMIS_R       (*((volatile unsigned long *)0x40020818))
-#define I2C0_SLAVE_MICR_R       (*((volatile unsigned long *)0x4002081C))
-#define I2C0_SLAVE_MCR_R        (*((volatile unsigned long *)0x40020820))
 
 //*****************************************************************************
 //
@@ -323,18 +307,11 @@
 //
 //*****************************************************************************
 #define I2C1_MASTER_MSA_R       (*((volatile unsigned long *)0x40021000))
-#define I2C1_MASTER_SOAR_R      (*((volatile unsigned long *)0x40021000))
-#define I2C1_MASTER_SCSR_R      (*((volatile unsigned long *)0x40021004))
 #define I2C1_MASTER_MCS_R       (*((volatile unsigned long *)0x40021004))
-#define I2C1_MASTER_SDR_R       (*((volatile unsigned long *)0x40021008))
 #define I2C1_MASTER_MDR_R       (*((volatile unsigned long *)0x40021008))
 #define I2C1_MASTER_MTPR_R      (*((volatile unsigned long *)0x4002100C))
-#define I2C1_MASTER_SIMR_R      (*((volatile unsigned long *)0x4002100C))
-#define I2C1_MASTER_SRIS_R      (*((volatile unsigned long *)0x40021010))
 #define I2C1_MASTER_MIMR_R      (*((volatile unsigned long *)0x40021010))
 #define I2C1_MASTER_MRIS_R      (*((volatile unsigned long *)0x40021014))
-#define I2C1_MASTER_SMIS_R      (*((volatile unsigned long *)0x40021014))
-#define I2C1_MASTER_SICR_R      (*((volatile unsigned long *)0x40021018))
 #define I2C1_MASTER_MMIS_R      (*((volatile unsigned long *)0x40021018))
 #define I2C1_MASTER_MICR_R      (*((volatile unsigned long *)0x4002101C))
 #define I2C1_MASTER_MCR_R       (*((volatile unsigned long *)0x40021020))
@@ -344,22 +321,13 @@
 // I2C registers (I2C1 SLAVE)
 //
 //*****************************************************************************
-#define I2C1_SLAVE_MSA_R        (*((volatile unsigned long *)0x40021800))
 #define I2C1_SLAVE_SOAR_R       (*((volatile unsigned long *)0x40021800))
 #define I2C1_SLAVE_SCSR_R       (*((volatile unsigned long *)0x40021804))
-#define I2C1_SLAVE_MCS_R        (*((volatile unsigned long *)0x40021804))
 #define I2C1_SLAVE_SDR_R        (*((volatile unsigned long *)0x40021808))
-#define I2C1_SLAVE_MDR_R        (*((volatile unsigned long *)0x40021808))
-#define I2C1_SLAVE_MTPR_R       (*((volatile unsigned long *)0x4002180C))
 #define I2C1_SLAVE_SIMR_R       (*((volatile unsigned long *)0x4002180C))
 #define I2C1_SLAVE_SRIS_R       (*((volatile unsigned long *)0x40021810))
-#define I2C1_SLAVE_MIMR_R       (*((volatile unsigned long *)0x40021810))
-#define I2C1_SLAVE_MRIS_R       (*((volatile unsigned long *)0x40021814))
 #define I2C1_SLAVE_SMIS_R       (*((volatile unsigned long *)0x40021814))
 #define I2C1_SLAVE_SICR_R       (*((volatile unsigned long *)0x40021818))
-#define I2C1_SLAVE_MMIS_R       (*((volatile unsigned long *)0x40021818))
-#define I2C1_SLAVE_MICR_R       (*((volatile unsigned long *)0x4002181C))
-#define I2C1_SLAVE_MCR_R        (*((volatile unsigned long *)0x40021820))
 
 //*****************************************************************************
 //
@@ -569,6 +537,99 @@
 #define PWM_3_FLTSEN_R          (*((volatile unsigned long *)0x40028980))
 #define PWM_3_FLTSTAT0_R        (*((volatile unsigned long *)0x40028984))
 #define PWM_3_FLTSTAT1_R        (*((volatile unsigned long *)0x40028988))
+
+//*****************************************************************************
+//
+// PWM registers (PWM0)
+//
+//*****************************************************************************
+#define PWM0_CTL_R              (*((volatile unsigned long *)0x40028000))
+#define PWM0_SYNC_R             (*((volatile unsigned long *)0x40028004))
+#define PWM0_ENABLE_R           (*((volatile unsigned long *)0x40028008))
+#define PWM0_INVERT_R           (*((volatile unsigned long *)0x4002800C))
+#define PWM0_FAULT_R            (*((volatile unsigned long *)0x40028010))
+#define PWM0_INTEN_R            (*((volatile unsigned long *)0x40028014))
+#define PWM0_RIS_R              (*((volatile unsigned long *)0x40028018))
+#define PWM0_ISC_R              (*((volatile unsigned long *)0x4002801C))
+#define PWM0_STATUS_R           (*((volatile unsigned long *)0x40028020))
+#define PWM0_FAULTVAL_R         (*((volatile unsigned long *)0x40028024))
+#define PWM0_ENUPD_R            (*((volatile unsigned long *)0x40028028))
+#define PWM0_0_CTL_R            (*((volatile unsigned long *)0x40028040))
+#define PWM0_0_INTEN_R          (*((volatile unsigned long *)0x40028044))
+#define PWM0_0_RIS_R            (*((volatile unsigned long *)0x40028048))
+#define PWM0_0_ISC_R            (*((volatile unsigned long *)0x4002804C))
+#define PWM0_0_LOAD_R           (*((volatile unsigned long *)0x40028050))
+#define PWM0_0_COUNT_R          (*((volatile unsigned long *)0x40028054))
+#define PWM0_0_CMPA_R           (*((volatile unsigned long *)0x40028058))
+#define PWM0_0_CMPB_R           (*((volatile unsigned long *)0x4002805C))
+#define PWM0_0_GENA_R           (*((volatile unsigned long *)0x40028060))
+#define PWM0_0_GENB_R           (*((volatile unsigned long *)0x40028064))
+#define PWM0_0_DBCTL_R          (*((volatile unsigned long *)0x40028068))
+#define PWM0_0_DBRISE_R         (*((volatile unsigned long *)0x4002806C))
+#define PWM0_0_DBFALL_R         (*((volatile unsigned long *)0x40028070))
+#define PWM0_0_FLTSRC0_R        (*((volatile unsigned long *)0x40028074))
+#define PWM0_0_FLTSRC1_R        (*((volatile unsigned long *)0x40028078))
+#define PWM0_0_MINFLTPER_R      (*((volatile unsigned long *)0x4002807C))
+#define PWM0_1_CTL_R            (*((volatile unsigned long *)0x40028080))
+#define PWM0_1_INTEN_R          (*((volatile unsigned long *)0x40028084))
+#define PWM0_1_RIS_R            (*((volatile unsigned long *)0x40028088))
+#define PWM0_1_ISC_R            (*((volatile unsigned long *)0x4002808C))
+#define PWM0_1_LOAD_R           (*((volatile unsigned long *)0x40028090))
+#define PWM0_1_COUNT_R          (*((volatile unsigned long *)0x40028094))
+#define PWM0_1_CMPA_R           (*((volatile unsigned long *)0x40028098))
+#define PWM0_1_CMPB_R           (*((volatile unsigned long *)0x4002809C))
+#define PWM0_1_GENA_R           (*((volatile unsigned long *)0x400280A0))
+#define PWM0_1_GENB_R           (*((volatile unsigned long *)0x400280A4))
+#define PWM0_1_DBCTL_R          (*((volatile unsigned long *)0x400280A8))
+#define PWM0_1_DBRISE_R         (*((volatile unsigned long *)0x400280AC))
+#define PWM0_1_DBFALL_R         (*((volatile unsigned long *)0x400280B0))
+#define PWM0_1_FLTSRC0_R        (*((volatile unsigned long *)0x400280B4))
+#define PWM0_1_FLTSRC1_R        (*((volatile unsigned long *)0x400280B8))
+#define PWM0_1_MINFLTPER_R      (*((volatile unsigned long *)0x400280BC))
+#define PWM0_2_CTL_R            (*((volatile unsigned long *)0x400280C0))
+#define PWM0_2_INTEN_R          (*((volatile unsigned long *)0x400280C4))
+#define PWM0_2_RIS_R            (*((volatile unsigned long *)0x400280C8))
+#define PWM0_2_ISC_R            (*((volatile unsigned long *)0x400280CC))
+#define PWM0_2_LOAD_R           (*((volatile unsigned long *)0x400280D0))
+#define PWM0_2_COUNT_R          (*((volatile unsigned long *)0x400280D4))
+#define PWM0_2_CMPA_R           (*((volatile unsigned long *)0x400280D8))
+#define PWM0_2_CMPB_R           (*((volatile unsigned long *)0x400280DC))
+#define PWM0_2_GENA_R           (*((volatile unsigned long *)0x400280E0))
+#define PWM0_2_GENB_R           (*((volatile unsigned long *)0x400280E4))
+#define PWM0_2_DBCTL_R          (*((volatile unsigned long *)0x400280E8))
+#define PWM0_2_DBRISE_R         (*((volatile unsigned long *)0x400280EC))
+#define PWM0_2_DBFALL_R         (*((volatile unsigned long *)0x400280F0))
+#define PWM0_2_FLTSRC0_R        (*((volatile unsigned long *)0x400280F4))
+#define PWM0_2_FLTSRC1_R        (*((volatile unsigned long *)0x400280F8))
+#define PWM0_2_MINFLTPER_R      (*((volatile unsigned long *)0x400280FC))
+#define PWM0_3_CTL_R            (*((volatile unsigned long *)0x40028100))
+#define PWM0_3_INTEN_R          (*((volatile unsigned long *)0x40028104))
+#define PWM0_3_RIS_R            (*((volatile unsigned long *)0x40028108))
+#define PWM0_3_ISC_R            (*((volatile unsigned long *)0x4002810C))
+#define PWM0_3_LOAD_R           (*((volatile unsigned long *)0x40028110))
+#define PWM0_3_COUNT_R          (*((volatile unsigned long *)0x40028114))
+#define PWM0_3_CMPA_R           (*((volatile unsigned long *)0x40028118))
+#define PWM0_3_CMPB_R           (*((volatile unsigned long *)0x4002811C))
+#define PWM0_3_GENA_R           (*((volatile unsigned long *)0x40028120))
+#define PWM0_3_GENB_R           (*((volatile unsigned long *)0x40028124))
+#define PWM0_3_DBCTL_R          (*((volatile unsigned long *)0x40028128))
+#define PWM0_3_DBRISE_R         (*((volatile unsigned long *)0x4002812C))
+#define PWM0_3_DBFALL_R         (*((volatile unsigned long *)0x40028130))
+#define PWM0_3_FLTSRC0_R        (*((volatile unsigned long *)0x40028134))
+#define PWM0_3_FLTSRC1_R        (*((volatile unsigned long *)0x40028138))
+#define PWM0_3_MINFLTPER_R      (*((volatile unsigned long *)0x4002813C))
+#define PWM0_0_FLTSEN_R         (*((volatile unsigned long *)0x40028800))
+#define PWM0_0_FLTSTAT0_R       (*((volatile unsigned long *)0x40028804))
+#define PWM0_0_FLTSTAT1_R       (*((volatile unsigned long *)0x40028808))
+#define PWM0_1_FLTSEN_R         (*((volatile unsigned long *)0x40028880))
+#define PWM0_1_FLTSTAT0_R       (*((volatile unsigned long *)0x40028884))
+#define PWM0_1_FLTSTAT1_R       (*((volatile unsigned long *)0x40028888))
+#define PWM0_2_FLTSEN_R         (*((volatile unsigned long *)0x40028900))
+#define PWM0_2_FLTSTAT0_R       (*((volatile unsigned long *)0x40028904))
+#define PWM0_2_FLTSTAT1_R       (*((volatile unsigned long *)0x40028908))
+#define PWM0_3_FLTSEN_R         (*((volatile unsigned long *)0x40028980))
+#define PWM0_3_FLTSTAT0_R       (*((volatile unsigned long *)0x40028984))
+#define PWM0_3_FLTSTAT1_R       (*((volatile unsigned long *)0x40028988))
 
 //*****************************************************************************
 //
@@ -1784,7 +1845,7 @@
 #define UDMA_PRIOSET_R          (*((volatile unsigned long *)0x400FF038))
 #define UDMA_PRIOCLR_R          (*((volatile unsigned long *)0x400FF03C))
 #define UDMA_ERRCLR_R           (*((volatile unsigned long *)0x400FF04C))
-#define UDMA_CHALT_R            (*((volatile unsigned long *)0x400FF500))
+#define UDMA_CHASGN_R           (*((volatile unsigned long *)0x400FF500))
 
 //*****************************************************************************
 //
@@ -1803,6 +1864,7 @@
 //
 //*****************************************************************************
 #define NVIC_INT_TYPE_R         (*((volatile unsigned long *)0xE000E004))
+#define NVIC_ACTLR_R            (*((volatile unsigned long *)0xE000E008))
 #define NVIC_ST_CTRL_R          (*((volatile unsigned long *)0xE000E010))
 #define NVIC_ST_RELOAD_R        (*((volatile unsigned long *)0xE000E014))
 #define NVIC_ST_CURRENT_R       (*((volatile unsigned long *)0xE000E018))
@@ -1851,6 +1913,12 @@
 #define NVIC_MPU_NUMBER_R       (*((volatile unsigned long *)0xE000ED98))
 #define NVIC_MPU_BASE_R         (*((volatile unsigned long *)0xE000ED9C))
 #define NVIC_MPU_ATTR_R         (*((volatile unsigned long *)0xE000EDA0))
+#define NVIC_MPU_BASE1_R        (*((volatile unsigned long *)0xE000EDA4))
+#define NVIC_MPU_ATTR1_R        (*((volatile unsigned long *)0xE000EDA8))
+#define NVIC_MPU_BASE2_R        (*((volatile unsigned long *)0xE000EDAC))
+#define NVIC_MPU_ATTR2_R        (*((volatile unsigned long *)0xE000EDB0))
+#define NVIC_MPU_BASE3_R        (*((volatile unsigned long *)0xE000EDB4))
+#define NVIC_MPU_ATTR3_R        (*((volatile unsigned long *)0xE000EDB8))
 #define NVIC_DBG_CTRL_R         (*((volatile unsigned long *)0xE000EDF0))
 #define NVIC_DBG_XFER_R         (*((volatile unsigned long *)0xE000EDF4))
 #define NVIC_DBG_DATA_R         (*((volatile unsigned long *)0xE000EDF8))
@@ -1939,41 +2007,6 @@
 // port A.
 //
 //*****************************************************************************
-#define GPIO_PCTL_PA0_M         0x0000000F  // PA0 mask
-#define GPIO_PCTL_PA0_U0RX      0x00000001  // U0RX on PA0
-#define GPIO_PCTL_PA0_I2C1SCL   0x00000008  // I2C1SCL on PA0
-#define GPIO_PCTL_PA0_U1RX      0x00000009  // U1RX on PA0
-#define GPIO_PCTL_PA1_M         0x000000F0  // PA1 mask
-#define GPIO_PCTL_PA1_U0TX      0x00000010  // U0TX on PA1
-#define GPIO_PCTL_PA1_I2C1SDA   0x00000080  // I2C1SDA on PA1
-#define GPIO_PCTL_PA1_U1TX      0x00000090  // U1TX on PA1
-#define GPIO_PCTL_PA2_M         0x00000F00  // PA2 mask
-#define GPIO_PCTL_PA2_SSI0CLK   0x00000100  // SSI0CLK on PA2
-#define GPIO_PCTL_PA2_PWM4      0x00000400  // PWM4 on PA2
-#define GPIO_PCTL_PA2_I2S0RXSD  0x00000900  // I2S0RXSD on PA2
-#define GPIO_PCTL_PA3_M         0x0000F000  // PA3 mask
-#define GPIO_PCTL_PA3_SSI0FSS   0x00001000  // SSI0FSS on PA3
-#define GPIO_PCTL_PA3_PWM5      0x00004000  // PWM5 on PA3
-#define GPIO_PCTL_PA3_I2S0RXMCLK \
-                                0x00009000  // I2S0RXMCLK on PA3
-#define GPIO_PCTL_PA4_M         0x000F0000  // PA4 mask
-#define GPIO_PCTL_PA4_SSI0RX    0x00010000  // SSI0RX on PA4
-#define GPIO_PCTL_PA4_PWM6      0x00040000  // PWM6 on PA4
-#define GPIO_PCTL_PA4_CAN0RX    0x00050000  // CAN0RX on PA4
-#define GPIO_PCTL_PA4_I2S0TXSCK 0x00090000  // I2S0TXSCK on PA4
-#define GPIO_PCTL_PA5_M         0x00F00000  // PA5 mask
-#define GPIO_PCTL_PA5_SSI0TX    0x00100000  // SSI0TX on PA5
-#define GPIO_PCTL_PA5_PWM7      0x00400000  // PWM7 on PA5
-#define GPIO_PCTL_PA5_CAN0TX    0x00500000  // CAN0TX on PA5
-#define GPIO_PCTL_PA5_I2S0TXWS  0x00900000  // I2S0TXWS on PA5
-#define GPIO_PCTL_PA6_M         0x0F000000  // PA6 mask
-#define GPIO_PCTL_PA6_I2C1SCL   0x01000000  // I2C1SCL on PA6
-#define GPIO_PCTL_PA6_CCP1      0x02000000  // CCP1 on PA6
-#define GPIO_PCTL_PA6_PWM0      0x04000000  // PWM0 on PA6
-#define GPIO_PCTL_PA6_PWM4      0x05000000  // PWM4 on PA6
-#define GPIO_PCTL_PA6_CAN0RX    0x06000000  // CAN0RX on PA6
-#define GPIO_PCTL_PA6_USB0EPEN  0x08000000  // USB0EPEN on PA6
-#define GPIO_PCTL_PA6_U1CTS     0x09000000  // U1CTS on PA6
 #define GPIO_PCTL_PA7_M         0xF0000000  // PA7 mask
 #define GPIO_PCTL_PA7_I2C1SDA   0x10000000  // I2C1SDA on PA7
 #define GPIO_PCTL_PA7_CCP4      0x20000000  // CCP4 on PA7
@@ -1983,6 +2016,41 @@
 #define GPIO_PCTL_PA7_CCP3      0x70000000  // CCP3 on PA7
 #define GPIO_PCTL_PA7_USB0PFLT  0x80000000  // USB0PFLT on PA7
 #define GPIO_PCTL_PA7_U1DCD     0x90000000  // U1DCD on PA7
+#define GPIO_PCTL_PA6_M         0x0F000000  // PA6 mask
+#define GPIO_PCTL_PA6_I2C1SCL   0x01000000  // I2C1SCL on PA6
+#define GPIO_PCTL_PA6_CCP1      0x02000000  // CCP1 on PA6
+#define GPIO_PCTL_PA6_PWM0      0x04000000  // PWM0 on PA6
+#define GPIO_PCTL_PA6_PWM4      0x05000000  // PWM4 on PA6
+#define GPIO_PCTL_PA6_CAN0RX    0x06000000  // CAN0RX on PA6
+#define GPIO_PCTL_PA6_USB0EPEN  0x08000000  // USB0EPEN on PA6
+#define GPIO_PCTL_PA6_U1CTS     0x09000000  // U1CTS on PA6
+#define GPIO_PCTL_PA5_M         0x00F00000  // PA5 mask
+#define GPIO_PCTL_PA5_SSI0TX    0x00100000  // SSI0TX on PA5
+#define GPIO_PCTL_PA5_PWM7      0x00400000  // PWM7 on PA5
+#define GPIO_PCTL_PA5_CAN0TX    0x00500000  // CAN0TX on PA5
+#define GPIO_PCTL_PA5_I2S0TXWS  0x00900000  // I2S0TXWS on PA5
+#define GPIO_PCTL_PA4_M         0x000F0000  // PA4 mask
+#define GPIO_PCTL_PA4_SSI0RX    0x00010000  // SSI0RX on PA4
+#define GPIO_PCTL_PA4_PWM6      0x00040000  // PWM6 on PA4
+#define GPIO_PCTL_PA4_CAN0RX    0x00050000  // CAN0RX on PA4
+#define GPIO_PCTL_PA4_I2S0TXSCK 0x00090000  // I2S0TXSCK on PA4
+#define GPIO_PCTL_PA3_M         0x0000F000  // PA3 mask
+#define GPIO_PCTL_PA3_SSI0FSS   0x00001000  // SSI0FSS on PA3
+#define GPIO_PCTL_PA3_PWM5      0x00004000  // PWM5 on PA3
+#define GPIO_PCTL_PA3_I2S0RXMCLK \
+                                0x00009000  // I2S0RXMCLK on PA3
+#define GPIO_PCTL_PA2_M         0x00000F00  // PA2 mask
+#define GPIO_PCTL_PA2_SSI0CLK   0x00000100  // SSI0CLK on PA2
+#define GPIO_PCTL_PA2_PWM4      0x00000400  // PWM4 on PA2
+#define GPIO_PCTL_PA2_I2S0RXSD  0x00000900  // I2S0RXSD on PA2
+#define GPIO_PCTL_PA1_M         0x000000F0  // PA1 mask
+#define GPIO_PCTL_PA1_U0TX      0x00000010  // U0TX on PA1
+#define GPIO_PCTL_PA1_I2C1SDA   0x00000080  // I2C1SDA on PA1
+#define GPIO_PCTL_PA1_U1TX      0x00000090  // U1TX on PA1
+#define GPIO_PCTL_PA0_M         0x0000000F  // PA0 mask
+#define GPIO_PCTL_PA0_U0RX      0x00000001  // U0RX on PA0
+#define GPIO_PCTL_PA0_I2C1SCL   0x00000008  // I2C1SCL on PA0
+#define GPIO_PCTL_PA0_U1RX      0x00000009  // U1RX on PA0
 
 //*****************************************************************************
 //
@@ -1990,32 +2058,16 @@
 // port B.
 //
 //*****************************************************************************
-#define GPIO_PCTL_PB0_M         0x0000000F  // PB0 mask
-#define GPIO_PCTL_PB0_CCP0      0x00000001  // CCP0 on PB0
-#define GPIO_PCTL_PB0_PWM2      0x00000002  // PWM2 on PB0
-#define GPIO_PCTL_PB0_U1RX      0x00000005  // U1RX on PB0
-#define GPIO_PCTL_PB1_M         0x000000F0  // PB1 mask
-#define GPIO_PCTL_PB1_CCP2      0x00000010  // CCP2 on PB1
-#define GPIO_PCTL_PB1_PWM3      0x00000020  // PWM3 on PB1
-#define GPIO_PCTL_PB1_CCP1      0x00000040  // CCP1 on PB1
-#define GPIO_PCTL_PB1_U1TX      0x00000050  // U1TX on PB1
-#define GPIO_PCTL_PB2_M         0x00000F00  // PB2 mask
-#define GPIO_PCTL_PB2_I2C0SCL   0x00000100  // I2C0SCL on PB2
-#define GPIO_PCTL_PB2_IDX0      0x00000200  // IDX0 on PB2
-#define GPIO_PCTL_PB2_CCP3      0x00000400  // CCP3 on PB2
-#define GPIO_PCTL_PB2_CCP0      0x00000500  // CCP0 on PB2
-#define GPIO_PCTL_PB2_USB0EPEN  0x00000800  // USB0EPEN on PB2
-#define GPIO_PCTL_PB3_M         0x0000F000  // PB3 mask
-#define GPIO_PCTL_PB3_I2C0SDA   0x00001000  // I2C0SDA on PB3
-#define GPIO_PCTL_PB3_FAULT0    0x00002000  // FAULT0 on PB3
-#define GPIO_PCTL_PB3_FAULT3    0x00004000  // FAULT3 on PB3
-#define GPIO_PCTL_PB3_USB0PFLT  0x00008000  // USB0PFLT on PB3
-#define GPIO_PCTL_PB4_M         0x000F0000  // PB4 mask
-#define GPIO_PCTL_PB4_U2RX      0x00040000  // U2RX on PB4
-#define GPIO_PCTL_PB4_CAN0RX    0x00050000  // CAN0RX on PB4
-#define GPIO_PCTL_PB4_IDX0      0x00060000  // IDX0 on PB4
-#define GPIO_PCTL_PB4_U1RX      0x00070000  // U1RX on PB4
-#define GPIO_PCTL_PB4_EPI0S23   0x00080000  // EPI0S23 on PB4
+#define GPIO_PCTL_PB7_M         0xF0000000  // PB7 mask
+#define GPIO_PCTL_PB7_NMI       0x40000000  // NMI on PB7
+#define GPIO_PCTL_PB6_M         0x0F000000  // PB6 mask
+#define GPIO_PCTL_PB6_CCP1      0x01000000  // CCP1 on PB6
+#define GPIO_PCTL_PB6_CCP7      0x02000000  // CCP7 on PB6
+#define GPIO_PCTL_PB6_C0O       0x03000000  // C0O on PB6
+#define GPIO_PCTL_PB6_FAULT1    0x04000000  // FAULT1 on PB6
+#define GPIO_PCTL_PB6_IDX0      0x05000000  // IDX0 on PB6
+#define GPIO_PCTL_PB6_CCP5      0x06000000  // CCP5 on PB6
+#define GPIO_PCTL_PB6_I2S0TXSCK 0x09000000  // I2S0TXSCK on PB6
 #define GPIO_PCTL_PB5_M         0x00F00000  // PB5 mask
 #define GPIO_PCTL_PB5_C0O       0x00100000  // C0O on PB5
 #define GPIO_PCTL_PB5_CCP5      0x00200000  // CCP5 on PB5
@@ -2025,16 +2077,32 @@
 #define GPIO_PCTL_PB5_CCP2      0x00600000  // CCP2 on PB5
 #define GPIO_PCTL_PB5_U1TX      0x00700000  // U1TX on PB5
 #define GPIO_PCTL_PB5_EPI0S22   0x00800000  // EPI0S22 on PB5
-#define GPIO_PCTL_PB6_M         0x0F000000  // PB6 mask
-#define GPIO_PCTL_PB6_CCP1      0x01000000  // CCP1 on PB6
-#define GPIO_PCTL_PB6_CCP7      0x02000000  // CCP7 on PB6
-#define GPIO_PCTL_PB6_C0O       0x03000000  // C0O on PB6
-#define GPIO_PCTL_PB6_FAULT1    0x04000000  // FAULT1 on PB6
-#define GPIO_PCTL_PB6_IDX0      0x05000000  // IDX0 on PB6
-#define GPIO_PCTL_PB6_CCP5      0x06000000  // CCP5 on PB6
-#define GPIO_PCTL_PB6_I2S0TXSCK 0x09000000  // I2S0TXSCK on PB6
-#define GPIO_PCTL_PB7_M         0xF0000000  // PB7 mask
-#define GPIO_PCTL_PB7_NMI       0x40000000  // NMI on PB7
+#define GPIO_PCTL_PB4_M         0x000F0000  // PB4 mask
+#define GPIO_PCTL_PB4_U2RX      0x00040000  // U2RX on PB4
+#define GPIO_PCTL_PB4_CAN0RX    0x00050000  // CAN0RX on PB4
+#define GPIO_PCTL_PB4_IDX0      0x00060000  // IDX0 on PB4
+#define GPIO_PCTL_PB4_U1RX      0x00070000  // U1RX on PB4
+#define GPIO_PCTL_PB4_EPI0S23   0x00080000  // EPI0S23 on PB4
+#define GPIO_PCTL_PB3_M         0x0000F000  // PB3 mask
+#define GPIO_PCTL_PB3_I2C0SDA   0x00001000  // I2C0SDA on PB3
+#define GPIO_PCTL_PB3_FAULT0    0x00002000  // FAULT0 on PB3
+#define GPIO_PCTL_PB3_FAULT3    0x00004000  // FAULT3 on PB3
+#define GPIO_PCTL_PB3_USB0PFLT  0x00008000  // USB0PFLT on PB3
+#define GPIO_PCTL_PB2_M         0x00000F00  // PB2 mask
+#define GPIO_PCTL_PB2_I2C0SCL   0x00000100  // I2C0SCL on PB2
+#define GPIO_PCTL_PB2_IDX0      0x00000200  // IDX0 on PB2
+#define GPIO_PCTL_PB2_CCP3      0x00000400  // CCP3 on PB2
+#define GPIO_PCTL_PB2_CCP0      0x00000500  // CCP0 on PB2
+#define GPIO_PCTL_PB2_USB0EPEN  0x00000800  // USB0EPEN on PB2
+#define GPIO_PCTL_PB1_M         0x000000F0  // PB1 mask
+#define GPIO_PCTL_PB1_CCP2      0x00000010  // CCP2 on PB1
+#define GPIO_PCTL_PB1_PWM3      0x00000020  // PWM3 on PB1
+#define GPIO_PCTL_PB1_CCP1      0x00000040  // CCP1 on PB1
+#define GPIO_PCTL_PB1_U1TX      0x00000050  // U1TX on PB1
+#define GPIO_PCTL_PB0_M         0x0000000F  // PB0 mask
+#define GPIO_PCTL_PB0_CCP0      0x00000001  // CCP0 on PB0
+#define GPIO_PCTL_PB0_PWM2      0x00000002  // PWM2 on PB0
+#define GPIO_PCTL_PB0_U1RX      0x00000005  // U1RX on PB0
 
 //*****************************************************************************
 //
@@ -2042,30 +2110,14 @@
 // port C.
 //
 //*****************************************************************************
-#define GPIO_PCTL_PC0_M         0x0000000F  // PC0 mask
-#define GPIO_PCTL_PC0_TCK       0x00000003  // TCK on PC0
-#define GPIO_PCTL_PC1_M         0x000000F0  // PC1 mask
-#define GPIO_PCTL_PC1_TMS       0x00000030  // TMS on PC1
-#define GPIO_PCTL_PC2_M         0x00000F00  // PC2 mask
-#define GPIO_PCTL_PC2_TDI       0x00000300  // TDI on PC2
-#define GPIO_PCTL_PC3_M         0x0000F000  // PC3 mask
-#define GPIO_PCTL_PC3_TDO       0x00003000  // TDO on PC3
-#define GPIO_PCTL_PC4_M         0x000F0000  // PC4 mask
-#define GPIO_PCTL_PC4_CCP5      0x00010000  // CCP5 on PC4
-#define GPIO_PCTL_PC4_PHA0      0x00020000  // PHA0 on PC4
-#define GPIO_PCTL_PC4_PWM6      0x00040000  // PWM6 on PC4
-#define GPIO_PCTL_PC4_CCP2      0x00050000  // CCP2 on PC4
-#define GPIO_PCTL_PC4_CCP4      0x00060000  // CCP4 on PC4
-#define GPIO_PCTL_PC4_EPI0S2    0x00080000  // EPI0S2 on PC4
-#define GPIO_PCTL_PC4_CCP1      0x00090000  // CCP1 on PC4
-#define GPIO_PCTL_PC5_M         0x00F00000  // PC5 mask
-#define GPIO_PCTL_PC5_CCP1      0x00100000  // CCP1 on PC5
-#define GPIO_PCTL_PC5_C1O       0x00200000  // C1O on PC5
-#define GPIO_PCTL_PC5_C0O       0x00300000  // C0O on PC5
-#define GPIO_PCTL_PC5_FAULT2    0x00400000  // FAULT2 on PC5
-#define GPIO_PCTL_PC5_CCP3      0x00500000  // CCP3 on PC5
-#define GPIO_PCTL_PC5_USB0EPEN  0x00600000  // USB0EPEN on PC5
-#define GPIO_PCTL_PC5_EPI0S3    0x00800000  // EPI0S3 on PC5
+#define GPIO_PCTL_PC7_M         0xF0000000  // PC7 mask
+#define GPIO_PCTL_PC7_CCP4      0x10000000  // CCP4 on PC7
+#define GPIO_PCTL_PC7_PHB0      0x20000000  // PHB0 on PC7
+#define GPIO_PCTL_PC7_CCP0      0x40000000  // CCP0 on PC7
+#define GPIO_PCTL_PC7_U1TX      0x50000000  // U1TX on PC7
+#define GPIO_PCTL_PC7_USB0PFLT  0x60000000  // USB0PFLT on PC7
+#define GPIO_PCTL_PC7_C1O       0x70000000  // C1O on PC7
+#define GPIO_PCTL_PC7_EPI0S5    0x80000000  // EPI0S5 on PC7
 #define GPIO_PCTL_PC6_M         0x0F000000  // PC6 mask
 #define GPIO_PCTL_PC6_CCP3      0x01000000  // CCP3 on PC6
 #define GPIO_PCTL_PC6_PHB0      0x02000000  // PHB0 on PC6
@@ -2075,14 +2127,30 @@
 #define GPIO_PCTL_PC6_CCP0      0x06000000  // CCP0 on PC6
 #define GPIO_PCTL_PC6_USB0PFLT  0x07000000  // USB0PFLT on PC6
 #define GPIO_PCTL_PC6_EPI0S4    0x08000000  // EPI0S4 on PC6
-#define GPIO_PCTL_PC7_M         0xF0000000  // PC7 mask
-#define GPIO_PCTL_PC7_CCP4      0x10000000  // CCP4 on PC7
-#define GPIO_PCTL_PC7_PHB0      0x20000000  // PHB0 on PC7
-#define GPIO_PCTL_PC7_CCP0      0x40000000  // CCP0 on PC7
-#define GPIO_PCTL_PC7_U1TX      0x50000000  // U1TX on PC7
-#define GPIO_PCTL_PC7_USB0PFLT  0x60000000  // USB0PFLT on PC7
-#define GPIO_PCTL_PC7_C1O       0x70000000  // C1O on PC7
-#define GPIO_PCTL_PC7_EPI0S5    0x80000000  // EPI0S5 on PC7
+#define GPIO_PCTL_PC5_M         0x00F00000  // PC5 mask
+#define GPIO_PCTL_PC5_CCP1      0x00100000  // CCP1 on PC5
+#define GPIO_PCTL_PC5_C1O       0x00200000  // C1O on PC5
+#define GPIO_PCTL_PC5_C0O       0x00300000  // C0O on PC5
+#define GPIO_PCTL_PC5_FAULT2    0x00400000  // FAULT2 on PC5
+#define GPIO_PCTL_PC5_CCP3      0x00500000  // CCP3 on PC5
+#define GPIO_PCTL_PC5_USB0EPEN  0x00600000  // USB0EPEN on PC5
+#define GPIO_PCTL_PC5_EPI0S3    0x00800000  // EPI0S3 on PC5
+#define GPIO_PCTL_PC4_M         0x000F0000  // PC4 mask
+#define GPIO_PCTL_PC4_CCP5      0x00010000  // CCP5 on PC4
+#define GPIO_PCTL_PC4_PHA0      0x00020000  // PHA0 on PC4
+#define GPIO_PCTL_PC4_PWM6      0x00040000  // PWM6 on PC4
+#define GPIO_PCTL_PC4_CCP2      0x00050000  // CCP2 on PC4
+#define GPIO_PCTL_PC4_CCP4      0x00060000  // CCP4 on PC4
+#define GPIO_PCTL_PC4_EPI0S2    0x00080000  // EPI0S2 on PC4
+#define GPIO_PCTL_PC4_CCP1      0x00090000  // CCP1 on PC4
+#define GPIO_PCTL_PC3_M         0x0000F000  // PC3 mask
+#define GPIO_PCTL_PC3_TDO       0x00003000  // TDO on PC3
+#define GPIO_PCTL_PC2_M         0x00000F00  // PC2 mask
+#define GPIO_PCTL_PC2_TDI       0x00000300  // TDI on PC2
+#define GPIO_PCTL_PC1_M         0x000000F0  // PC1 mask
+#define GPIO_PCTL_PC1_TMS       0x00000030  // TMS on PC1
+#define GPIO_PCTL_PC0_M         0x0000000F  // PC0 mask
+#define GPIO_PCTL_PC0_TCK       0x00000003  // TCK on PC0
 
 //*****************************************************************************
 //
@@ -2090,15 +2158,43 @@
 // port D.
 //
 //*****************************************************************************
-#define GPIO_PCTL_PD0_M         0x0000000F  // PD0 mask
-#define GPIO_PCTL_PD0_PWM0      0x00000001  // PWM0 on PD0
-#define GPIO_PCTL_PD0_CAN0RX    0x00000002  // CAN0RX on PD0
-#define GPIO_PCTL_PD0_IDX0      0x00000003  // IDX0 on PD0
-#define GPIO_PCTL_PD0_U2RX      0x00000004  // U2RX on PD0
-#define GPIO_PCTL_PD0_U1RX      0x00000005  // U1RX on PD0
-#define GPIO_PCTL_PD0_CCP6      0x00000006  // CCP6 on PD0
-#define GPIO_PCTL_PD0_I2S0RXSCK 0x00000008  // I2S0RXSCK on PD0
-#define GPIO_PCTL_PD0_U1CTS     0x00000009  // U1CTS on PD0
+#define GPIO_PCTL_PD7_M         0xF0000000  // PD7 mask
+#define GPIO_PCTL_PD7_IDX0      0x10000000  // IDX0 on PD7
+#define GPIO_PCTL_PD7_C0O       0x20000000  // C0O on PD7
+#define GPIO_PCTL_PD7_CCP1      0x30000000  // CCP1 on PD7
+#define GPIO_PCTL_PD7_I2S0TXWS  0x80000000  // I2S0TXWS on PD7
+#define GPIO_PCTL_PD7_U1DTR     0x90000000  // U1DTR on PD7
+#define GPIO_PCTL_PD7_EPI0S30   0xA0000000  // EPI0S30 on PD7
+#define GPIO_PCTL_PD6_M         0x0F000000  // PD6 mask
+#define GPIO_PCTL_PD6_FAULT0    0x01000000  // FAULT0 on PD6
+#define GPIO_PCTL_PD6_I2S0TXSCK 0x08000000  // I2S0TXSCK on PD6
+#define GPIO_PCTL_PD6_U2TX      0x09000000  // U2TX on PD6
+#define GPIO_PCTL_PD6_EPI0S29   0x0A000000  // EPI0S29 on PD6
+#define GPIO_PCTL_PD5_M         0x00F00000  // PD5 mask
+#define GPIO_PCTL_PD5_CCP2      0x00100000  // CCP2 on PD5
+#define GPIO_PCTL_PD5_CCP4      0x00200000  // CCP4 on PD5
+#define GPIO_PCTL_PD5_I2S0RXMCLK \
+                                0x00800000  // I2S0RXMCLK on PD5
+#define GPIO_PCTL_PD5_U2RX      0x00900000  // U2RX on PD5
+#define GPIO_PCTL_PD5_EPI0S28   0x00A00000  // EPI0S28 on PD5
+#define GPIO_PCTL_PD4_M         0x000F0000  // PD4 mask
+#define GPIO_PCTL_PD4_CCP0      0x00010000  // CCP0 on PD4
+#define GPIO_PCTL_PD4_CCP3      0x00020000  // CCP3 on PD4
+#define GPIO_PCTL_PD4_I2S0RXSD  0x00080000  // I2S0RXSD on PD4
+#define GPIO_PCTL_PD4_U1RI      0x00090000  // U1RI on PD4
+#define GPIO_PCTL_PD4_EPI0S19   0x000A0000  // EPI0S19 on PD4
+#define GPIO_PCTL_PD3_M         0x0000F000  // PD3 mask
+#define GPIO_PCTL_PD3_U1TX      0x00001000  // U1TX on PD3
+#define GPIO_PCTL_PD3_CCP7      0x00002000  // CCP7 on PD3
+#define GPIO_PCTL_PD3_PWM3      0x00003000  // PWM3 on PD3
+#define GPIO_PCTL_PD3_CCP0      0x00004000  // CCP0 on PD3
+#define GPIO_PCTL_PD3_EPI0S21   0x00008000  // EPI0S21 on PD3
+#define GPIO_PCTL_PD2_M         0x00000F00  // PD2 mask
+#define GPIO_PCTL_PD2_U1RX      0x00000100  // U1RX on PD2
+#define GPIO_PCTL_PD2_CCP6      0x00000200  // CCP6 on PD2
+#define GPIO_PCTL_PD2_PWM2      0x00000300  // PWM2 on PD2
+#define GPIO_PCTL_PD2_CCP5      0x00000400  // CCP5 on PD2
+#define GPIO_PCTL_PD2_EPI0S20   0x00000800  // EPI0S20 on PD2
 #define GPIO_PCTL_PD1_M         0x000000F0  // PD1 mask
 #define GPIO_PCTL_PD1_PWM1      0x00000010  // PWM1 on PD1
 #define GPIO_PCTL_PD1_CAN0TX    0x00000020  // CAN0TX on PD1
@@ -2110,43 +2206,15 @@
 #define GPIO_PCTL_PD1_U1DCD     0x00000090  // U1DCD on PD1
 #define GPIO_PCTL_PD1_CCP2      0x000000A0  // CCP2 on PD1
 #define GPIO_PCTL_PD1_PHB1      0x000000B0  // PHB1 on PD1
-#define GPIO_PCTL_PD2_M         0x00000F00  // PD2 mask
-#define GPIO_PCTL_PD2_U1RX      0x00000100  // U1RX on PD2
-#define GPIO_PCTL_PD2_CCP6      0x00000200  // CCP6 on PD2
-#define GPIO_PCTL_PD2_PWM2      0x00000300  // PWM2 on PD2
-#define GPIO_PCTL_PD2_CCP5      0x00000400  // CCP5 on PD2
-#define GPIO_PCTL_PD2_EPI0S20   0x00000800  // EPI0S20 on PD2
-#define GPIO_PCTL_PD3_M         0x0000F000  // PD3 mask
-#define GPIO_PCTL_PD3_U1TX      0x00001000  // U1TX on PD3
-#define GPIO_PCTL_PD3_CCP7      0x00002000  // CCP7 on PD3
-#define GPIO_PCTL_PD3_PWM3      0x00003000  // PWM3 on PD3
-#define GPIO_PCTL_PD3_CCP0      0x00004000  // CCP0 on PD3
-#define GPIO_PCTL_PD3_EPI0S21   0x00008000  // EPI0S21 on PD3
-#define GPIO_PCTL_PD4_M         0x000F0000  // PD4 mask
-#define GPIO_PCTL_PD4_CCP0      0x00010000  // CCP0 on PD4
-#define GPIO_PCTL_PD4_CCP3      0x00020000  // CCP3 on PD4
-#define GPIO_PCTL_PD4_I2S0RXSD  0x00080000  // I2S0RXSD on PD4
-#define GPIO_PCTL_PD4_U1RI      0x00090000  // U1RI on PD4
-#define GPIO_PCTL_PD4_EPI0S19   0x000A0000  // EPI0S19 on PD4
-#define GPIO_PCTL_PD5_M         0x00F00000  // PD5 mask
-#define GPIO_PCTL_PD5_CCP2      0x00100000  // CCP2 on PD5
-#define GPIO_PCTL_PD5_CCP4      0x00200000  // CCP4 on PD5
-#define GPIO_PCTL_PD5_I2S0RXMCLK \
-                                0x00800000  // I2S0RXMCLK on PD5
-#define GPIO_PCTL_PD5_U2RX      0x00900000  // U2RX on PD5
-#define GPIO_PCTL_PD5_EPI0S28   0x00A00000  // EPI0S28 on PD5
-#define GPIO_PCTL_PD6_M         0x0F000000  // PD6 mask
-#define GPIO_PCTL_PD6_FAULT0    0x01000000  // FAULT0 on PD6
-#define GPIO_PCTL_PD6_I2S0TXSCK 0x08000000  // I2S0TXSCK on PD6
-#define GPIO_PCTL_PD6_U2TX      0x09000000  // U2TX on PD6
-#define GPIO_PCTL_PD6_EPI0S29   0x0A000000  // EPI0S29 on PD6
-#define GPIO_PCTL_PD7_M         0xF0000000  // PD7 mask
-#define GPIO_PCTL_PD7_IDX0      0x10000000  // IDX0 on PD7
-#define GPIO_PCTL_PD7_C0O       0x20000000  // C0O on PD7
-#define GPIO_PCTL_PD7_CCP1      0x30000000  // CCP1 on PD7
-#define GPIO_PCTL_PD7_I2S0TXWS  0x80000000  // I2S0TXWS on PD7
-#define GPIO_PCTL_PD7_U1DTR     0x90000000  // U1DTR on PD7
-#define GPIO_PCTL_PD7_EPI0S30   0xA0000000  // EPI0S30 on PD7
+#define GPIO_PCTL_PD0_M         0x0000000F  // PD0 mask
+#define GPIO_PCTL_PD0_PWM0      0x00000001  // PWM0 on PD0
+#define GPIO_PCTL_PD0_CAN0RX    0x00000002  // CAN0RX on PD0
+#define GPIO_PCTL_PD0_IDX0      0x00000003  // IDX0 on PD0
+#define GPIO_PCTL_PD0_U2RX      0x00000004  // U2RX on PD0
+#define GPIO_PCTL_PD0_U1RX      0x00000005  // U1RX on PD0
+#define GPIO_PCTL_PD0_CCP6      0x00000006  // CCP6 on PD0
+#define GPIO_PCTL_PD0_I2S0RXSCK 0x00000008  // I2S0RXSCK on PD0
+#define GPIO_PCTL_PD0_U1CTS     0x00000009  // U1CTS on PD0
 
 //*****************************************************************************
 //
@@ -2154,26 +2222,23 @@
 // port E.
 //
 //*****************************************************************************
-#define GPIO_PCTL_PE0_M         0x0000000F  // PE0 mask
-#define GPIO_PCTL_PE0_PWM4      0x00000001  // PWM4 on PE0
-#define GPIO_PCTL_PE0_SSI1CLK   0x00000002  // SSI1CLK on PE0
-#define GPIO_PCTL_PE0_CCP3      0x00000003  // CCP3 on PE0
-#define GPIO_PCTL_PE0_EPI0S8    0x00000008  // EPI0S8 on PE0
-#define GPIO_PCTL_PE0_USB0PFLT  0x00000009  // USB0PFLT on PE0
-#define GPIO_PCTL_PE1_M         0x000000F0  // PE1 mask
-#define GPIO_PCTL_PE1_PWM5      0x00000010  // PWM5 on PE1
-#define GPIO_PCTL_PE1_SSI1FSS   0x00000020  // SSI1FSS on PE1
-#define GPIO_PCTL_PE1_FAULT0    0x00000030  // FAULT0 on PE1
-#define GPIO_PCTL_PE1_CCP2      0x00000040  // CCP2 on PE1
-#define GPIO_PCTL_PE1_CCP6      0x00000050  // CCP6 on PE1
-#define GPIO_PCTL_PE1_EPI0S9    0x00000080  // EPI0S9 on PE1
-#define GPIO_PCTL_PE2_M         0x00000F00  // PE2 mask
-#define GPIO_PCTL_PE2_CCP4      0x00000100  // CCP4 on PE2
-#define GPIO_PCTL_PE2_SSI1RX    0x00000200  // SSI1RX on PE2
-#define GPIO_PCTL_PE2_PHB1      0x00000300  // PHB1 on PE2
-#define GPIO_PCTL_PE2_PHA0      0x00000400  // PHA0 on PE2
-#define GPIO_PCTL_PE2_CCP2      0x00000500  // CCP2 on PE2
-#define GPIO_PCTL_PE2_EPI0S24   0x00000800  // EPI0S24 on PE2
+#define GPIO_PCTL_PE7_M         0xF0000000  // PE7 mask
+#define GPIO_PCTL_PE7_PWM5      0x10000000  // PWM5 on PE7
+#define GPIO_PCTL_PE7_C2O       0x20000000  // C2O on PE7
+#define GPIO_PCTL_PE7_U1DCD     0x90000000  // U1DCD on PE7
+#define GPIO_PCTL_PE6_M         0x0F000000  // PE6 mask
+#define GPIO_PCTL_PE6_PWM4      0x01000000  // PWM4 on PE6
+#define GPIO_PCTL_PE6_C1O       0x02000000  // C1O on PE6
+#define GPIO_PCTL_PE6_U1CTS     0x09000000  // U1CTS on PE6
+#define GPIO_PCTL_PE5_M         0x00F00000  // PE5 mask
+#define GPIO_PCTL_PE5_CCP5      0x00100000  // CCP5 on PE5
+#define GPIO_PCTL_PE5_I2S0TXSD  0x00900000  // I2S0TXSD on PE5
+#define GPIO_PCTL_PE4_M         0x000F0000  // PE4 mask
+#define GPIO_PCTL_PE4_CCP3      0x00010000  // CCP3 on PE4
+#define GPIO_PCTL_PE4_FAULT0    0x00040000  // FAULT0 on PE4
+#define GPIO_PCTL_PE4_U2TX      0x00050000  // U2TX on PE4
+#define GPIO_PCTL_PE4_CCP2      0x00060000  // CCP2 on PE4
+#define GPIO_PCTL_PE4_I2S0TXWS  0x00090000  // I2S0TXWS on PE4
 #define GPIO_PCTL_PE3_M         0x0000F000  // PE3 mask
 #define GPIO_PCTL_PE3_CCP1      0x00001000  // CCP1 on PE3
 #define GPIO_PCTL_PE3_SSI1TX    0x00002000  // SSI1TX on PE3
@@ -2181,23 +2246,26 @@
 #define GPIO_PCTL_PE3_PHB0      0x00004000  // PHB0 on PE3
 #define GPIO_PCTL_PE3_CCP7      0x00005000  // CCP7 on PE3
 #define GPIO_PCTL_PE3_EPI0S25   0x00008000  // EPI0S25 on PE3
-#define GPIO_PCTL_PE4_M         0x000F0000  // PE4 mask
-#define GPIO_PCTL_PE4_CCP3      0x00010000  // CCP3 on PE4
-#define GPIO_PCTL_PE4_FAULT0    0x00040000  // FAULT0 on PE4
-#define GPIO_PCTL_PE4_U2TX      0x00050000  // U2TX on PE4
-#define GPIO_PCTL_PE4_CCP2      0x00060000  // CCP2 on PE4
-#define GPIO_PCTL_PE4_I2S0TXWS  0x00090000  // I2S0TXWS on PE4
-#define GPIO_PCTL_PE5_M         0x00F00000  // PE5 mask
-#define GPIO_PCTL_PE5_CCP5      0x00100000  // CCP5 on PE5
-#define GPIO_PCTL_PE5_I2S0TXSD  0x00900000  // I2S0TXSD on PE5
-#define GPIO_PCTL_PE6_M         0x0F000000  // PE6 mask
-#define GPIO_PCTL_PE6_PWM4      0x01000000  // PWM4 on PE6
-#define GPIO_PCTL_PE6_C1O       0x02000000  // C1O on PE6
-#define GPIO_PCTL_PE6_U1CTS     0x09000000  // U1CTS on PE6
-#define GPIO_PCTL_PE7_M         0xF0000000  // PE7 mask
-#define GPIO_PCTL_PE7_PWM5      0x10000000  // PWM5 on PE7
-#define GPIO_PCTL_PE7_C2O       0x20000000  // C2O on PE7
-#define GPIO_PCTL_PE7_U1DCD     0x90000000  // U1DCD on PE7
+#define GPIO_PCTL_PE2_M         0x00000F00  // PE2 mask
+#define GPIO_PCTL_PE2_CCP4      0x00000100  // CCP4 on PE2
+#define GPIO_PCTL_PE2_SSI1RX    0x00000200  // SSI1RX on PE2
+#define GPIO_PCTL_PE2_PHB1      0x00000300  // PHB1 on PE2
+#define GPIO_PCTL_PE2_PHA0      0x00000400  // PHA0 on PE2
+#define GPIO_PCTL_PE2_CCP2      0x00000500  // CCP2 on PE2
+#define GPIO_PCTL_PE2_EPI0S24   0x00000800  // EPI0S24 on PE2
+#define GPIO_PCTL_PE1_M         0x000000F0  // PE1 mask
+#define GPIO_PCTL_PE1_PWM5      0x00000010  // PWM5 on PE1
+#define GPIO_PCTL_PE1_SSI1FSS   0x00000020  // SSI1FSS on PE1
+#define GPIO_PCTL_PE1_FAULT0    0x00000030  // FAULT0 on PE1
+#define GPIO_PCTL_PE1_CCP2      0x00000040  // CCP2 on PE1
+#define GPIO_PCTL_PE1_CCP6      0x00000050  // CCP6 on PE1
+#define GPIO_PCTL_PE1_EPI0S9    0x00000080  // EPI0S9 on PE1
+#define GPIO_PCTL_PE0_M         0x0000000F  // PE0 mask
+#define GPIO_PCTL_PE0_PWM4      0x00000001  // PWM4 on PE0
+#define GPIO_PCTL_PE0_SSI1CLK   0x00000002  // SSI1CLK on PE0
+#define GPIO_PCTL_PE0_CCP3      0x00000003  // CCP3 on PE0
+#define GPIO_PCTL_PE0_EPI0S8    0x00000008  // EPI0S8 on PE0
+#define GPIO_PCTL_PE0_USB0PFLT  0x00000009  // USB0PFLT on PE0
 
 //*****************************************************************************
 //
@@ -2205,12 +2273,27 @@
 // port F.
 //
 //*****************************************************************************
-#define GPIO_PCTL_PF0_M         0x0000000F  // PF0 mask
-#define GPIO_PCTL_PF0_CAN1RX    0x00000001  // CAN1RX on PF0
-#define GPIO_PCTL_PF0_PHB0      0x00000002  // PHB0 on PF0
-#define GPIO_PCTL_PF0_PWM0      0x00000003  // PWM0 on PF0
-#define GPIO_PCTL_PF0_I2S0TXSD  0x00000008  // I2S0TXSD on PF0
-#define GPIO_PCTL_PF0_U1DSR     0x00000009  // U1DSR on PF0
+#define GPIO_PCTL_PF5_M         0x00F00000  // PF5 mask
+#define GPIO_PCTL_PF5_CCP2      0x00100000  // CCP2 on PF5
+#define GPIO_PCTL_PF5_C1O       0x00200000  // C1O on PF5
+#define GPIO_PCTL_PF5_EPI0S15   0x00800000  // EPI0S15 on PF5
+#define GPIO_PCTL_PF5_SSI1TX    0x00900000  // SSI1TX on PF5
+#define GPIO_PCTL_PF4_M         0x000F0000  // PF4 mask
+#define GPIO_PCTL_PF4_CCP0      0x00010000  // CCP0 on PF4
+#define GPIO_PCTL_PF4_C0O       0x00020000  // C0O on PF4
+#define GPIO_PCTL_PF4_FAULT0    0x00040000  // FAULT0 on PF4
+#define GPIO_PCTL_PF4_EPI0S12   0x00080000  // EPI0S12 on PF4
+#define GPIO_PCTL_PF4_SSI1RX    0x00090000  // SSI1RX on PF4
+#define GPIO_PCTL_PF3_M         0x0000F000  // PF3 mask
+#define GPIO_PCTL_PF3_LED0      0x00001000  // LED0 on PF3
+#define GPIO_PCTL_PF3_PWM5      0x00002000  // PWM5 on PF3
+#define GPIO_PCTL_PF3_PWM3      0x00004000  // PWM3 on PF3
+#define GPIO_PCTL_PF3_SSI1FSS   0x00009000  // SSI1FSS on PF3
+#define GPIO_PCTL_PF2_M         0x00000F00  // PF2 mask
+#define GPIO_PCTL_PF2_LED1      0x00000100  // LED1 on PF2
+#define GPIO_PCTL_PF2_PWM4      0x00000200  // PWM4 on PF2
+#define GPIO_PCTL_PF2_PWM2      0x00000400  // PWM2 on PF2
+#define GPIO_PCTL_PF2_SSI1CLK   0x00000900  // SSI1CLK on PF2
 #define GPIO_PCTL_PF1_M         0x000000F0  // PF1 mask
 #define GPIO_PCTL_PF1_CAN1TX    0x00000010  // CAN1TX on PF1
 #define GPIO_PCTL_PF1_IDX1      0x00000020  // IDX1 on PF1
@@ -2219,27 +2302,12 @@
                                 0x00000080  // I2S0TXMCLK on PF1
 #define GPIO_PCTL_PF1_U1RTS     0x00000090  // U1RTS on PF1
 #define GPIO_PCTL_PF1_CCP3      0x000000A0  // CCP3 on PF1
-#define GPIO_PCTL_PF2_M         0x00000F00  // PF2 mask
-#define GPIO_PCTL_PF2_LED1      0x00000100  // LED1 on PF2
-#define GPIO_PCTL_PF2_PWM4      0x00000200  // PWM4 on PF2
-#define GPIO_PCTL_PF2_PWM2      0x00000400  // PWM2 on PF2
-#define GPIO_PCTL_PF2_SSI1CLK   0x00000900  // SSI1CLK on PF2
-#define GPIO_PCTL_PF3_M         0x0000F000  // PF3 mask
-#define GPIO_PCTL_PF3_LED0      0x00001000  // LED0 on PF3
-#define GPIO_PCTL_PF3_PWM5      0x00002000  // PWM5 on PF3
-#define GPIO_PCTL_PF3_PWM3      0x00004000  // PWM3 on PF3
-#define GPIO_PCTL_PF3_SSI1FSS   0x00009000  // SSI1FSS on PF3
-#define GPIO_PCTL_PF4_M         0x000F0000  // PF4 mask
-#define GPIO_PCTL_PF4_CCP0      0x00010000  // CCP0 on PF4
-#define GPIO_PCTL_PF4_C0O       0x00020000  // C0O on PF4
-#define GPIO_PCTL_PF4_FAULT0    0x00040000  // FAULT0 on PF4
-#define GPIO_PCTL_PF4_EPI0S12   0x00080000  // EPI0S12 on PF4
-#define GPIO_PCTL_PF4_SSI1RX    0x00090000  // SSI1RX on PF4
-#define GPIO_PCTL_PF5_M         0x00F00000  // PF5 mask
-#define GPIO_PCTL_PF5_CCP2      0x00100000  // CCP2 on PF5
-#define GPIO_PCTL_PF5_C1O       0x00200000  // C1O on PF5
-#define GPIO_PCTL_PF5_EPI0S15   0x00800000  // EPI0S15 on PF5
-#define GPIO_PCTL_PF5_SSI1TX    0x00900000  // SSI1TX on PF5
+#define GPIO_PCTL_PF0_M         0x0000000F  // PF0 mask
+#define GPIO_PCTL_PF0_CAN1RX    0x00000001  // CAN1RX on PF0
+#define GPIO_PCTL_PF0_PHB0      0x00000002  // PHB0 on PF0
+#define GPIO_PCTL_PF0_PWM0      0x00000003  // PWM0 on PF0
+#define GPIO_PCTL_PF0_I2S0TXSD  0x00000008  // I2S0TXSD on PF0
+#define GPIO_PCTL_PF0_U1DSR     0x00000009  // U1DSR on PF0
 
 //*****************************************************************************
 //
@@ -2247,6 +2315,17 @@
 // port G.
 //
 //*****************************************************************************
+#define GPIO_PCTL_PG7_M         0xF0000000  // PG7 mask
+#define GPIO_PCTL_PG7_PHB1      0x10000000  // PHB1 on PG7
+#define GPIO_PCTL_PG7_PWM7      0x40000000  // PWM7 on PG7
+#define GPIO_PCTL_PG7_CCP5      0x80000000  // CCP5 on PG7
+#define GPIO_PCTL_PG7_EPI0S31   0x90000000  // EPI0S31 on PG7
+#define GPIO_PCTL_PG1_M         0x000000F0  // PG1 mask
+#define GPIO_PCTL_PG1_U2TX      0x00000010  // U2TX on PG1
+#define GPIO_PCTL_PG1_PWM1      0x00000020  // PWM1 on PG1
+#define GPIO_PCTL_PG1_I2C1SDA   0x00000030  // I2C1SDA on PG1
+#define GPIO_PCTL_PG1_PWM5      0x00000040  // PWM5 on PG1
+#define GPIO_PCTL_PG1_EPI0S14   0x00000080  // EPI0S14 on PG1
 #define GPIO_PCTL_PG0_M         0x0000000F  // PG0 mask
 #define GPIO_PCTL_PG0_U2RX      0x00000001  // U2RX on PG0
 #define GPIO_PCTL_PG0_PWM0      0x00000002  // PWM0 on PG0
@@ -2254,17 +2333,6 @@
 #define GPIO_PCTL_PG0_PWM4      0x00000004  // PWM4 on PG0
 #define GPIO_PCTL_PG0_USB0EPEN  0x00000007  // USB0EPEN on PG0
 #define GPIO_PCTL_PG0_EPI0S13   0x00000008  // EPI0S13 on PG0
-#define GPIO_PCTL_PG1_M         0x000000F0  // PG1 mask
-#define GPIO_PCTL_PG1_U2TX      0x00000010  // U2TX on PG1
-#define GPIO_PCTL_PG1_PWM1      0x00000020  // PWM1 on PG1
-#define GPIO_PCTL_PG1_I2C1SDA   0x00000030  // I2C1SDA on PG1
-#define GPIO_PCTL_PG1_PWM5      0x00000040  // PWM5 on PG1
-#define GPIO_PCTL_PG1_EPI0S14   0x00000080  // EPI0S14 on PG1
-#define GPIO_PCTL_PG7_M         0xF0000000  // PG7 mask
-#define GPIO_PCTL_PG7_PHB1      0x10000000  // PHB1 on PG7
-#define GPIO_PCTL_PG7_PWM7      0x40000000  // PWM7 on PG7
-#define GPIO_PCTL_PG7_CCP5      0x80000000  // CCP5 on PG7
-#define GPIO_PCTL_PG7_EPI0S31   0x90000000  // EPI0S31 on PG7
 
 //*****************************************************************************
 //
@@ -2272,42 +2340,42 @@
 // port H.
 //
 //*****************************************************************************
-#define GPIO_PCTL_PH0_M         0x0000000F  // PH0 mask
-#define GPIO_PCTL_PH0_CCP6      0x00000001  // CCP6 on PH0
-#define GPIO_PCTL_PH0_PWM2      0x00000002  // PWM2 on PH0
-#define GPIO_PCTL_PH0_EPI0S6    0x00000008  // EPI0S6 on PH0
-#define GPIO_PCTL_PH0_PWM4      0x00000009  // PWM4 on PH0
-#define GPIO_PCTL_PH1_M         0x000000F0  // PH1 mask
-#define GPIO_PCTL_PH1_CCP7      0x00000010  // CCP7 on PH1
-#define GPIO_PCTL_PH1_PWM3      0x00000020  // PWM3 on PH1
-#define GPIO_PCTL_PH1_EPI0S7    0x00000080  // EPI0S7 on PH1
-#define GPIO_PCTL_PH1_PWM5      0x00000090  // PWM5 on PH1
-#define GPIO_PCTL_PH2_M         0x00000F00  // PH2 mask
-#define GPIO_PCTL_PH2_IDX1      0x00000100  // IDX1 on PH2
-#define GPIO_PCTL_PH2_C1O       0x00000200  // C1O on PH2
-#define GPIO_PCTL_PH2_FAULT3    0x00000400  // FAULT3 on PH2
-#define GPIO_PCTL_PH2_EPI0S1    0x00000800  // EPI0S1 on PH2
+#define GPIO_PCTL_PH7_M         0xF0000000  // PH7 mask
+#define GPIO_PCTL_PH7_EPI0S27   0x80000000  // EPI0S27 on PH7
+#define GPIO_PCTL_PH7_PWM5      0xA0000000  // PWM5 on PH7
+#define GPIO_PCTL_PH7_SSI1TX    0xB0000000  // SSI1TX on PH7
+#define GPIO_PCTL_PH6_M         0x0F000000  // PH6 mask
+#define GPIO_PCTL_PH6_EPI0S26   0x08000000  // EPI0S26 on PH6
+#define GPIO_PCTL_PH6_PWM4      0x0A000000  // PWM4 on PH6
+#define GPIO_PCTL_PH6_SSI1RX    0x0B000000  // SSI1RX on PH6
+#define GPIO_PCTL_PH5_M         0x00F00000  // PH5 mask
+#define GPIO_PCTL_PH5_EPI0S11   0x00800000  // EPI0S11 on PH5
+#define GPIO_PCTL_PH5_FAULT2    0x00A00000  // FAULT2 on PH5
+#define GPIO_PCTL_PH5_SSI1FSS   0x00B00000  // SSI1FSS on PH5
+#define GPIO_PCTL_PH4_M         0x000F0000  // PH4 mask
+#define GPIO_PCTL_PH4_USB0PFLT  0x00040000  // USB0PFLT on PH4
+#define GPIO_PCTL_PH4_EPI0S10   0x00080000  // EPI0S10 on PH4
+#define GPIO_PCTL_PH4_SSI1CLK   0x000B0000  // SSI1CLK on PH4
 #define GPIO_PCTL_PH3_M         0x0000F000  // PH3 mask
 #define GPIO_PCTL_PH3_PHB0      0x00001000  // PHB0 on PH3
 #define GPIO_PCTL_PH3_FAULT0    0x00002000  // FAULT0 on PH3
 #define GPIO_PCTL_PH3_USB0EPEN  0x00004000  // USB0EPEN on PH3
 #define GPIO_PCTL_PH3_EPI0S0    0x00008000  // EPI0S0 on PH3
-#define GPIO_PCTL_PH4_M         0x000F0000  // PH4 mask
-#define GPIO_PCTL_PH4_USB0PFLT  0x00040000  // USB0PFLT on PH4
-#define GPIO_PCTL_PH4_EPI0S10   0x00080000  // EPI0S10 on PH4
-#define GPIO_PCTL_PH4_SSI1CLK   0x000B0000  // SSI1CLK on PH4
-#define GPIO_PCTL_PH5_M         0x00F00000  // PH5 mask
-#define GPIO_PCTL_PH5_EPI0S11   0x00800000  // EPI0S11 on PH5
-#define GPIO_PCTL_PH5_FAULT2    0x00A00000  // FAULT2 on PH5
-#define GPIO_PCTL_PH5_SSI1FSS   0x00B00000  // SSI1FSS on PH5
-#define GPIO_PCTL_PH6_M         0x0F000000  // PH6 mask
-#define GPIO_PCTL_PH6_EPI0S26   0x08000000  // EPI0S26 on PH6
-#define GPIO_PCTL_PH6_PWM4      0x0A000000  // PWM4 on PH6
-#define GPIO_PCTL_PH6_SSI1RX    0x0B000000  // SSI1RX on PH6
-#define GPIO_PCTL_PH7_M         0xF0000000  // PH7 mask
-#define GPIO_PCTL_PH7_EPI0S27   0x80000000  // EPI0S27 on PH7
-#define GPIO_PCTL_PH7_PWM5      0xA0000000  // PWM5 on PH7
-#define GPIO_PCTL_PH7_SSI1TX    0xB0000000  // SSI1TX on PH7
+#define GPIO_PCTL_PH2_M         0x00000F00  // PH2 mask
+#define GPIO_PCTL_PH2_IDX1      0x00000100  // IDX1 on PH2
+#define GPIO_PCTL_PH2_C1O       0x00000200  // C1O on PH2
+#define GPIO_PCTL_PH2_FAULT3    0x00000400  // FAULT3 on PH2
+#define GPIO_PCTL_PH2_EPI0S1    0x00000800  // EPI0S1 on PH2
+#define GPIO_PCTL_PH1_M         0x000000F0  // PH1 mask
+#define GPIO_PCTL_PH1_CCP7      0x00000010  // CCP7 on PH1
+#define GPIO_PCTL_PH1_PWM3      0x00000020  // PWM3 on PH1
+#define GPIO_PCTL_PH1_EPI0S7    0x00000080  // EPI0S7 on PH1
+#define GPIO_PCTL_PH1_PWM5      0x00000090  // PWM5 on PH1
+#define GPIO_PCTL_PH0_M         0x0000000F  // PH0 mask
+#define GPIO_PCTL_PH0_CCP6      0x00000001  // CCP6 on PH0
+#define GPIO_PCTL_PH0_PWM2      0x00000002  // PWM2 on PH0
+#define GPIO_PCTL_PH0_EPI0S6    0x00000008  // EPI0S6 on PH0
+#define GPIO_PCTL_PH0_PWM4      0x00000009  // PWM4 on PH0
 
 //*****************************************************************************
 //
@@ -2315,38 +2383,38 @@
 // port J.
 //
 //*****************************************************************************
-#define GPIO_PCTL_PJ0_M         0x0000000F  // PJ0 mask
-#define GPIO_PCTL_PJ0_EPI0S16   0x00000008  // EPI0S16 on PJ0
-#define GPIO_PCTL_PJ0_PWM0      0x0000000A  // PWM0 on PJ0
-#define GPIO_PCTL_PJ0_I2C1SCL   0x0000000B  // I2C1SCL on PJ0
+#define GPIO_PCTL_PJ7_M         0xF0000000  // PJ7 mask
+#define GPIO_PCTL_PJ7_U1DTR     0x90000000  // U1DTR on PJ7
+#define GPIO_PCTL_PJ7_CCP0      0xA0000000  // CCP0 on PJ7
+#define GPIO_PCTL_PJ6_M         0x0F000000  // PJ6 mask
+#define GPIO_PCTL_PJ6_EPI0S30   0x08000000  // EPI0S30 on PJ6
+#define GPIO_PCTL_PJ6_U1RTS     0x09000000  // U1RTS on PJ6
+#define GPIO_PCTL_PJ6_CCP1      0x0A000000  // CCP1 on PJ6
+#define GPIO_PCTL_PJ5_M         0x00F00000  // PJ5 mask
+#define GPIO_PCTL_PJ5_EPI0S29   0x00800000  // EPI0S29 on PJ5
+#define GPIO_PCTL_PJ5_U1DSR     0x00900000  // U1DSR on PJ5
+#define GPIO_PCTL_PJ5_CCP2      0x00A00000  // CCP2 on PJ5
+#define GPIO_PCTL_PJ4_M         0x000F0000  // PJ4 mask
+#define GPIO_PCTL_PJ4_EPI0S28   0x00080000  // EPI0S28 on PJ4
+#define GPIO_PCTL_PJ4_U1DCD     0x00090000  // U1DCD on PJ4
+#define GPIO_PCTL_PJ4_CCP4      0x000A0000  // CCP4 on PJ4
+#define GPIO_PCTL_PJ3_M         0x0000F000  // PJ3 mask
+#define GPIO_PCTL_PJ3_EPI0S19   0x00008000  // EPI0S19 on PJ3
+#define GPIO_PCTL_PJ3_U1CTS     0x00009000  // U1CTS on PJ3
+#define GPIO_PCTL_PJ3_CCP6      0x0000A000  // CCP6 on PJ3
+#define GPIO_PCTL_PJ2_M         0x00000F00  // PJ2 mask
+#define GPIO_PCTL_PJ2_EPI0S18   0x00000800  // EPI0S18 on PJ2
+#define GPIO_PCTL_PJ2_CCP0      0x00000900  // CCP0 on PJ2
+#define GPIO_PCTL_PJ2_FAULT0    0x00000A00  // FAULT0 on PJ2
 #define GPIO_PCTL_PJ1_M         0x000000F0  // PJ1 mask
 #define GPIO_PCTL_PJ1_EPI0S17   0x00000080  // EPI0S17 on PJ1
 #define GPIO_PCTL_PJ1_USB0PFLT  0x00000090  // USB0PFLT on PJ1
 #define GPIO_PCTL_PJ1_PWM1      0x000000A0  // PWM1 on PJ1
 #define GPIO_PCTL_PJ1_I2C1SDA   0x000000B0  // I2C1SDA on PJ1
-#define GPIO_PCTL_PJ2_M         0x00000F00  // PJ2 mask
-#define GPIO_PCTL_PJ2_EPI0S18   0x00000800  // EPI0S18 on PJ2
-#define GPIO_PCTL_PJ2_CCP0      0x00000900  // CCP0 on PJ2
-#define GPIO_PCTL_PJ2_FAULT0    0x00000A00  // FAULT0 on PJ2
-#define GPIO_PCTL_PJ3_M         0x0000F000  // PJ3 mask
-#define GPIO_PCTL_PJ3_EPI0S19   0x00008000  // EPI0S19 on PJ3
-#define GPIO_PCTL_PJ3_U1CTS     0x00009000  // U1CTS on PJ3
-#define GPIO_PCTL_PJ3_CCP6      0x0000A000  // CCP6 on PJ3
-#define GPIO_PCTL_PJ4_M         0x000F0000  // PJ4 mask
-#define GPIO_PCTL_PJ4_EPI0S28   0x00080000  // EPI0S28 on PJ4
-#define GPIO_PCTL_PJ4_U1DCD     0x00090000  // U1DCD on PJ4
-#define GPIO_PCTL_PJ4_CCP4      0x000A0000  // CCP4 on PJ4
-#define GPIO_PCTL_PJ5_M         0x00F00000  // PJ5 mask
-#define GPIO_PCTL_PJ5_EPI0S29   0x00800000  // EPI0S29 on PJ5
-#define GPIO_PCTL_PJ5_U1DSR     0x00900000  // U1DSR on PJ5
-#define GPIO_PCTL_PJ5_CCP2      0x00A00000  // CCP2 on PJ5
-#define GPIO_PCTL_PJ6_M         0x0F000000  // PJ6 mask
-#define GPIO_PCTL_PJ6_EPI0S30   0x08000000  // EPI0S30 on PJ6
-#define GPIO_PCTL_PJ6_U1RTS     0x09000000  // U1RTS on PJ6
-#define GPIO_PCTL_PJ6_CCP1      0x0A000000  // CCP1 on PJ6
-#define GPIO_PCTL_PJ7_M         0xF0000000  // PJ7 mask
-#define GPIO_PCTL_PJ7_U1DTR     0x90000000  // U1DTR on PJ7
-#define GPIO_PCTL_PJ7_CCP0      0xA0000000  // CCP0 on PJ7
+#define GPIO_PCTL_PJ0_M         0x0000000F  // PJ0 mask
+#define GPIO_PCTL_PJ0_EPI0S16   0x00000008  // EPI0S16 on PJ0
+#define GPIO_PCTL_PJ0_PWM0      0x0000000A  // PWM0 on PJ0
+#define GPIO_PCTL_PJ0_I2C1SCL   0x0000000B  // I2C1SCL on PJ0
 
 //*****************************************************************************
 //
@@ -2701,9 +2769,13 @@
 // The following are defines for the bit fields in the UART_O_ICR register.
 //
 //*****************************************************************************
+#define UART_ICR_LME5IC         0x00008000  // LIN Mode Edge 5 Interrupt Clear
 #define UART_ICR_LME5MIC        0x00008000  // LIN Mode Edge 5 Interrupt Clear
 #define UART_ICR_LME1MIC        0x00004000  // LIN Mode Edge 1 Interrupt Clear
+#define UART_ICR_LME1IC         0x00004000  // LIN Mode Edge 1 Interrupt Clear
 #define UART_ICR_LMSBMIC        0x00002000  // LIN Mode Sync Break Interrupt
+                                            // Clear
+#define UART_ICR_LMSBIC         0x00002000  // LIN Mode Sync Break Interrupt
                                             // Clear
 #define UART_ICR_OEIC           0x00000400  // Overrun Error Interrupt Clear
 #define UART_ICR_BEIC           0x00000200  // Break Error Interrupt Clear
@@ -3658,21 +3730,27 @@
 // The following are defines for the bit fields in the TIMER_O_TAILR register.
 //
 //*****************************************************************************
+#define TIMER_TAILR_M           0xFFFFFFFF  // GPTM Timer A Interval Load
+                                            // Register
 #define TIMER_TAILR_TAILRH_M    0xFFFF0000  // GPTM Timer A Interval Load
                                             // Register High
 #define TIMER_TAILR_TAILRL_M    0x0000FFFF  // GPTM Timer A Interval Load
                                             // Register Low
 #define TIMER_TAILR_TAILRH_S    16
 #define TIMER_TAILR_TAILRL_S    0
+#define TIMER_TAILR_S           0
 
 //*****************************************************************************
 //
 // The following are defines for the bit fields in the TIMER_O_TBILR register.
 //
 //*****************************************************************************
+#define TIMER_TBILR_M           0xFFFFFFFF  // GPTM Timer B Interval Load
+                                            // Register
 #define TIMER_TBILR_TBILRL_M    0x0000FFFF  // GPTM Timer B Interval Load
                                             // Register
 #define TIMER_TBILR_TBILRL_S    0
+#define TIMER_TBILR_S           0
 
 //*****************************************************************************
 //
@@ -3680,10 +3758,12 @@
 // register.
 //
 //*****************************************************************************
+#define TIMER_TAMATCHR_TAMR_M   0xFFFFFFFF  // GPTM Timer A Match Register
 #define TIMER_TAMATCHR_TAMRH_M  0xFFFF0000  // GPTM Timer A Match Register High
 #define TIMER_TAMATCHR_TAMRL_M  0x0000FFFF  // GPTM Timer A Match Register Low
 #define TIMER_TAMATCHR_TAMRH_S  16
 #define TIMER_TAMATCHR_TAMRL_S  0
+#define TIMER_TAMATCHR_TAMR_S   0
 
 //*****************************************************************************
 //
@@ -3691,7 +3771,9 @@
 // register.
 //
 //*****************************************************************************
+#define TIMER_TBMATCHR_TBMR_M   0xFFFFFFFF  // GPTM Timer B Match Register
 #define TIMER_TBMATCHR_TBMRL_M  0x0000FFFF  // GPTM Timer B Match Register Low
+#define TIMER_TBMATCHR_TBMR_S   0
 #define TIMER_TBMATCHR_TBMRL_S  0
 
 //*****************************************************************************
@@ -3731,36 +3813,44 @@
 // The following are defines for the bit fields in the TIMER_O_TAR register.
 //
 //*****************************************************************************
+#define TIMER_TAR_M             0xFFFFFFFF  // GPTM Timer A Register
 #define TIMER_TAR_TARH_M        0xFFFF0000  // GPTM Timer A Register High
 #define TIMER_TAR_TARL_M        0x0000FFFF  // GPTM Timer A Register Low
 #define TIMER_TAR_TARH_S        16
 #define TIMER_TAR_TARL_S        0
+#define TIMER_TAR_S             0
 
 //*****************************************************************************
 //
 // The following are defines for the bit fields in the TIMER_O_TBR register.
 //
 //*****************************************************************************
+#define TIMER_TBR_M             0xFFFFFFFF  // GPTM Timer B Register
 #define TIMER_TBR_TBRL_M        0x00FFFFFF  // GPTM Timer B
 #define TIMER_TBR_TBRL_S        0
+#define TIMER_TBR_S             0
 
 //*****************************************************************************
 //
 // The following are defines for the bit fields in the TIMER_O_TAV register.
 //
 //*****************************************************************************
+#define TIMER_TAV_M             0xFFFFFFFF  // GPTM Timer A Value
 #define TIMER_TAV_TAVH_M        0xFFFF0000  // GPTM Timer A Value High
 #define TIMER_TAV_TAVL_M        0x0000FFFF  // GPTM Timer A Register Low
 #define TIMER_TAV_TAVH_S        16
 #define TIMER_TAV_TAVL_S        0
+#define TIMER_TAV_S             0
 
 //*****************************************************************************
 //
 // The following are defines for the bit fields in the TIMER_O_TBV register.
 //
 //*****************************************************************************
+#define TIMER_TBV_M             0xFFFFFFFF  // GPTM Timer B Value
 #define TIMER_TBV_TBVL_M        0x0000FFFF  // GPTM Timer B Register
 #define TIMER_TBV_TBVL_S        0
+#define TIMER_TBV_S             0
 
 //*****************************************************************************
 //
@@ -9490,6 +9580,8 @@
 #define USB_DMASEL_DMABRX_M     0x00000F00  // DMA B RX Select
 #define USB_DMASEL_DMAATX_M     0x000000F0  // DMA A TX Select
 #define USB_DMASEL_DMAARX_M     0x0000000F  // DMA A RX Select
+#define USB_DMASEL_DMACTX_S     20
+#define USB_DMASEL_DMACRX_S     16
 #define USB_DMASEL_DMABTX_S     12
 #define USB_DMASEL_DMABRX_S     8
 #define USB_DMASEL_DMAATX_S     4
@@ -10439,6 +10531,7 @@
 #define SYSCTL_DC4_EPHY0        0x40000000  // Ethernet PHY Layer 0 Present
 #define SYSCTL_DC4_EMAC0        0x10000000  // Ethernet MAC Layer 0 Present
 #define SYSCTL_DC4_E1588        0x01000000  // 1588 Capable
+#define SYSCTL_DC4_PICAL        0x00040000  // PIOSC Calibrate
 #define SYSCTL_DC4_CCP7         0x00008000  // CCP7 Pin Present
 #define SYSCTL_DC4_CCP6         0x00004000  // CCP6 Pin Present
 #define SYSCTL_DC4_UDMA         0x00002000  // Micro-DMA Module Present
@@ -11341,11 +11434,14 @@
 
 //*****************************************************************************
 //
-// The following are defines for the bit fields in the UDMA_CHALT register.
+// The following are defines for the bit fields in the UDMA_CHASGN register.
 //
 //*****************************************************************************
-#define UDMA_CHALT_M            0xFFFFFFFF  // Channel [n] Alternate Assignment
-                                            // Select
+#define UDMA_CHASGN_M           0xFFFFFFFF  // Channel [n] Assignment Select
+#define UDMA_CHASGN_PRIMARY     0x00000000  // Use the primary channel
+                                            // assignment
+#define UDMA_CHASGN_SECONDARY   0x00000001  // Use the secondary channel
+                                            // assignment
 
 //*****************************************************************************
 //
@@ -11430,20 +11526,30 @@
 
 //*****************************************************************************
 //
+// The following are defines for the bit fields in the NVIC_ACTLR register.
+//
+//*****************************************************************************
+#define NVIC_ACTLR_DISFOLD      0x00000004  // Disable IT Folding
+#define NVIC_ACTLR_DISWBUF      0x00000002  // Disable Write Buffer
+#define NVIC_ACTLR_DISMCYC      0x00000001  // Disable Interrupts of Multiple
+                                            // Cycle Instructions
+
+//*****************************************************************************
+//
 // The following are defines for the bit fields in the NVIC_ST_CTRL register.
 //
 //*****************************************************************************
-#define NVIC_ST_CTRL_COUNT      0x00010000  // Count flag
+#define NVIC_ST_CTRL_COUNT      0x00010000  // Count Flag
 #define NVIC_ST_CTRL_CLK_SRC    0x00000004  // Clock Source
-#define NVIC_ST_CTRL_INTEN      0x00000002  // Interrupt enable
-#define NVIC_ST_CTRL_ENABLE     0x00000001  // Counter mode
+#define NVIC_ST_CTRL_INTEN      0x00000002  // Interrupt Enable
+#define NVIC_ST_CTRL_ENABLE     0x00000001  // Enable
 
 //*****************************************************************************
 //
 // The following are defines for the bit fields in the NVIC_ST_RELOAD register.
 //
 //*****************************************************************************
-#define NVIC_ST_RELOAD_M        0x00FFFFFF  // Counter load value
+#define NVIC_ST_RELOAD_M        0x00FFFFFF  // Reload Value
 #define NVIC_ST_RELOAD_S        0
 
 //*****************************************************************************
@@ -11452,7 +11558,7 @@
 // register.
 //
 //*****************************************************************************
-#define NVIC_ST_CURRENT_M       0x00FFFFFF  // Counter current value
+#define NVIC_ST_CURRENT_M       0x00FFFFFF  // Current Value
 #define NVIC_ST_CURRENT_S       0
 
 //*****************************************************************************
@@ -11470,541 +11576,583 @@
 // The following are defines for the bit fields in the NVIC_EN0 register.
 //
 //*****************************************************************************
-#define NVIC_EN0_INT31          0x80000000  // Interrupt 31 enable
-#define NVIC_EN0_INT30          0x40000000  // Interrupt 30 enable
-#define NVIC_EN0_INT29          0x20000000  // Interrupt 29 enable
-#define NVIC_EN0_INT28          0x10000000  // Interrupt 28 enable
-#define NVIC_EN0_INT27          0x08000000  // Interrupt 27 enable
-#define NVIC_EN0_INT26          0x04000000  // Interrupt 26 enable
-#define NVIC_EN0_INT25          0x02000000  // Interrupt 25 enable
-#define NVIC_EN0_INT24          0x01000000  // Interrupt 24 enable
-#define NVIC_EN0_INT23          0x00800000  // Interrupt 23 enable
-#define NVIC_EN0_INT22          0x00400000  // Interrupt 22 enable
-#define NVIC_EN0_INT21          0x00200000  // Interrupt 21 enable
-#define NVIC_EN0_INT20          0x00100000  // Interrupt 20 enable
-#define NVIC_EN0_INT19          0x00080000  // Interrupt 19 enable
-#define NVIC_EN0_INT18          0x00040000  // Interrupt 18 enable
-#define NVIC_EN0_INT17          0x00020000  // Interrupt 17 enable
-#define NVIC_EN0_INT16          0x00010000  // Interrupt 16 enable
-#define NVIC_EN0_INT15          0x00008000  // Interrupt 15 enable
-#define NVIC_EN0_INT14          0x00004000  // Interrupt 14 enable
-#define NVIC_EN0_INT13          0x00002000  // Interrupt 13 enable
-#define NVIC_EN0_INT12          0x00001000  // Interrupt 12 enable
-#define NVIC_EN0_INT11          0x00000800  // Interrupt 11 enable
-#define NVIC_EN0_INT10          0x00000400  // Interrupt 10 enable
-#define NVIC_EN0_INT9           0x00000200  // Interrupt 9 enable
-#define NVIC_EN0_INT8           0x00000100  // Interrupt 8 enable
-#define NVIC_EN0_INT7           0x00000080  // Interrupt 7 enable
-#define NVIC_EN0_INT6           0x00000040  // Interrupt 6 enable
-#define NVIC_EN0_INT5           0x00000020  // Interrupt 5 enable
-#define NVIC_EN0_INT4           0x00000010  // Interrupt 4 enable
-#define NVIC_EN0_INT3           0x00000008  // Interrupt 3 enable
-#define NVIC_EN0_INT2           0x00000004  // Interrupt 2 enable
-#define NVIC_EN0_INT1           0x00000002  // Interrupt 1 enable
+#define NVIC_EN0_INT_M          0xFFFFFFFF  // Interrupt Enable
 #define NVIC_EN0_INT0           0x00000001  // Interrupt 0 enable
+#define NVIC_EN0_INT1           0x00000002  // Interrupt 1 enable
+#define NVIC_EN0_INT2           0x00000004  // Interrupt 2 enable
+#define NVIC_EN0_INT3           0x00000008  // Interrupt 3 enable
+#define NVIC_EN0_INT4           0x00000010  // Interrupt 4 enable
+#define NVIC_EN0_INT5           0x00000020  // Interrupt 5 enable
+#define NVIC_EN0_INT6           0x00000040  // Interrupt 6 enable
+#define NVIC_EN0_INT7           0x00000080  // Interrupt 7 enable
+#define NVIC_EN0_INT8           0x00000100  // Interrupt 8 enable
+#define NVIC_EN0_INT9           0x00000200  // Interrupt 9 enable
+#define NVIC_EN0_INT10          0x00000400  // Interrupt 10 enable
+#define NVIC_EN0_INT11          0x00000800  // Interrupt 11 enable
+#define NVIC_EN0_INT12          0x00001000  // Interrupt 12 enable
+#define NVIC_EN0_INT13          0x00002000  // Interrupt 13 enable
+#define NVIC_EN0_INT14          0x00004000  // Interrupt 14 enable
+#define NVIC_EN0_INT15          0x00008000  // Interrupt 15 enable
+#define NVIC_EN0_INT16          0x00010000  // Interrupt 16 enable
+#define NVIC_EN0_INT17          0x00020000  // Interrupt 17 enable
+#define NVIC_EN0_INT18          0x00040000  // Interrupt 18 enable
+#define NVIC_EN0_INT19          0x00080000  // Interrupt 19 enable
+#define NVIC_EN0_INT20          0x00100000  // Interrupt 20 enable
+#define NVIC_EN0_INT21          0x00200000  // Interrupt 21 enable
+#define NVIC_EN0_INT22          0x00400000  // Interrupt 22 enable
+#define NVIC_EN0_INT23          0x00800000  // Interrupt 23 enable
+#define NVIC_EN0_INT24          0x01000000  // Interrupt 24 enable
+#define NVIC_EN0_INT25          0x02000000  // Interrupt 25 enable
+#define NVIC_EN0_INT26          0x04000000  // Interrupt 26 enable
+#define NVIC_EN0_INT27          0x08000000  // Interrupt 27 enable
+#define NVIC_EN0_INT28          0x10000000  // Interrupt 28 enable
+#define NVIC_EN0_INT29          0x20000000  // Interrupt 29 enable
+#define NVIC_EN0_INT30          0x40000000  // Interrupt 30 enable
+#define NVIC_EN0_INT31          0x80000000  // Interrupt 31 enable
 
 //*****************************************************************************
 //
 // The following are defines for the bit fields in the NVIC_EN1 register.
 //
 //*****************************************************************************
-#define NVIC_EN1_INT59          0x08000000  // Interrupt 59 enable
-#define NVIC_EN1_INT58          0x04000000  // Interrupt 58 enable
-#define NVIC_EN1_INT57          0x02000000  // Interrupt 57 enable
-#define NVIC_EN1_INT56          0x01000000  // Interrupt 56 enable
-#define NVIC_EN1_INT55          0x00800000  // Interrupt 55 enable
-#define NVIC_EN1_INT54          0x00400000  // Interrupt 54 enable
-#define NVIC_EN1_INT53          0x00200000  // Interrupt 53 enable
-#define NVIC_EN1_INT52          0x00100000  // Interrupt 52 enable
-#define NVIC_EN1_INT51          0x00080000  // Interrupt 51 enable
-#define NVIC_EN1_INT50          0x00040000  // Interrupt 50 enable
-#define NVIC_EN1_INT49          0x00020000  // Interrupt 49 enable
-#define NVIC_EN1_INT48          0x00010000  // Interrupt 48 enable
-#define NVIC_EN1_INT47          0x00008000  // Interrupt 47 enable
-#define NVIC_EN1_INT46          0x00004000  // Interrupt 46 enable
-#define NVIC_EN1_INT45          0x00002000  // Interrupt 45 enable
-#define NVIC_EN1_INT44          0x00001000  // Interrupt 44 enable
-#define NVIC_EN1_INT43          0x00000800  // Interrupt 43 enable
-#define NVIC_EN1_INT42          0x00000400  // Interrupt 42 enable
-#define NVIC_EN1_INT41          0x00000200  // Interrupt 41 enable
-#define NVIC_EN1_INT40          0x00000100  // Interrupt 40 enable
-#define NVIC_EN1_INT39          0x00000080  // Interrupt 39 enable
-#define NVIC_EN1_INT38          0x00000040  // Interrupt 38 enable
-#define NVIC_EN1_INT37          0x00000020  // Interrupt 37 enable
-#define NVIC_EN1_INT36          0x00000010  // Interrupt 36 enable
-#define NVIC_EN1_INT35          0x00000008  // Interrupt 35 enable
-#define NVIC_EN1_INT34          0x00000004  // Interrupt 34 enable
-#define NVIC_EN1_INT33          0x00000002  // Interrupt 33 enable
+#define NVIC_EN1_INT_M          0x007FFFFF  // Interrupt Enable
 #define NVIC_EN1_INT32          0x00000001  // Interrupt 32 enable
+#define NVIC_EN1_INT33          0x00000002  // Interrupt 33 enable
+#define NVIC_EN1_INT34          0x00000004  // Interrupt 34 enable
+#define NVIC_EN1_INT35          0x00000008  // Interrupt 35 enable
+#define NVIC_EN1_INT36          0x00000010  // Interrupt 36 enable
+#define NVIC_EN1_INT37          0x00000020  // Interrupt 37 enable
+#define NVIC_EN1_INT38          0x00000040  // Interrupt 38 enable
+#define NVIC_EN1_INT39          0x00000080  // Interrupt 39 enable
+#define NVIC_EN1_INT40          0x00000100  // Interrupt 40 enable
+#define NVIC_EN1_INT41          0x00000200  // Interrupt 41 enable
+#define NVIC_EN1_INT42          0x00000400  // Interrupt 42 enable
+#define NVIC_EN1_INT43          0x00000800  // Interrupt 43 enable
+#define NVIC_EN1_INT44          0x00001000  // Interrupt 44 enable
+#define NVIC_EN1_INT45          0x00002000  // Interrupt 45 enable
+#define NVIC_EN1_INT46          0x00004000  // Interrupt 46 enable
+#define NVIC_EN1_INT47          0x00008000  // Interrupt 47 enable
 
 //*****************************************************************************
 //
 // The following are defines for the bit fields in the NVIC_DIS0 register.
 //
 //*****************************************************************************
-#define NVIC_DIS0_INT31         0x80000000  // Interrupt 31 disable
-#define NVIC_DIS0_INT30         0x40000000  // Interrupt 30 disable
-#define NVIC_DIS0_INT29         0x20000000  // Interrupt 29 disable
-#define NVIC_DIS0_INT28         0x10000000  // Interrupt 28 disable
-#define NVIC_DIS0_INT27         0x08000000  // Interrupt 27 disable
-#define NVIC_DIS0_INT26         0x04000000  // Interrupt 26 disable
-#define NVIC_DIS0_INT25         0x02000000  // Interrupt 25 disable
-#define NVIC_DIS0_INT24         0x01000000  // Interrupt 24 disable
-#define NVIC_DIS0_INT23         0x00800000  // Interrupt 23 disable
-#define NVIC_DIS0_INT22         0x00400000  // Interrupt 22 disable
-#define NVIC_DIS0_INT21         0x00200000  // Interrupt 21 disable
-#define NVIC_DIS0_INT20         0x00100000  // Interrupt 20 disable
-#define NVIC_DIS0_INT19         0x00080000  // Interrupt 19 disable
-#define NVIC_DIS0_INT18         0x00040000  // Interrupt 18 disable
-#define NVIC_DIS0_INT17         0x00020000  // Interrupt 17 disable
-#define NVIC_DIS0_INT16         0x00010000  // Interrupt 16 disable
-#define NVIC_DIS0_INT15         0x00008000  // Interrupt 15 disable
-#define NVIC_DIS0_INT14         0x00004000  // Interrupt 14 disable
-#define NVIC_DIS0_INT13         0x00002000  // Interrupt 13 disable
-#define NVIC_DIS0_INT12         0x00001000  // Interrupt 12 disable
-#define NVIC_DIS0_INT11         0x00000800  // Interrupt 11 disable
-#define NVIC_DIS0_INT10         0x00000400  // Interrupt 10 disable
-#define NVIC_DIS0_INT9          0x00000200  // Interrupt 9 disable
-#define NVIC_DIS0_INT8          0x00000100  // Interrupt 8 disable
-#define NVIC_DIS0_INT7          0x00000080  // Interrupt 7 disable
-#define NVIC_DIS0_INT6          0x00000040  // Interrupt 6 disable
-#define NVIC_DIS0_INT5          0x00000020  // Interrupt 5 disable
-#define NVIC_DIS0_INT4          0x00000010  // Interrupt 4 disable
-#define NVIC_DIS0_INT3          0x00000008  // Interrupt 3 disable
-#define NVIC_DIS0_INT2          0x00000004  // Interrupt 2 disable
-#define NVIC_DIS0_INT1          0x00000002  // Interrupt 1 disable
+#define NVIC_DIS0_INT_M         0xFFFFFFFF  // Interrupt Disable
 #define NVIC_DIS0_INT0          0x00000001  // Interrupt 0 disable
+#define NVIC_DIS0_INT1          0x00000002  // Interrupt 1 disable
+#define NVIC_DIS0_INT2          0x00000004  // Interrupt 2 disable
+#define NVIC_DIS0_INT3          0x00000008  // Interrupt 3 disable
+#define NVIC_DIS0_INT4          0x00000010  // Interrupt 4 disable
+#define NVIC_DIS0_INT5          0x00000020  // Interrupt 5 disable
+#define NVIC_DIS0_INT6          0x00000040  // Interrupt 6 disable
+#define NVIC_DIS0_INT7          0x00000080  // Interrupt 7 disable
+#define NVIC_DIS0_INT8          0x00000100  // Interrupt 8 disable
+#define NVIC_DIS0_INT9          0x00000200  // Interrupt 9 disable
+#define NVIC_DIS0_INT10         0x00000400  // Interrupt 10 disable
+#define NVIC_DIS0_INT11         0x00000800  // Interrupt 11 disable
+#define NVIC_DIS0_INT12         0x00001000  // Interrupt 12 disable
+#define NVIC_DIS0_INT13         0x00002000  // Interrupt 13 disable
+#define NVIC_DIS0_INT14         0x00004000  // Interrupt 14 disable
+#define NVIC_DIS0_INT15         0x00008000  // Interrupt 15 disable
+#define NVIC_DIS0_INT16         0x00010000  // Interrupt 16 disable
+#define NVIC_DIS0_INT17         0x00020000  // Interrupt 17 disable
+#define NVIC_DIS0_INT18         0x00040000  // Interrupt 18 disable
+#define NVIC_DIS0_INT19         0x00080000  // Interrupt 19 disable
+#define NVIC_DIS0_INT20         0x00100000  // Interrupt 20 disable
+#define NVIC_DIS0_INT21         0x00200000  // Interrupt 21 disable
+#define NVIC_DIS0_INT22         0x00400000  // Interrupt 22 disable
+#define NVIC_DIS0_INT23         0x00800000  // Interrupt 23 disable
+#define NVIC_DIS0_INT24         0x01000000  // Interrupt 24 disable
+#define NVIC_DIS0_INT25         0x02000000  // Interrupt 25 disable
+#define NVIC_DIS0_INT26         0x04000000  // Interrupt 26 disable
+#define NVIC_DIS0_INT27         0x08000000  // Interrupt 27 disable
+#define NVIC_DIS0_INT28         0x10000000  // Interrupt 28 disable
+#define NVIC_DIS0_INT29         0x20000000  // Interrupt 29 disable
+#define NVIC_DIS0_INT30         0x40000000  // Interrupt 30 disable
+#define NVIC_DIS0_INT31         0x80000000  // Interrupt 31 disable
 
 //*****************************************************************************
 //
 // The following are defines for the bit fields in the NVIC_DIS1 register.
 //
 //*****************************************************************************
-#define NVIC_DIS1_INT59         0x08000000  // Interrupt 59 disable
-#define NVIC_DIS1_INT58         0x04000000  // Interrupt 58 disable
-#define NVIC_DIS1_INT57         0x02000000  // Interrupt 57 disable
-#define NVIC_DIS1_INT56         0x01000000  // Interrupt 56 disable
-#define NVIC_DIS1_INT55         0x00800000  // Interrupt 55 disable
-#define NVIC_DIS1_INT54         0x00400000  // Interrupt 54 disable
-#define NVIC_DIS1_INT53         0x00200000  // Interrupt 53 disable
-#define NVIC_DIS1_INT52         0x00100000  // Interrupt 52 disable
-#define NVIC_DIS1_INT51         0x00080000  // Interrupt 51 disable
-#define NVIC_DIS1_INT50         0x00040000  // Interrupt 50 disable
-#define NVIC_DIS1_INT49         0x00020000  // Interrupt 49 disable
-#define NVIC_DIS1_INT48         0x00010000  // Interrupt 48 disable
-#define NVIC_DIS1_INT47         0x00008000  // Interrupt 47 disable
-#define NVIC_DIS1_INT46         0x00004000  // Interrupt 46 disable
-#define NVIC_DIS1_INT45         0x00002000  // Interrupt 45 disable
-#define NVIC_DIS1_INT44         0x00001000  // Interrupt 44 disable
-#define NVIC_DIS1_INT43         0x00000800  // Interrupt 43 disable
-#define NVIC_DIS1_INT42         0x00000400  // Interrupt 42 disable
-#define NVIC_DIS1_INT41         0x00000200  // Interrupt 41 disable
-#define NVIC_DIS1_INT40         0x00000100  // Interrupt 40 disable
-#define NVIC_DIS1_INT39         0x00000080  // Interrupt 39 disable
-#define NVIC_DIS1_INT38         0x00000040  // Interrupt 38 disable
-#define NVIC_DIS1_INT37         0x00000020  // Interrupt 37 disable
-#define NVIC_DIS1_INT36         0x00000010  // Interrupt 36 disable
-#define NVIC_DIS1_INT35         0x00000008  // Interrupt 35 disable
-#define NVIC_DIS1_INT34         0x00000004  // Interrupt 34 disable
-#define NVIC_DIS1_INT33         0x00000002  // Interrupt 33 disable
+#define NVIC_DIS1_INT_M         0x007FFFFF  // Interrupt Disable
 #define NVIC_DIS1_INT32         0x00000001  // Interrupt 32 disable
+#define NVIC_DIS1_INT33         0x00000002  // Interrupt 33 disable
+#define NVIC_DIS1_INT34         0x00000004  // Interrupt 34 disable
+#define NVIC_DIS1_INT35         0x00000008  // Interrupt 35 disable
+#define NVIC_DIS1_INT36         0x00000010  // Interrupt 36 disable
+#define NVIC_DIS1_INT37         0x00000020  // Interrupt 37 disable
+#define NVIC_DIS1_INT38         0x00000040  // Interrupt 38 disable
+#define NVIC_DIS1_INT39         0x00000080  // Interrupt 39 disable
+#define NVIC_DIS1_INT40         0x00000100  // Interrupt 40 disable
+#define NVIC_DIS1_INT41         0x00000200  // Interrupt 41 disable
+#define NVIC_DIS1_INT42         0x00000400  // Interrupt 42 disable
+#define NVIC_DIS1_INT43         0x00000800  // Interrupt 43 disable
+#define NVIC_DIS1_INT44         0x00001000  // Interrupt 44 disable
+#define NVIC_DIS1_INT45         0x00002000  // Interrupt 45 disable
+#define NVIC_DIS1_INT46         0x00004000  // Interrupt 46 disable
+#define NVIC_DIS1_INT47         0x00008000  // Interrupt 47 disable
+#define NVIC_DIS1_INT48         0x00010000  // Interrupt 48 disable
+#define NVIC_DIS1_INT49         0x00020000  // Interrupt 49 disable
+#define NVIC_DIS1_INT50         0x00040000  // Interrupt 50 disable
+#define NVIC_DIS1_INT51         0x00080000  // Interrupt 51 disable
+#define NVIC_DIS1_INT52         0x00100000  // Interrupt 52 disable
+#define NVIC_DIS1_INT53         0x00200000  // Interrupt 53 disable
+#define NVIC_DIS1_INT54         0x00400000  // Interrupt 54 disable
+#define NVIC_DIS1_INT55         0x00800000  // Interrupt 55 disable
 
 //*****************************************************************************
 //
 // The following are defines for the bit fields in the NVIC_PEND0 register.
 //
 //*****************************************************************************
-#define NVIC_PEND0_INT31        0x80000000  // Interrupt 31 pend
-#define NVIC_PEND0_INT30        0x40000000  // Interrupt 30 pend
-#define NVIC_PEND0_INT29        0x20000000  // Interrupt 29 pend
-#define NVIC_PEND0_INT28        0x10000000  // Interrupt 28 pend
-#define NVIC_PEND0_INT27        0x08000000  // Interrupt 27 pend
-#define NVIC_PEND0_INT26        0x04000000  // Interrupt 26 pend
-#define NVIC_PEND0_INT25        0x02000000  // Interrupt 25 pend
-#define NVIC_PEND0_INT24        0x01000000  // Interrupt 24 pend
-#define NVIC_PEND0_INT23        0x00800000  // Interrupt 23 pend
-#define NVIC_PEND0_INT22        0x00400000  // Interrupt 22 pend
-#define NVIC_PEND0_INT21        0x00200000  // Interrupt 21 pend
-#define NVIC_PEND0_INT20        0x00100000  // Interrupt 20 pend
-#define NVIC_PEND0_INT19        0x00080000  // Interrupt 19 pend
-#define NVIC_PEND0_INT18        0x00040000  // Interrupt 18 pend
-#define NVIC_PEND0_INT17        0x00020000  // Interrupt 17 pend
-#define NVIC_PEND0_INT16        0x00010000  // Interrupt 16 pend
-#define NVIC_PEND0_INT15        0x00008000  // Interrupt 15 pend
-#define NVIC_PEND0_INT14        0x00004000  // Interrupt 14 pend
-#define NVIC_PEND0_INT13        0x00002000  // Interrupt 13 pend
-#define NVIC_PEND0_INT12        0x00001000  // Interrupt 12 pend
-#define NVIC_PEND0_INT11        0x00000800  // Interrupt 11 pend
-#define NVIC_PEND0_INT10        0x00000400  // Interrupt 10 pend
-#define NVIC_PEND0_INT9         0x00000200  // Interrupt 9 pend
-#define NVIC_PEND0_INT8         0x00000100  // Interrupt 8 pend
-#define NVIC_PEND0_INT7         0x00000080  // Interrupt 7 pend
-#define NVIC_PEND0_INT6         0x00000040  // Interrupt 6 pend
-#define NVIC_PEND0_INT5         0x00000020  // Interrupt 5 pend
-#define NVIC_PEND0_INT4         0x00000010  // Interrupt 4 pend
-#define NVIC_PEND0_INT3         0x00000008  // Interrupt 3 pend
-#define NVIC_PEND0_INT2         0x00000004  // Interrupt 2 pend
-#define NVIC_PEND0_INT1         0x00000002  // Interrupt 1 pend
+#define NVIC_PEND0_INT_M        0xFFFFFFFF  // Interrupt Set Pending
 #define NVIC_PEND0_INT0         0x00000001  // Interrupt 0 pend
+#define NVIC_PEND0_INT1         0x00000002  // Interrupt 1 pend
+#define NVIC_PEND0_INT2         0x00000004  // Interrupt 2 pend
+#define NVIC_PEND0_INT3         0x00000008  // Interrupt 3 pend
+#define NVIC_PEND0_INT4         0x00000010  // Interrupt 4 pend
+#define NVIC_PEND0_INT5         0x00000020  // Interrupt 5 pend
+#define NVIC_PEND0_INT6         0x00000040  // Interrupt 6 pend
+#define NVIC_PEND0_INT7         0x00000080  // Interrupt 7 pend
+#define NVIC_PEND0_INT8         0x00000100  // Interrupt 8 pend
+#define NVIC_PEND0_INT9         0x00000200  // Interrupt 9 pend
+#define NVIC_PEND0_INT10        0x00000400  // Interrupt 10 pend
+#define NVIC_PEND0_INT11        0x00000800  // Interrupt 11 pend
+#define NVIC_PEND0_INT12        0x00001000  // Interrupt 12 pend
+#define NVIC_PEND0_INT13        0x00002000  // Interrupt 13 pend
+#define NVIC_PEND0_INT14        0x00004000  // Interrupt 14 pend
+#define NVIC_PEND0_INT15        0x00008000  // Interrupt 15 pend
+#define NVIC_PEND0_INT16        0x00010000  // Interrupt 16 pend
+#define NVIC_PEND0_INT17        0x00020000  // Interrupt 17 pend
+#define NVIC_PEND0_INT18        0x00040000  // Interrupt 18 pend
+#define NVIC_PEND0_INT19        0x00080000  // Interrupt 19 pend
+#define NVIC_PEND0_INT20        0x00100000  // Interrupt 20 pend
+#define NVIC_PEND0_INT21        0x00200000  // Interrupt 21 pend
+#define NVIC_PEND0_INT22        0x00400000  // Interrupt 22 pend
+#define NVIC_PEND0_INT23        0x00800000  // Interrupt 23 pend
+#define NVIC_PEND0_INT24        0x01000000  // Interrupt 24 pend
+#define NVIC_PEND0_INT25        0x02000000  // Interrupt 25 pend
+#define NVIC_PEND0_INT26        0x04000000  // Interrupt 26 pend
+#define NVIC_PEND0_INT27        0x08000000  // Interrupt 27 pend
+#define NVIC_PEND0_INT28        0x10000000  // Interrupt 28 pend
+#define NVIC_PEND0_INT29        0x20000000  // Interrupt 29 pend
+#define NVIC_PEND0_INT30        0x40000000  // Interrupt 30 pend
+#define NVIC_PEND0_INT31        0x80000000  // Interrupt 31 pend
 
 //*****************************************************************************
 //
 // The following are defines for the bit fields in the NVIC_PEND1 register.
 //
 //*****************************************************************************
-#define NVIC_PEND1_INT59        0x08000000  // Interrupt 59 pend
-#define NVIC_PEND1_INT58        0x04000000  // Interrupt 58 pend
-#define NVIC_PEND1_INT57        0x02000000  // Interrupt 57 pend
-#define NVIC_PEND1_INT56        0x01000000  // Interrupt 56 pend
-#define NVIC_PEND1_INT55        0x00800000  // Interrupt 55 pend
-#define NVIC_PEND1_INT54        0x00400000  // Interrupt 54 pend
-#define NVIC_PEND1_INT53        0x00200000  // Interrupt 53 pend
-#define NVIC_PEND1_INT52        0x00100000  // Interrupt 52 pend
-#define NVIC_PEND1_INT51        0x00080000  // Interrupt 51 pend
-#define NVIC_PEND1_INT50        0x00040000  // Interrupt 50 pend
-#define NVIC_PEND1_INT49        0x00020000  // Interrupt 49 pend
-#define NVIC_PEND1_INT48        0x00010000  // Interrupt 48 pend
-#define NVIC_PEND1_INT47        0x00008000  // Interrupt 47 pend
-#define NVIC_PEND1_INT46        0x00004000  // Interrupt 46 pend
-#define NVIC_PEND1_INT45        0x00002000  // Interrupt 45 pend
-#define NVIC_PEND1_INT44        0x00001000  // Interrupt 44 pend
-#define NVIC_PEND1_INT43        0x00000800  // Interrupt 43 pend
-#define NVIC_PEND1_INT42        0x00000400  // Interrupt 42 pend
-#define NVIC_PEND1_INT41        0x00000200  // Interrupt 41 pend
-#define NVIC_PEND1_INT40        0x00000100  // Interrupt 40 pend
-#define NVIC_PEND1_INT39        0x00000080  // Interrupt 39 pend
-#define NVIC_PEND1_INT38        0x00000040  // Interrupt 38 pend
-#define NVIC_PEND1_INT37        0x00000020  // Interrupt 37 pend
-#define NVIC_PEND1_INT36        0x00000010  // Interrupt 36 pend
-#define NVIC_PEND1_INT35        0x00000008  // Interrupt 35 pend
-#define NVIC_PEND1_INT34        0x00000004  // Interrupt 34 pend
-#define NVIC_PEND1_INT33        0x00000002  // Interrupt 33 pend
+#define NVIC_PEND1_INT_M        0x007FFFFF  // Interrupt Set Pending
 #define NVIC_PEND1_INT32        0x00000001  // Interrupt 32 pend
+#define NVIC_PEND1_INT33        0x00000002  // Interrupt 33 pend
+#define NVIC_PEND1_INT34        0x00000004  // Interrupt 34 pend
+#define NVIC_PEND1_INT35        0x00000008  // Interrupt 35 pend
+#define NVIC_PEND1_INT36        0x00000010  // Interrupt 36 pend
+#define NVIC_PEND1_INT37        0x00000020  // Interrupt 37 pend
+#define NVIC_PEND1_INT38        0x00000040  // Interrupt 38 pend
+#define NVIC_PEND1_INT39        0x00000080  // Interrupt 39 pend
+#define NVIC_PEND1_INT40        0x00000100  // Interrupt 40 pend
+#define NVIC_PEND1_INT41        0x00000200  // Interrupt 41 pend
+#define NVIC_PEND1_INT42        0x00000400  // Interrupt 42 pend
+#define NVIC_PEND1_INT43        0x00000800  // Interrupt 43 pend
+#define NVIC_PEND1_INT44        0x00001000  // Interrupt 44 pend
+#define NVIC_PEND1_INT45        0x00002000  // Interrupt 45 pend
+#define NVIC_PEND1_INT46        0x00004000  // Interrupt 46 pend
+#define NVIC_PEND1_INT47        0x00008000  // Interrupt 47 pend
+#define NVIC_PEND1_INT48        0x00010000  // Interrupt 48 pend
+#define NVIC_PEND1_INT49        0x00020000  // Interrupt 49 pend
+#define NVIC_PEND1_INT50        0x00040000  // Interrupt 50 pend
+#define NVIC_PEND1_INT51        0x00080000  // Interrupt 51 pend
+#define NVIC_PEND1_INT52        0x00100000  // Interrupt 52 pend
+#define NVIC_PEND1_INT53        0x00200000  // Interrupt 53 pend
+#define NVIC_PEND1_INT54        0x00400000  // Interrupt 54 pend
+#define NVIC_PEND1_INT55        0x00800000  // Interrupt 55 pend
 
 //*****************************************************************************
 //
 // The following are defines for the bit fields in the NVIC_UNPEND0 register.
 //
 //*****************************************************************************
-#define NVIC_UNPEND0_INT31      0x80000000  // Interrupt 31 unpend
-#define NVIC_UNPEND0_INT30      0x40000000  // Interrupt 30 unpend
-#define NVIC_UNPEND0_INT29      0x20000000  // Interrupt 29 unpend
-#define NVIC_UNPEND0_INT28      0x10000000  // Interrupt 28 unpend
-#define NVIC_UNPEND0_INT27      0x08000000  // Interrupt 27 unpend
-#define NVIC_UNPEND0_INT26      0x04000000  // Interrupt 26 unpend
-#define NVIC_UNPEND0_INT25      0x02000000  // Interrupt 25 unpend
-#define NVIC_UNPEND0_INT24      0x01000000  // Interrupt 24 unpend
-#define NVIC_UNPEND0_INT23      0x00800000  // Interrupt 23 unpend
-#define NVIC_UNPEND0_INT22      0x00400000  // Interrupt 22 unpend
-#define NVIC_UNPEND0_INT21      0x00200000  // Interrupt 21 unpend
-#define NVIC_UNPEND0_INT20      0x00100000  // Interrupt 20 unpend
-#define NVIC_UNPEND0_INT19      0x00080000  // Interrupt 19 unpend
-#define NVIC_UNPEND0_INT18      0x00040000  // Interrupt 18 unpend
-#define NVIC_UNPEND0_INT17      0x00020000  // Interrupt 17 unpend
-#define NVIC_UNPEND0_INT16      0x00010000  // Interrupt 16 unpend
-#define NVIC_UNPEND0_INT15      0x00008000  // Interrupt 15 unpend
-#define NVIC_UNPEND0_INT14      0x00004000  // Interrupt 14 unpend
-#define NVIC_UNPEND0_INT13      0x00002000  // Interrupt 13 unpend
-#define NVIC_UNPEND0_INT12      0x00001000  // Interrupt 12 unpend
-#define NVIC_UNPEND0_INT11      0x00000800  // Interrupt 11 unpend
-#define NVIC_UNPEND0_INT10      0x00000400  // Interrupt 10 unpend
-#define NVIC_UNPEND0_INT9       0x00000200  // Interrupt 9 unpend
-#define NVIC_UNPEND0_INT8       0x00000100  // Interrupt 8 unpend
-#define NVIC_UNPEND0_INT7       0x00000080  // Interrupt 7 unpend
-#define NVIC_UNPEND0_INT6       0x00000040  // Interrupt 6 unpend
-#define NVIC_UNPEND0_INT5       0x00000020  // Interrupt 5 unpend
-#define NVIC_UNPEND0_INT4       0x00000010  // Interrupt 4 unpend
-#define NVIC_UNPEND0_INT3       0x00000008  // Interrupt 3 unpend
-#define NVIC_UNPEND0_INT2       0x00000004  // Interrupt 2 unpend
-#define NVIC_UNPEND0_INT1       0x00000002  // Interrupt 1 unpend
+#define NVIC_UNPEND0_INT_M      0xFFFFFFFF  // Interrupt Clear Pending
 #define NVIC_UNPEND0_INT0       0x00000001  // Interrupt 0 unpend
+#define NVIC_UNPEND0_INT1       0x00000002  // Interrupt 1 unpend
+#define NVIC_UNPEND0_INT2       0x00000004  // Interrupt 2 unpend
+#define NVIC_UNPEND0_INT3       0x00000008  // Interrupt 3 unpend
+#define NVIC_UNPEND0_INT4       0x00000010  // Interrupt 4 unpend
+#define NVIC_UNPEND0_INT5       0x00000020  // Interrupt 5 unpend
+#define NVIC_UNPEND0_INT6       0x00000040  // Interrupt 6 unpend
+#define NVIC_UNPEND0_INT7       0x00000080  // Interrupt 7 unpend
+#define NVIC_UNPEND0_INT8       0x00000100  // Interrupt 8 unpend
+#define NVIC_UNPEND0_INT9       0x00000200  // Interrupt 9 unpend
+#define NVIC_UNPEND0_INT10      0x00000400  // Interrupt 10 unpend
+#define NVIC_UNPEND0_INT11      0x00000800  // Interrupt 11 unpend
+#define NVIC_UNPEND0_INT12      0x00001000  // Interrupt 12 unpend
+#define NVIC_UNPEND0_INT13      0x00002000  // Interrupt 13 unpend
+#define NVIC_UNPEND0_INT14      0x00004000  // Interrupt 14 unpend
+#define NVIC_UNPEND0_INT15      0x00008000  // Interrupt 15 unpend
+#define NVIC_UNPEND0_INT16      0x00010000  // Interrupt 16 unpend
+#define NVIC_UNPEND0_INT17      0x00020000  // Interrupt 17 unpend
+#define NVIC_UNPEND0_INT18      0x00040000  // Interrupt 18 unpend
+#define NVIC_UNPEND0_INT19      0x00080000  // Interrupt 19 unpend
+#define NVIC_UNPEND0_INT20      0x00100000  // Interrupt 20 unpend
+#define NVIC_UNPEND0_INT21      0x00200000  // Interrupt 21 unpend
+#define NVIC_UNPEND0_INT22      0x00400000  // Interrupt 22 unpend
+#define NVIC_UNPEND0_INT23      0x00800000  // Interrupt 23 unpend
+#define NVIC_UNPEND0_INT24      0x01000000  // Interrupt 24 unpend
+#define NVIC_UNPEND0_INT25      0x02000000  // Interrupt 25 unpend
+#define NVIC_UNPEND0_INT26      0x04000000  // Interrupt 26 unpend
+#define NVIC_UNPEND0_INT27      0x08000000  // Interrupt 27 unpend
+#define NVIC_UNPEND0_INT28      0x10000000  // Interrupt 28 unpend
+#define NVIC_UNPEND0_INT29      0x20000000  // Interrupt 29 unpend
+#define NVIC_UNPEND0_INT30      0x40000000  // Interrupt 30 unpend
+#define NVIC_UNPEND0_INT31      0x80000000  // Interrupt 31 unpend
 
 //*****************************************************************************
 //
 // The following are defines for the bit fields in the NVIC_UNPEND1 register.
 //
 //*****************************************************************************
-#define NVIC_UNPEND1_INT59      0x08000000  // Interrupt 59 unpend
-#define NVIC_UNPEND1_INT58      0x04000000  // Interrupt 58 unpend
-#define NVIC_UNPEND1_INT57      0x02000000  // Interrupt 57 unpend
-#define NVIC_UNPEND1_INT56      0x01000000  // Interrupt 56 unpend
-#define NVIC_UNPEND1_INT55      0x00800000  // Interrupt 55 unpend
-#define NVIC_UNPEND1_INT54      0x00400000  // Interrupt 54 unpend
-#define NVIC_UNPEND1_INT53      0x00200000  // Interrupt 53 unpend
-#define NVIC_UNPEND1_INT52      0x00100000  // Interrupt 52 unpend
-#define NVIC_UNPEND1_INT51      0x00080000  // Interrupt 51 unpend
-#define NVIC_UNPEND1_INT50      0x00040000  // Interrupt 50 unpend
-#define NVIC_UNPEND1_INT49      0x00020000  // Interrupt 49 unpend
-#define NVIC_UNPEND1_INT48      0x00010000  // Interrupt 48 unpend
-#define NVIC_UNPEND1_INT47      0x00008000  // Interrupt 47 unpend
-#define NVIC_UNPEND1_INT46      0x00004000  // Interrupt 46 unpend
-#define NVIC_UNPEND1_INT45      0x00002000  // Interrupt 45 unpend
-#define NVIC_UNPEND1_INT44      0x00001000  // Interrupt 44 unpend
-#define NVIC_UNPEND1_INT43      0x00000800  // Interrupt 43 unpend
-#define NVIC_UNPEND1_INT42      0x00000400  // Interrupt 42 unpend
-#define NVIC_UNPEND1_INT41      0x00000200  // Interrupt 41 unpend
-#define NVIC_UNPEND1_INT40      0x00000100  // Interrupt 40 unpend
-#define NVIC_UNPEND1_INT39      0x00000080  // Interrupt 39 unpend
-#define NVIC_UNPEND1_INT38      0x00000040  // Interrupt 38 unpend
-#define NVIC_UNPEND1_INT37      0x00000020  // Interrupt 37 unpend
-#define NVIC_UNPEND1_INT36      0x00000010  // Interrupt 36 unpend
-#define NVIC_UNPEND1_INT35      0x00000008  // Interrupt 35 unpend
-#define NVIC_UNPEND1_INT34      0x00000004  // Interrupt 34 unpend
-#define NVIC_UNPEND1_INT33      0x00000002  // Interrupt 33 unpend
+#define NVIC_UNPEND1_INT_M      0x007FFFFF  // Interrupt Clear Pending
 #define NVIC_UNPEND1_INT32      0x00000001  // Interrupt 32 unpend
+#define NVIC_UNPEND1_INT33      0x00000002  // Interrupt 33 unpend
+#define NVIC_UNPEND1_INT34      0x00000004  // Interrupt 34 unpend
+#define NVIC_UNPEND1_INT35      0x00000008  // Interrupt 35 unpend
+#define NVIC_UNPEND1_INT36      0x00000010  // Interrupt 36 unpend
+#define NVIC_UNPEND1_INT37      0x00000020  // Interrupt 37 unpend
+#define NVIC_UNPEND1_INT38      0x00000040  // Interrupt 38 unpend
+#define NVIC_UNPEND1_INT39      0x00000080  // Interrupt 39 unpend
+#define NVIC_UNPEND1_INT40      0x00000100  // Interrupt 40 unpend
+#define NVIC_UNPEND1_INT41      0x00000200  // Interrupt 41 unpend
+#define NVIC_UNPEND1_INT42      0x00000400  // Interrupt 42 unpend
+#define NVIC_UNPEND1_INT43      0x00000800  // Interrupt 43 unpend
+#define NVIC_UNPEND1_INT44      0x00001000  // Interrupt 44 unpend
+#define NVIC_UNPEND1_INT45      0x00002000  // Interrupt 45 unpend
+#define NVIC_UNPEND1_INT46      0x00004000  // Interrupt 46 unpend
+#define NVIC_UNPEND1_INT47      0x00008000  // Interrupt 47 unpend
+#define NVIC_UNPEND1_INT48      0x00010000  // Interrupt 48 unpend
+#define NVIC_UNPEND1_INT49      0x00020000  // Interrupt 49 unpend
+#define NVIC_UNPEND1_INT50      0x00040000  // Interrupt 50 unpend
+#define NVIC_UNPEND1_INT51      0x00080000  // Interrupt 51 unpend
+#define NVIC_UNPEND1_INT52      0x00100000  // Interrupt 52 unpend
+#define NVIC_UNPEND1_INT53      0x00200000  // Interrupt 53 unpend
+#define NVIC_UNPEND1_INT54      0x00400000  // Interrupt 54 unpend
+#define NVIC_UNPEND1_INT55      0x00800000  // Interrupt 55 unpend
 
 //*****************************************************************************
 //
 // The following are defines for the bit fields in the NVIC_ACTIVE0 register.
 //
 //*****************************************************************************
-#define NVIC_ACTIVE0_INT31      0x80000000  // Interrupt 31 active
-#define NVIC_ACTIVE0_INT30      0x40000000  // Interrupt 30 active
-#define NVIC_ACTIVE0_INT29      0x20000000  // Interrupt 29 active
-#define NVIC_ACTIVE0_INT28      0x10000000  // Interrupt 28 active
-#define NVIC_ACTIVE0_INT27      0x08000000  // Interrupt 27 active
-#define NVIC_ACTIVE0_INT26      0x04000000  // Interrupt 26 active
-#define NVIC_ACTIVE0_INT25      0x02000000  // Interrupt 25 active
-#define NVIC_ACTIVE0_INT24      0x01000000  // Interrupt 24 active
-#define NVIC_ACTIVE0_INT23      0x00800000  // Interrupt 23 active
-#define NVIC_ACTIVE0_INT22      0x00400000  // Interrupt 22 active
-#define NVIC_ACTIVE0_INT21      0x00200000  // Interrupt 21 active
-#define NVIC_ACTIVE0_INT20      0x00100000  // Interrupt 20 active
-#define NVIC_ACTIVE0_INT19      0x00080000  // Interrupt 19 active
-#define NVIC_ACTIVE0_INT18      0x00040000  // Interrupt 18 active
-#define NVIC_ACTIVE0_INT17      0x00020000  // Interrupt 17 active
-#define NVIC_ACTIVE0_INT16      0x00010000  // Interrupt 16 active
-#define NVIC_ACTIVE0_INT15      0x00008000  // Interrupt 15 active
-#define NVIC_ACTIVE0_INT14      0x00004000  // Interrupt 14 active
-#define NVIC_ACTIVE0_INT13      0x00002000  // Interrupt 13 active
-#define NVIC_ACTIVE0_INT12      0x00001000  // Interrupt 12 active
-#define NVIC_ACTIVE0_INT11      0x00000800  // Interrupt 11 active
-#define NVIC_ACTIVE0_INT10      0x00000400  // Interrupt 10 active
-#define NVIC_ACTIVE0_INT9       0x00000200  // Interrupt 9 active
-#define NVIC_ACTIVE0_INT8       0x00000100  // Interrupt 8 active
-#define NVIC_ACTIVE0_INT7       0x00000080  // Interrupt 7 active
-#define NVIC_ACTIVE0_INT6       0x00000040  // Interrupt 6 active
-#define NVIC_ACTIVE0_INT5       0x00000020  // Interrupt 5 active
-#define NVIC_ACTIVE0_INT4       0x00000010  // Interrupt 4 active
-#define NVIC_ACTIVE0_INT3       0x00000008  // Interrupt 3 active
-#define NVIC_ACTIVE0_INT2       0x00000004  // Interrupt 2 active
-#define NVIC_ACTIVE0_INT1       0x00000002  // Interrupt 1 active
+#define NVIC_ACTIVE0_INT_M      0xFFFFFFFF  // Interrupt Active
 #define NVIC_ACTIVE0_INT0       0x00000001  // Interrupt 0 active
+#define NVIC_ACTIVE0_INT1       0x00000002  // Interrupt 1 active
+#define NVIC_ACTIVE0_INT2       0x00000004  // Interrupt 2 active
+#define NVIC_ACTIVE0_INT3       0x00000008  // Interrupt 3 active
+#define NVIC_ACTIVE0_INT4       0x00000010  // Interrupt 4 active
+#define NVIC_ACTIVE0_INT5       0x00000020  // Interrupt 5 active
+#define NVIC_ACTIVE0_INT6       0x00000040  // Interrupt 6 active
+#define NVIC_ACTIVE0_INT7       0x00000080  // Interrupt 7 active
+#define NVIC_ACTIVE0_INT8       0x00000100  // Interrupt 8 active
+#define NVIC_ACTIVE0_INT9       0x00000200  // Interrupt 9 active
+#define NVIC_ACTIVE0_INT10      0x00000400  // Interrupt 10 active
+#define NVIC_ACTIVE0_INT11      0x00000800  // Interrupt 11 active
+#define NVIC_ACTIVE0_INT12      0x00001000  // Interrupt 12 active
+#define NVIC_ACTIVE0_INT13      0x00002000  // Interrupt 13 active
+#define NVIC_ACTIVE0_INT14      0x00004000  // Interrupt 14 active
+#define NVIC_ACTIVE0_INT15      0x00008000  // Interrupt 15 active
+#define NVIC_ACTIVE0_INT16      0x00010000  // Interrupt 16 active
+#define NVIC_ACTIVE0_INT17      0x00020000  // Interrupt 17 active
+#define NVIC_ACTIVE0_INT18      0x00040000  // Interrupt 18 active
+#define NVIC_ACTIVE0_INT19      0x00080000  // Interrupt 19 active
+#define NVIC_ACTIVE0_INT20      0x00100000  // Interrupt 20 active
+#define NVIC_ACTIVE0_INT21      0x00200000  // Interrupt 21 active
+#define NVIC_ACTIVE0_INT22      0x00400000  // Interrupt 22 active
+#define NVIC_ACTIVE0_INT23      0x00800000  // Interrupt 23 active
+#define NVIC_ACTIVE0_INT24      0x01000000  // Interrupt 24 active
+#define NVIC_ACTIVE0_INT25      0x02000000  // Interrupt 25 active
+#define NVIC_ACTIVE0_INT26      0x04000000  // Interrupt 26 active
+#define NVIC_ACTIVE0_INT27      0x08000000  // Interrupt 27 active
+#define NVIC_ACTIVE0_INT28      0x10000000  // Interrupt 28 active
+#define NVIC_ACTIVE0_INT29      0x20000000  // Interrupt 29 active
+#define NVIC_ACTIVE0_INT30      0x40000000  // Interrupt 30 active
+#define NVIC_ACTIVE0_INT31      0x80000000  // Interrupt 31 active
 
 //*****************************************************************************
 //
 // The following are defines for the bit fields in the NVIC_ACTIVE1 register.
 //
 //*****************************************************************************
-#define NVIC_ACTIVE1_INT59      0x08000000  // Interrupt 59 active
-#define NVIC_ACTIVE1_INT58      0x04000000  // Interrupt 58 active
-#define NVIC_ACTIVE1_INT57      0x02000000  // Interrupt 57 active
-#define NVIC_ACTIVE1_INT56      0x01000000  // Interrupt 56 active
-#define NVIC_ACTIVE1_INT55      0x00800000  // Interrupt 55 active
-#define NVIC_ACTIVE1_INT54      0x00400000  // Interrupt 54 active
-#define NVIC_ACTIVE1_INT53      0x00200000  // Interrupt 53 active
-#define NVIC_ACTIVE1_INT52      0x00100000  // Interrupt 52 active
-#define NVIC_ACTIVE1_INT51      0x00080000  // Interrupt 51 active
-#define NVIC_ACTIVE1_INT50      0x00040000  // Interrupt 50 active
-#define NVIC_ACTIVE1_INT49      0x00020000  // Interrupt 49 active
-#define NVIC_ACTIVE1_INT48      0x00010000  // Interrupt 48 active
-#define NVIC_ACTIVE1_INT47      0x00008000  // Interrupt 47 active
-#define NVIC_ACTIVE1_INT46      0x00004000  // Interrupt 46 active
-#define NVIC_ACTIVE1_INT45      0x00002000  // Interrupt 45 active
-#define NVIC_ACTIVE1_INT44      0x00001000  // Interrupt 44 active
-#define NVIC_ACTIVE1_INT43      0x00000800  // Interrupt 43 active
-#define NVIC_ACTIVE1_INT42      0x00000400  // Interrupt 42 active
-#define NVIC_ACTIVE1_INT41      0x00000200  // Interrupt 41 active
-#define NVIC_ACTIVE1_INT40      0x00000100  // Interrupt 40 active
-#define NVIC_ACTIVE1_INT39      0x00000080  // Interrupt 39 active
-#define NVIC_ACTIVE1_INT38      0x00000040  // Interrupt 38 active
-#define NVIC_ACTIVE1_INT37      0x00000020  // Interrupt 37 active
-#define NVIC_ACTIVE1_INT36      0x00000010  // Interrupt 36 active
-#define NVIC_ACTIVE1_INT35      0x00000008  // Interrupt 35 active
-#define NVIC_ACTIVE1_INT34      0x00000004  // Interrupt 34 active
-#define NVIC_ACTIVE1_INT33      0x00000002  // Interrupt 33 active
+#define NVIC_ACTIVE1_INT_M      0x007FFFFF  // Interrupt Active
 #define NVIC_ACTIVE1_INT32      0x00000001  // Interrupt 32 active
+#define NVIC_ACTIVE1_INT33      0x00000002  // Interrupt 33 active
+#define NVIC_ACTIVE1_INT34      0x00000004  // Interrupt 34 active
+#define NVIC_ACTIVE1_INT35      0x00000008  // Interrupt 35 active
+#define NVIC_ACTIVE1_INT36      0x00000010  // Interrupt 36 active
+#define NVIC_ACTIVE1_INT37      0x00000020  // Interrupt 37 active
+#define NVIC_ACTIVE1_INT38      0x00000040  // Interrupt 38 active
+#define NVIC_ACTIVE1_INT39      0x00000080  // Interrupt 39 active
+#define NVIC_ACTIVE1_INT40      0x00000100  // Interrupt 40 active
+#define NVIC_ACTIVE1_INT41      0x00000200  // Interrupt 41 active
+#define NVIC_ACTIVE1_INT42      0x00000400  // Interrupt 42 active
+#define NVIC_ACTIVE1_INT43      0x00000800  // Interrupt 43 active
+#define NVIC_ACTIVE1_INT44      0x00001000  // Interrupt 44 active
+#define NVIC_ACTIVE1_INT45      0x00002000  // Interrupt 45 active
+#define NVIC_ACTIVE1_INT46      0x00004000  // Interrupt 46 active
+#define NVIC_ACTIVE1_INT47      0x00008000  // Interrupt 47 active
+#define NVIC_ACTIVE1_INT48      0x00010000  // Interrupt 48 active
+#define NVIC_ACTIVE1_INT49      0x00020000  // Interrupt 49 active
+#define NVIC_ACTIVE1_INT50      0x00040000  // Interrupt 50 active
+#define NVIC_ACTIVE1_INT51      0x00080000  // Interrupt 51 active
+#define NVIC_ACTIVE1_INT52      0x00100000  // Interrupt 52 active
+#define NVIC_ACTIVE1_INT53      0x00200000  // Interrupt 53 active
+#define NVIC_ACTIVE1_INT54      0x00400000  // Interrupt 54 active
+#define NVIC_ACTIVE1_INT55      0x00800000  // Interrupt 55 active
 
 //*****************************************************************************
 //
 // The following are defines for the bit fields in the NVIC_PRI0 register.
 //
 //*****************************************************************************
-#define NVIC_PRI0_INT3_M        0xFF000000  // Interrupt 3 priority mask
-#define NVIC_PRI0_INT2_M        0x00FF0000  // Interrupt 2 priority mask
-#define NVIC_PRI0_INT1_M        0x0000FF00  // Interrupt 1 priority mask
-#define NVIC_PRI0_INT0_M        0x000000FF  // Interrupt 0 priority mask
-#define NVIC_PRI0_INT3_S        24
-#define NVIC_PRI0_INT2_S        16
-#define NVIC_PRI0_INT1_S        8
-#define NVIC_PRI0_INT0_S        0
+#define NVIC_PRI0_INT3_M        0xE0000000  // Interrupt 3 Priority Mask
+#define NVIC_PRI0_INT2_M        0x00E00000  // Interrupt 2 Priority Mask
+#define NVIC_PRI0_INT1_M        0x0000E000  // Interrupt 1 Priority Mask
+#define NVIC_PRI0_INT0_M        0x000000E0  // Interrupt 0 Priority Mask
+#define NVIC_PRI0_INT3_S        29
+#define NVIC_PRI0_INT2_S        21
+#define NVIC_PRI0_INT1_S        13
+#define NVIC_PRI0_INT0_S        5
 
 //*****************************************************************************
 //
 // The following are defines for the bit fields in the NVIC_PRI1 register.
 //
 //*****************************************************************************
-#define NVIC_PRI1_INT7_M        0xFF000000  // Interrupt 7 priority mask
-#define NVIC_PRI1_INT6_M        0x00FF0000  // Interrupt 6 priority mask
-#define NVIC_PRI1_INT5_M        0x0000FF00  // Interrupt 5 priority mask
-#define NVIC_PRI1_INT4_M        0x000000FF  // Interrupt 4 priority mask
-#define NVIC_PRI1_INT7_S        24
-#define NVIC_PRI1_INT6_S        16
-#define NVIC_PRI1_INT5_S        8
-#define NVIC_PRI1_INT4_S        0
+#define NVIC_PRI1_INT7_M        0xE0000000  // Interrupt 7 Priority Mask
+#define NVIC_PRI1_INT6_M        0x00E00000  // Interrupt 6 Priority Mask
+#define NVIC_PRI1_INT5_M        0x0000E000  // Interrupt 5 Priority Mask
+#define NVIC_PRI1_INT4_M        0x000000E0  // Interrupt 4 Priority Mask
+#define NVIC_PRI1_INT7_S        29
+#define NVIC_PRI1_INT6_S        21
+#define NVIC_PRI1_INT5_S        13
+#define NVIC_PRI1_INT4_S        5
 
 //*****************************************************************************
 //
 // The following are defines for the bit fields in the NVIC_PRI2 register.
 //
 //*****************************************************************************
-#define NVIC_PRI2_INT11_M       0xFF000000  // Interrupt 11 priority mask
-#define NVIC_PRI2_INT10_M       0x00FF0000  // Interrupt 10 priority mask
-#define NVIC_PRI2_INT9_M        0x0000FF00  // Interrupt 9 priority mask
-#define NVIC_PRI2_INT8_M        0x000000FF  // Interrupt 8 priority mask
-#define NVIC_PRI2_INT11_S       24
-#define NVIC_PRI2_INT10_S       16
-#define NVIC_PRI2_INT9_S        8
-#define NVIC_PRI2_INT8_S        0
+#define NVIC_PRI2_INT11_M       0xE0000000  // Interrupt 11 Priority Mask
+#define NVIC_PRI2_INT10_M       0x00E00000  // Interrupt 10 Priority Mask
+#define NVIC_PRI2_INT9_M        0x0000E000  // Interrupt 9 Priority Mask
+#define NVIC_PRI2_INT8_M        0x000000E0  // Interrupt 8 Priority Mask
+#define NVIC_PRI2_INT11_S       29
+#define NVIC_PRI2_INT10_S       21
+#define NVIC_PRI2_INT9_S        13
+#define NVIC_PRI2_INT8_S        5
 
 //*****************************************************************************
 //
 // The following are defines for the bit fields in the NVIC_PRI3 register.
 //
 //*****************************************************************************
-#define NVIC_PRI3_INT15_M       0xFF000000  // Interrupt 15 priority mask
-#define NVIC_PRI3_INT14_M       0x00FF0000  // Interrupt 14 priority mask
-#define NVIC_PRI3_INT13_M       0x0000FF00  // Interrupt 13 priority mask
-#define NVIC_PRI3_INT12_M       0x000000FF  // Interrupt 12 priority mask
-#define NVIC_PRI3_INT15_S       24
-#define NVIC_PRI3_INT14_S       16
-#define NVIC_PRI3_INT13_S       8
-#define NVIC_PRI3_INT12_S       0
+#define NVIC_PRI3_INT15_M       0xE0000000  // Interrupt 15 Priority Mask
+#define NVIC_PRI3_INT14_M       0x00E00000  // Interrupt 14 Priority Mask
+#define NVIC_PRI3_INT13_M       0x0000E000  // Interrupt 13 Priority Mask
+#define NVIC_PRI3_INT12_M       0x000000E0  // Interrupt 12 Priority Mask
+#define NVIC_PRI3_INT15_S       29
+#define NVIC_PRI3_INT14_S       21
+#define NVIC_PRI3_INT13_S       13
+#define NVIC_PRI3_INT12_S       5
 
 //*****************************************************************************
 //
 // The following are defines for the bit fields in the NVIC_PRI4 register.
 //
 //*****************************************************************************
-#define NVIC_PRI4_INT19_M       0xFF000000  // Interrupt 19 priority mask
-#define NVIC_PRI4_INT18_M       0x00FF0000  // Interrupt 18 priority mask
-#define NVIC_PRI4_INT17_M       0x0000FF00  // Interrupt 17 priority mask
-#define NVIC_PRI4_INT16_M       0x000000FF  // Interrupt 16 priority mask
-#define NVIC_PRI4_INT19_S       24
-#define NVIC_PRI4_INT18_S       16
-#define NVIC_PRI4_INT17_S       8
-#define NVIC_PRI4_INT16_S       0
+#define NVIC_PRI4_INT19_M       0xE0000000  // Interrupt 19 Priority Mask
+#define NVIC_PRI4_INT18_M       0x00E00000  // Interrupt 18 Priority Mask
+#define NVIC_PRI4_INT17_M       0x0000E000  // Interrupt 17 Priority Mask
+#define NVIC_PRI4_INT16_M       0x000000E0  // Interrupt 16 Priority Mask
+#define NVIC_PRI4_INT19_S       29
+#define NVIC_PRI4_INT18_S       21
+#define NVIC_PRI4_INT17_S       13
+#define NVIC_PRI4_INT16_S       5
 
 //*****************************************************************************
 //
 // The following are defines for the bit fields in the NVIC_PRI5 register.
 //
 //*****************************************************************************
-#define NVIC_PRI5_INT23_M       0xFF000000  // Interrupt 23 priority mask
-#define NVIC_PRI5_INT22_M       0x00FF0000  // Interrupt 22 priority mask
-#define NVIC_PRI5_INT21_M       0x0000FF00  // Interrupt 21 priority mask
-#define NVIC_PRI5_INT20_M       0x000000FF  // Interrupt 20 priority mask
-#define NVIC_PRI5_INT23_S       24
-#define NVIC_PRI5_INT22_S       16
-#define NVIC_PRI5_INT21_S       8
-#define NVIC_PRI5_INT20_S       0
+#define NVIC_PRI5_INT23_M       0xE0000000  // Interrupt 23 Priority Mask
+#define NVIC_PRI5_INT22_M       0x00E00000  // Interrupt 22 Priority Mask
+#define NVIC_PRI5_INT21_M       0x0000E000  // Interrupt 21 Priority Mask
+#define NVIC_PRI5_INT20_M       0x000000E0  // Interrupt 20 Priority Mask
+#define NVIC_PRI5_INT23_S       29
+#define NVIC_PRI5_INT22_S       21
+#define NVIC_PRI5_INT21_S       13
+#define NVIC_PRI5_INT20_S       5
 
 //*****************************************************************************
 //
 // The following are defines for the bit fields in the NVIC_PRI6 register.
 //
 //*****************************************************************************
-#define NVIC_PRI6_INT27_M       0xFF000000  // Interrupt 27 priority mask
-#define NVIC_PRI6_INT26_M       0x00FF0000  // Interrupt 26 priority mask
-#define NVIC_PRI6_INT25_M       0x0000FF00  // Interrupt 25 priority mask
-#define NVIC_PRI6_INT24_M       0x000000FF  // Interrupt 24 priority mask
-#define NVIC_PRI6_INT27_S       24
-#define NVIC_PRI6_INT26_S       16
-#define NVIC_PRI6_INT25_S       8
-#define NVIC_PRI6_INT24_S       0
+#define NVIC_PRI6_INT27_M       0xE0000000  // Interrupt 27 Priority Mask
+#define NVIC_PRI6_INT26_M       0x00E00000  // Interrupt 26 Priority Mask
+#define NVIC_PRI6_INT25_M       0x0000E000  // Interrupt 25 Priority Mask
+#define NVIC_PRI6_INT24_M       0x000000E0  // Interrupt 24 Priority Mask
+#define NVIC_PRI6_INT27_S       29
+#define NVIC_PRI6_INT26_S       21
+#define NVIC_PRI6_INT25_S       13
+#define NVIC_PRI6_INT24_S       5
 
 //*****************************************************************************
 //
 // The following are defines for the bit fields in the NVIC_PRI7 register.
 //
 //*****************************************************************************
-#define NVIC_PRI7_INT31_M       0xFF000000  // Interrupt 31 priority mask
-#define NVIC_PRI7_INT30_M       0x00FF0000  // Interrupt 30 priority mask
-#define NVIC_PRI7_INT29_M       0x0000FF00  // Interrupt 29 priority mask
-#define NVIC_PRI7_INT28_M       0x000000FF  // Interrupt 28 priority mask
-#define NVIC_PRI7_INT31_S       24
-#define NVIC_PRI7_INT30_S       16
-#define NVIC_PRI7_INT29_S       8
-#define NVIC_PRI7_INT28_S       0
+#define NVIC_PRI7_INT31_M       0xE0000000  // Interrupt 31 Priority Mask
+#define NVIC_PRI7_INT30_M       0x00E00000  // Interrupt 30 Priority Mask
+#define NVIC_PRI7_INT29_M       0x0000E000  // Interrupt 29 Priority Mask
+#define NVIC_PRI7_INT28_M       0x000000E0  // Interrupt 28 Priority Mask
+#define NVIC_PRI7_INT31_S       29
+#define NVIC_PRI7_INT30_S       21
+#define NVIC_PRI7_INT29_S       13
+#define NVIC_PRI7_INT28_S       5
 
 //*****************************************************************************
 //
 // The following are defines for the bit fields in the NVIC_PRI8 register.
 //
 //*****************************************************************************
-#define NVIC_PRI8_INT35_M       0xFF000000  // Interrupt 35 priority mask
-#define NVIC_PRI8_INT34_M       0x00FF0000  // Interrupt 34 priority mask
-#define NVIC_PRI8_INT33_M       0x0000FF00  // Interrupt 33 priority mask
-#define NVIC_PRI8_INT32_M       0x000000FF  // Interrupt 32 priority mask
-#define NVIC_PRI8_INT35_S       24
-#define NVIC_PRI8_INT34_S       16
-#define NVIC_PRI8_INT33_S       8
-#define NVIC_PRI8_INT32_S       0
+#define NVIC_PRI8_INT35_M       0xE0000000  // Interrupt 35 Priority Mask
+#define NVIC_PRI8_INT34_M       0x00E00000  // Interrupt 34 Priority Mask
+#define NVIC_PRI8_INT33_M       0x0000E000  // Interrupt 33 Priority Mask
+#define NVIC_PRI8_INT32_M       0x000000E0  // Interrupt 32 Priority Mask
+#define NVIC_PRI8_INT35_S       29
+#define NVIC_PRI8_INT34_S       21
+#define NVIC_PRI8_INT33_S       13
+#define NVIC_PRI8_INT32_S       5
 
 //*****************************************************************************
 //
 // The following are defines for the bit fields in the NVIC_PRI9 register.
 //
 //*****************************************************************************
-#define NVIC_PRI9_INT39_M       0xFF000000  // Interrupt 39 priority mask
-#define NVIC_PRI9_INT38_M       0x00FF0000  // Interrupt 38 priority mask
-#define NVIC_PRI9_INT37_M       0x0000FF00  // Interrupt 37 priority mask
-#define NVIC_PRI9_INT36_M       0x000000FF  // Interrupt 36 priority mask
-#define NVIC_PRI9_INT39_S       24
-#define NVIC_PRI9_INT38_S       16
-#define NVIC_PRI9_INT37_S       8
-#define NVIC_PRI9_INT36_S       0
+#define NVIC_PRI9_INT39_M       0xE0000000  // Interrupt 39 Priority Mask
+#define NVIC_PRI9_INT38_M       0x00E00000  // Interrupt 38 Priority Mask
+#define NVIC_PRI9_INT37_M       0x0000E000  // Interrupt 37 Priority Mask
+#define NVIC_PRI9_INT36_M       0x000000E0  // Interrupt 36 Priority Mask
+#define NVIC_PRI9_INT39_S       29
+#define NVIC_PRI9_INT38_S       21
+#define NVIC_PRI9_INT37_S       13
+#define NVIC_PRI9_INT36_S       5
 
 //*****************************************************************************
 //
 // The following are defines for the bit fields in the NVIC_PRI10 register.
 //
 //*****************************************************************************
-#define NVIC_PRI10_INT43_M      0xFF000000  // Interrupt 43 priority mask
-#define NVIC_PRI10_INT42_M      0x00FF0000  // Interrupt 42 priority mask
-#define NVIC_PRI10_INT41_M      0x0000FF00  // Interrupt 41 priority mask
-#define NVIC_PRI10_INT40_M      0x000000FF  // Interrupt 40 priority mask
-#define NVIC_PRI10_INT43_S      24
-#define NVIC_PRI10_INT42_S      16
-#define NVIC_PRI10_INT41_S      8
-#define NVIC_PRI10_INT40_S      0
+#define NVIC_PRI10_INT43_M      0xE0000000  // Interrupt 43 Priority Mask
+#define NVIC_PRI10_INT42_M      0x00E00000  // Interrupt 42 Priority Mask
+#define NVIC_PRI10_INT41_M      0x0000E000  // Interrupt 41 Priority Mask
+#define NVIC_PRI10_INT40_M      0x000000E0  // Interrupt 40 Priority Mask
+#define NVIC_PRI10_INT43_S      29
+#define NVIC_PRI10_INT42_S      21
+#define NVIC_PRI10_INT41_S      13
+#define NVIC_PRI10_INT40_S      5
+
+//*****************************************************************************
+//
+// The following are defines for the bit fields in the NVIC_PRI11 register.
+//
+//*****************************************************************************
+#define NVIC_PRI11_INT47_M      0xE0000000  // Interrupt 47 Priority Mask
+#define NVIC_PRI11_INT46_M      0x00E00000  // Interrupt 46 Priority Mask
+#define NVIC_PRI11_INT45_M      0x0000E000  // Interrupt 45 Priority Mask
+#define NVIC_PRI11_INT44_M      0x000000E0  // Interrupt 44 Priority Mask
+#define NVIC_PRI11_INT47_S      29
+#define NVIC_PRI11_INT46_S      21
+#define NVIC_PRI11_INT45_S      13
+#define NVIC_PRI11_INT44_S      5
+
+//*****************************************************************************
+//
+// The following are defines for the bit fields in the NVIC_PRI12 register.
+//
+//*****************************************************************************
+#define NVIC_PRI12_INT51_M      0xE0000000  // Interrupt 51 Priority Mask
+#define NVIC_PRI12_INT50_M      0x00E00000  // Interrupt 50 Priority Mask
+#define NVIC_PRI12_INT49_M      0x0000E000  // Interrupt 49 Priority Mask
+#define NVIC_PRI12_INT48_M      0x000000E0  // Interrupt 48 Priority Mask
+#define NVIC_PRI12_INT51_S      29
+#define NVIC_PRI12_INT50_S      21
+#define NVIC_PRI12_INT49_S      13
+#define NVIC_PRI12_INT48_S      5
+
+//*****************************************************************************
+//
+// The following are defines for the bit fields in the NVIC_PRI13 register.
+//
+//*****************************************************************************
+#define NVIC_PRI13_INT55_M      0xE0000000  // Interrupt 55 Priority Mask
+#define NVIC_PRI13_INT54_M      0x00E00000  // Interrupt 54 Priority Mask
+#define NVIC_PRI13_INT53_M      0x0000E000  // Interrupt 53 Priority Mask
+#define NVIC_PRI13_INT52_M      0x000000E0  // Interrupt 52 Priority Mask
+#define NVIC_PRI13_INT55_S      29
+#define NVIC_PRI13_INT54_S      21
+#define NVIC_PRI13_INT53_S      13
+#define NVIC_PRI13_INT52_S      5
 
 //*****************************************************************************
 //
 // The following are defines for the bit fields in the NVIC_CPUID register.
 //
 //*****************************************************************************
-#define NVIC_CPUID_IMP_M        0xFF000000  // Implementer
-#define NVIC_CPUID_VAR_M        0x00F00000  // Variant
-#define NVIC_CPUID_PARTNO_M     0x0000FFF0  // Processor part number
-#define NVIC_CPUID_REV_M        0x0000000F  // Revision
+#define NVIC_CPUID_IMP_M        0xFF000000  // Implementer Code
+#define NVIC_CPUID_IMP_ARM      0x41000000  // ARM
+#define NVIC_CPUID_VAR_M        0x00F00000  // Variant Number
+#define NVIC_CPUID_CON_M        0x000F0000  // Constant
+#define NVIC_CPUID_PARTNO_M     0x0000FFF0  // Part Number
+#define NVIC_CPUID_PARTNO_CM3   0x0000C230  // Cortex-M3 processor
+#define NVIC_CPUID_REV_M        0x0000000F  // Revision Number
 
 //*****************************************************************************
 //
 // The following are defines for the bit fields in the NVIC_INT_CTRL register.
 //
 //*****************************************************************************
-#define NVIC_INT_CTRL_NMI_SET   0x80000000  // Pend a NMI
-#define NVIC_INT_CTRL_PEND_SV   0x10000000  // Pend a PendSV
-#define NVIC_INT_CTRL_UNPEND_SV 0x08000000  // Unpend a PendSV
-#define NVIC_INT_CTRL_PENDSTSET 0x04000000  // Set pending SysTick interrupt
-#define NVIC_INT_CTRL_PENDSTCLR 0x02000000  // Clear pending SysTick interrupt
-#define NVIC_INT_CTRL_ISR_PRE   0x00800000  // Debug interrupt handling
-#define NVIC_INT_CTRL_ISR_PEND  0x00400000  // Debug interrupt pending
-#define NVIC_INT_CTRL_VEC_PEN_M 0x003FF000  // Highest pending exception
-#define NVIC_INT_CTRL_RET_BASE  0x00000800  // Return to base
-#define NVIC_INT_CTRL_VEC_ACT_M 0x000003FF  // Current active exception
-#define NVIC_INT_CTRL_VEC_PEN_S 12
+#define NVIC_INT_CTRL_NMI_SET   0x80000000  // NMI Set Pending
+#define NVIC_INT_CTRL_PEND_SV   0x10000000  // PendSV Set Pending
+#define NVIC_INT_CTRL_UNPEND_SV 0x08000000  // PendSV Clear Pending
+#define NVIC_INT_CTRL_PENDSTSET 0x04000000  // SysTick Set Pending
+#define NVIC_INT_CTRL_PENDSTCLR 0x02000000  // SysTick Clear Pending
+#define NVIC_INT_CTRL_ISR_PRE   0x00800000  // Debug Interrupt Handling
+#define NVIC_INT_CTRL_ISR_PEND  0x00400000  // Interrupt Pending
+#define NVIC_INT_CTRL_VEC_PEN_M 0x0007F000  // Interrupt Pending Vector Number
+#define NVIC_INT_CTRL_VEC_PEN_NMI \
+                                0x00002000  // NMI
+#define NVIC_INT_CTRL_VEC_PEN_HARD \
+                                0x00003000  // Hard fault
+#define NVIC_INT_CTRL_VEC_PEN_MEM \
+                                0x00004000  // Memory management fault
+#define NVIC_INT_CTRL_VEC_PEN_BUS \
+                                0x00005000  // Bus fault
+#define NVIC_INT_CTRL_VEC_PEN_USG \
+                                0x00006000  // Usage fault
+#define NVIC_INT_CTRL_VEC_PEN_SVC \
+                                0x0000B000  // SVCall
+#define NVIC_INT_CTRL_VEC_PEN_PNDSV \
+                                0x0000E000  // PendSV
+#define NVIC_INT_CTRL_VEC_PEN_TICK \
+                                0x0000F000  // SysTick
+#define NVIC_INT_CTRL_RET_BASE  0x00000800  // Return to Base
+#define NVIC_INT_CTRL_VEC_ACT_M 0x0000007F  // Interrupt Pending Vector Number
 #define NVIC_INT_CTRL_VEC_ACT_S 0
 
 //*****************************************************************************
@@ -12012,19 +12160,19 @@
 // The following are defines for the bit fields in the NVIC_VTABLE register.
 //
 //*****************************************************************************
-#define NVIC_VTABLE_BASE        0x20000000  // Vector table base
-#define NVIC_VTABLE_OFFSET_M    0x1FFFFF00  // Vector table offset
-#define NVIC_VTABLE_OFFSET_S    8
+#define NVIC_VTABLE_BASE        0x20000000  // Vector Table Base
+#define NVIC_VTABLE_OFFSET_M    0x1FFFFE00  // Vector Table Offset
+#define NVIC_VTABLE_OFFSET_S    9
 
 //*****************************************************************************
 //
 // The following are defines for the bit fields in the NVIC_APINT register.
 //
 //*****************************************************************************
-#define NVIC_APINT_VECTKEY_M    0xFFFF0000  // Vector key mask
+#define NVIC_APINT_VECTKEY_M    0xFFFF0000  // Register Key
 #define NVIC_APINT_VECTKEY      0x05FA0000  // Vector key
-#define NVIC_APINT_ENDIANESS    0x00008000  // Data endianess
-#define NVIC_APINT_PRIGROUP_M   0x00000700  // Priority group
+#define NVIC_APINT_ENDIANESS    0x00008000  // Data Endianess
+#define NVIC_APINT_PRIGROUP_M   0x00000700  // Interrupt Priority Grouping
 #define NVIC_APINT_PRIGROUP_7_1 0x00000000  // Priority group 7.1 split
 #define NVIC_APINT_PRIGROUP_6_2 0x00000100  // Priority group 6.2 split
 #define NVIC_APINT_PRIGROUP_5_3 0x00000200  // Priority group 5.3 split
@@ -12033,65 +12181,64 @@
 #define NVIC_APINT_PRIGROUP_2_6 0x00000500  // Priority group 2.6 split
 #define NVIC_APINT_PRIGROUP_1_7 0x00000600  // Priority group 1.7 split
 #define NVIC_APINT_PRIGROUP_0_8 0x00000700  // Priority group 0.8 split
-#define NVIC_APINT_SYSRESETREQ  0x00000004  // System reset request
-#define NVIC_APINT_VECT_CLR_ACT 0x00000002  // Clear active NMI/fault info
-#define NVIC_APINT_VECT_RESET   0x00000001  // System reset
+#define NVIC_APINT_SYSRESETREQ  0x00000004  // System Reset Request
+#define NVIC_APINT_VECT_CLR_ACT 0x00000002  // Clear Active NMI / Fault
+#define NVIC_APINT_VECT_RESET   0x00000001  // System Reset
 
 //*****************************************************************************
 //
 // The following are defines for the bit fields in the NVIC_SYS_CTRL register.
 //
 //*****************************************************************************
-#define NVIC_SYS_CTRL_SEVONPEND 0x00000010  // Wakeup on pend
-#define NVIC_SYS_CTRL_SLEEPDEEP 0x00000004  // Deep sleep enable
-#define NVIC_SYS_CTRL_SLEEPEXIT 0x00000002  // Sleep on ISR exit
+#define NVIC_SYS_CTRL_SEVONPEND 0x00000010  // Wake Up on Pending
+#define NVIC_SYS_CTRL_SLEEPDEEP 0x00000004  // Deep Sleep Enable
+#define NVIC_SYS_CTRL_SLEEPEXIT 0x00000002  // Sleep on ISR Exit
 
 //*****************************************************************************
 //
 // The following are defines for the bit fields in the NVIC_CFG_CTRL register.
 //
 //*****************************************************************************
-#define NVIC_CFG_CTRL_BFHFNMIGN 0x00000100  // Ignore bus fault in NMI/fault
-#define NVIC_CFG_CTRL_DIV0      0x00000010  // Trap on divide by 0
-#define NVIC_CFG_CTRL_UNALIGNED 0x00000008  // Trap on unaligned access
-#define NVIC_CFG_CTRL_DEEP_PEND 0x00000004  // Allow deep interrupt trigger
-#define NVIC_CFG_CTRL_MAIN_PEND 0x00000002  // Allow main interrupt trigger
-#define NVIC_CFG_CTRL_BASE_THR  0x00000001  // Thread state control
+#define NVIC_CFG_CTRL_STKALIGN  0x00000200  // Stack Alignment on Exception
+                                            // Entry
+#define NVIC_CFG_CTRL_BFHFNMIGN 0x00000100  // Ignore Bus Fault in NMI and
+                                            // Fault
+#define NVIC_CFG_CTRL_DIV0      0x00000010  // Trap on Divide by 0
+#define NVIC_CFG_CTRL_UNALIGNED 0x00000008  // Trap on Unaligned Access
+#define NVIC_CFG_CTRL_MAIN_PEND 0x00000002  // Allow Main Interrupt Trigger
+#define NVIC_CFG_CTRL_BASE_THR  0x00000001  // Thread State Control
 
 //*****************************************************************************
 //
 // The following are defines for the bit fields in the NVIC_SYS_PRI1 register.
 //
 //*****************************************************************************
-#define NVIC_SYS_PRI1_RES_M     0xFF000000  // Priority of reserved handler
-#define NVIC_SYS_PRI1_USAGE_M   0x00FF0000  // Priority of usage fault handler
-#define NVIC_SYS_PRI1_BUS_M     0x0000FF00  // Priority of bus fault handler
-#define NVIC_SYS_PRI1_MEM_M     0x000000FF  // Priority of mem manage handler
-#define NVIC_SYS_PRI1_USAGE_S   16
-#define NVIC_SYS_PRI1_BUS_S     8
-#define NVIC_SYS_PRI1_MEM_S     0
+#define NVIC_SYS_PRI1_USAGE_M   0x00E00000  // Usage Fault Priority
+#define NVIC_SYS_PRI1_BUS_M     0x0000E000  // Bus Fault Priority
+#define NVIC_SYS_PRI1_MEM_M     0x000000E0  // Memory Management Fault Priority
+#define NVIC_SYS_PRI1_USAGE_S   21
+#define NVIC_SYS_PRI1_BUS_S     13
+#define NVIC_SYS_PRI1_MEM_S     5
 
 //*****************************************************************************
 //
 // The following are defines for the bit fields in the NVIC_SYS_PRI2 register.
 //
 //*****************************************************************************
-#define NVIC_SYS_PRI2_SVC_M     0xFF000000  // Priority of SVCall handler
-#define NVIC_SYS_PRI2_RES_M     0x00FFFFFF  // Priority of reserved handlers
-#define NVIC_SYS_PRI2_SVC_S     24
+#define NVIC_SYS_PRI2_SVC_M     0xE0000000  // SVCall Priority
+#define NVIC_SYS_PRI2_SVC_S     29
 
 //*****************************************************************************
 //
 // The following are defines for the bit fields in the NVIC_SYS_PRI3 register.
 //
 //*****************************************************************************
-#define NVIC_SYS_PRI3_TICK_M    0xFF000000  // Priority of Sys Tick handler
-#define NVIC_SYS_PRI3_PENDSV_M  0x00FF0000  // Priority of PendSV handler
-#define NVIC_SYS_PRI3_RES_M     0x0000FF00  // Priority of reserved handler
-#define NVIC_SYS_PRI3_DEBUG_M   0x000000FF  // Priority of debug handler
-#define NVIC_SYS_PRI3_TICK_S    24
-#define NVIC_SYS_PRI3_PENDSV_S  16
-#define NVIC_SYS_PRI3_DEBUG_S   0
+#define NVIC_SYS_PRI3_TICK_M    0xE0000000  // SysTick Exception Priority
+#define NVIC_SYS_PRI3_PENDSV_M  0x00E00000  // PendSV Priority
+#define NVIC_SYS_PRI3_DEBUG_M   0x000000E0  // Debug Priority
+#define NVIC_SYS_PRI3_TICK_S    29
+#define NVIC_SYS_PRI3_PENDSV_S  21
+#define NVIC_SYS_PRI3_DEBUG_S   5
 
 //*****************************************************************************
 //
@@ -12099,18 +12246,21 @@
 // register.
 //
 //*****************************************************************************
-#define NVIC_SYS_HND_CTRL_USAGE 0x00040000  // Usage fault enable
-#define NVIC_SYS_HND_CTRL_BUS   0x00020000  // Bus fault enable
-#define NVIC_SYS_HND_CTRL_MEM   0x00010000  // Mem manage fault enable
-#define NVIC_SYS_HND_CTRL_SVC   0x00008000  // SVCall is pended
-#define NVIC_SYS_HND_CTRL_BUSP  0x00004000  // Bus fault is pended
-#define NVIC_SYS_HND_CTRL_TICK  0x00000800  // Sys tick is active
-#define NVIC_SYS_HND_CTRL_PNDSV 0x00000400  // PendSV is active
-#define NVIC_SYS_HND_CTRL_MON   0x00000100  // Monitor is active
-#define NVIC_SYS_HND_CTRL_SVCA  0x00000080  // SVCall is active
-#define NVIC_SYS_HND_CTRL_USGA  0x00000008  // Usage fault is active
-#define NVIC_SYS_HND_CTRL_BUSA  0x00000002  // Bus fault is active
-#define NVIC_SYS_HND_CTRL_MEMA  0x00000001  // Mem manage is active
+#define NVIC_SYS_HND_CTRL_USAGE 0x00040000  // Usage Fault Enable
+#define NVIC_SYS_HND_CTRL_BUS   0x00020000  // Bus Fault Enable
+#define NVIC_SYS_HND_CTRL_MEM   0x00010000  // Memory Management Fault Enable
+#define NVIC_SYS_HND_CTRL_SVC   0x00008000  // SVC Call Pending
+#define NVIC_SYS_HND_CTRL_BUSP  0x00004000  // Bus Fault Pending
+#define NVIC_SYS_HND_CTRL_MEMP  0x00002000  // Memory Management Fault Pending
+#define NVIC_SYS_HND_CTRL_USAGEP \
+                                0x00001000  // Usage Fault Pending
+#define NVIC_SYS_HND_CTRL_TICK  0x00000800  // SysTick Exception Active
+#define NVIC_SYS_HND_CTRL_PNDSV 0x00000400  // PendSV Exception Active
+#define NVIC_SYS_HND_CTRL_MON   0x00000100  // Debug Monitor Active
+#define NVIC_SYS_HND_CTRL_SVCA  0x00000080  // SVC Call Active
+#define NVIC_SYS_HND_CTRL_USGA  0x00000008  // Usage Fault Active
+#define NVIC_SYS_HND_CTRL_BUSA  0x00000002  // Bus Fault Active
+#define NVIC_SYS_HND_CTRL_MEMA  0x00000001  // Memory Management Fault Active
 
 //*****************************************************************************
 //
@@ -12118,23 +12268,25 @@
 // register.
 //
 //*****************************************************************************
-#define NVIC_FAULT_STAT_DIV0    0x02000000  // Divide by zero fault
-#define NVIC_FAULT_STAT_UNALIGN 0x01000000  // Unaligned access fault
-#define NVIC_FAULT_STAT_NOCP    0x00080000  // No coprocessor fault
-#define NVIC_FAULT_STAT_INVPC   0x00040000  // Invalid PC fault
-#define NVIC_FAULT_STAT_INVSTAT 0x00020000  // Invalid state fault
-#define NVIC_FAULT_STAT_UNDEF   0x00010000  // Undefined instruction fault
-#define NVIC_FAULT_STAT_BFARV   0x00008000  // BFAR is valid
-#define NVIC_FAULT_STAT_BSTKE   0x00001000  // Stack bus fault
-#define NVIC_FAULT_STAT_BUSTKE  0x00000800  // Unstack bus fault
-#define NVIC_FAULT_STAT_IMPRE   0x00000400  // Imprecise data bus error
-#define NVIC_FAULT_STAT_PRECISE 0x00000200  // Precise data bus error
-#define NVIC_FAULT_STAT_IBUS    0x00000100  // Instruction bus fault
-#define NVIC_FAULT_STAT_MMARV   0x00000080  // MMAR is valid
-#define NVIC_FAULT_STAT_MSTKE   0x00000010  // Stack access violation
-#define NVIC_FAULT_STAT_MUSTKE  0x00000008  // Unstack access violation
-#define NVIC_FAULT_STAT_DERR    0x00000002  // Data access violation
-#define NVIC_FAULT_STAT_IERR    0x00000001  // Instruction access violation
+#define NVIC_FAULT_STAT_DIV0    0x02000000  // Divide-by-Zero Usage Fault
+#define NVIC_FAULT_STAT_UNALIGN 0x01000000  // Unaligned Access Usage Fault
+#define NVIC_FAULT_STAT_NOCP    0x00080000  // No Coprocessor Usage Fault
+#define NVIC_FAULT_STAT_INVPC   0x00040000  // Invalid PC Load Usage Fault
+#define NVIC_FAULT_STAT_INVSTAT 0x00020000  // Invalid State Usage Fault
+#define NVIC_FAULT_STAT_UNDEF   0x00010000  // Undefined Instruction Usage
+                                            // Fault
+#define NVIC_FAULT_STAT_BFARV   0x00008000  // Bus Fault Address Register Valid
+#define NVIC_FAULT_STAT_BSTKE   0x00001000  // Stack Bus Fault
+#define NVIC_FAULT_STAT_BUSTKE  0x00000800  // Unstack Bus Fault
+#define NVIC_FAULT_STAT_IMPRE   0x00000400  // Imprecise Data Bus Error
+#define NVIC_FAULT_STAT_PRECISE 0x00000200  // Precise Data Bus Error
+#define NVIC_FAULT_STAT_IBUS    0x00000100  // Instruction Bus Error
+#define NVIC_FAULT_STAT_MMARV   0x00000080  // Memory Management Fault Address
+                                            // Register Valid
+#define NVIC_FAULT_STAT_MSTKE   0x00000010  // Stack Access Violation
+#define NVIC_FAULT_STAT_MUSTKE  0x00000008  // Unstack Access Violation
+#define NVIC_FAULT_STAT_DERR    0x00000002  // Data Access Violation
+#define NVIC_FAULT_STAT_IERR    0x00000001  // Instruction Access Violation
 
 //*****************************************************************************
 //
@@ -12142,9 +12294,9 @@
 // register.
 //
 //*****************************************************************************
-#define NVIC_HFAULT_STAT_DBG    0x80000000  // Debug event
-#define NVIC_HFAULT_STAT_FORCED 0x40000000  // Cannot execute fault handler
-#define NVIC_HFAULT_STAT_VECT   0x00000002  // Vector table read fault
+#define NVIC_HFAULT_STAT_DBG    0x80000000  // Debug Event
+#define NVIC_HFAULT_STAT_FORCED 0x40000000  // Forced Hard Fault
+#define NVIC_HFAULT_STAT_VECT   0x00000002  // Vector Table Read Fault
 
 //*****************************************************************************
 //
@@ -12163,7 +12315,7 @@
 // The following are defines for the bit fields in the NVIC_MM_ADDR register.
 //
 //*****************************************************************************
-#define NVIC_MM_ADDR_M          0xFFFFFFFF  // Data fault address
+#define NVIC_MM_ADDR_M          0xFFFFFFFF  // Fault Address
 #define NVIC_MM_ADDR_S          0
 
 //*****************************************************************************
@@ -12172,7 +12324,7 @@
 // register.
 //
 //*****************************************************************************
-#define NVIC_FAULT_ADDR_M       0xFFFFFFFF  // Data bus fault address
+#define NVIC_FAULT_ADDR_M       0xFFFFFFFF  // Fault Address
 #define NVIC_FAULT_ADDR_S       0
 
 //*****************************************************************************
@@ -12180,9 +12332,9 @@
 // The following are defines for the bit fields in the NVIC_MPU_TYPE register.
 //
 //*****************************************************************************
-#define NVIC_MPU_TYPE_IREGION_M 0x00FF0000  // Number of I regions
-#define NVIC_MPU_TYPE_DREGION_M 0x0000FF00  // Number of D regions
-#define NVIC_MPU_TYPE_SEPARATE  0x00000001  // Separate or unified MPU
+#define NVIC_MPU_TYPE_IREGION_M 0x00FF0000  // Number of I Regions
+#define NVIC_MPU_TYPE_DREGION_M 0x0000FF00  // Number of D Regions
+#define NVIC_MPU_TYPE_SEPARATE  0x00000001  // Separate or Unified MPU
 #define NVIC_MPU_TYPE_IREGION_S 16
 #define NVIC_MPU_TYPE_DREGION_S 8
 
@@ -12191,9 +12343,9 @@
 // The following are defines for the bit fields in the NVIC_MPU_CTRL register.
 //
 //*****************************************************************************
-#define NVIC_MPU_CTRL_PRIVDEFEN 0x00000004  // MPU default region in priv mode
-#define NVIC_MPU_CTRL_HFNMIENA  0x00000002  // MPU enabled during faults
-#define NVIC_MPU_CTRL_ENABLE    0x00000001  // MPU enable
+#define NVIC_MPU_CTRL_PRIVDEFEN 0x00000004  // MPU Default Region
+#define NVIC_MPU_CTRL_HFNMIENA  0x00000002  // MPU Enabled During Faults
+#define NVIC_MPU_CTRL_ENABLE    0x00000001  // MPU Enable
 
 //*****************************************************************************
 //
@@ -12201,7 +12353,7 @@
 // register.
 //
 //*****************************************************************************
-#define NVIC_MPU_NUMBER_M       0x000000FF  // MPU region to access
+#define NVIC_MPU_NUMBER_M       0x00000007  // MPU Region to Access
 #define NVIC_MPU_NUMBER_S       0
 
 //*****************************************************************************
@@ -12209,10 +12361,10 @@
 // The following are defines for the bit fields in the NVIC_MPU_BASE register.
 //
 //*****************************************************************************
-#define NVIC_MPU_BASE_ADDR_M    0xFFFFFFE0  // Base address mask
-#define NVIC_MPU_BASE_VALID     0x00000010  // Region number valid
-#define NVIC_MPU_BASE_REGION_M  0x0000000F  // Region number
-#define NVIC_MPU_BASE_ADDR_S    8
+#define NVIC_MPU_BASE_ADDR_M    0xFFFFFFE0  // Base Address Mask
+#define NVIC_MPU_BASE_VALID     0x00000010  // Region Number Valid
+#define NVIC_MPU_BASE_REGION_M  0x00000007  // Region Number
+#define NVIC_MPU_BASE_ADDR_S    5
 #define NVIC_MPU_BASE_REGION_S  0
 
 //*****************************************************************************
@@ -12221,19 +12373,19 @@
 //
 //*****************************************************************************
 #define NVIC_MPU_ATTR_M         0xFFFF0000  // Attributes
+#define NVIC_MPU_ATTR_XN        0x10000000  // Instruction Access Disable
+#define NVIC_MPU_ATTR_AP_M      0x07000000  // Access Privilege
 #define NVIC_MPU_ATTR_AP_NO_NO  0x00000000  // prv: no access, usr: no access
-#define NVIC_MPU_ATTR_BUFFRABLE 0x00010000  // Bufferable
-#define NVIC_MPU_ATTR_CACHEABLE 0x00020000  // Cacheable
-#define NVIC_MPU_ATTR_SHAREABLE 0x00040000  // Shareable
-#define NVIC_MPU_ATTR_TEX_M     0x00380000  // Type extension mask
 #define NVIC_MPU_ATTR_AP_RW_NO  0x01000000  // prv: rw, usr: none
 #define NVIC_MPU_ATTR_AP_RW_RO  0x02000000  // prv: rw, usr: read-only
 #define NVIC_MPU_ATTR_AP_RW_RW  0x03000000  // prv: rw, usr: rw
 #define NVIC_MPU_ATTR_AP_RO_NO  0x05000000  // prv: ro, usr: none
 #define NVIC_MPU_ATTR_AP_RO_RO  0x06000000  // prv: ro, usr: ro
-#define NVIC_MPU_ATTR_AP_M      0x07000000  // Access permissions mask
-#define NVIC_MPU_ATTR_XN        0x10000000  // Execute disable
-#define NVIC_MPU_ATTR_SRD_M     0x0000FF00  // Sub-region disable mask
+#define NVIC_MPU_ATTR_TEX_M     0x00380000  // Type Extension Mask
+#define NVIC_MPU_ATTR_SHAREABLE 0x00040000  // Shareable
+#define NVIC_MPU_ATTR_CACHEABLE 0x00020000  // Cacheable
+#define NVIC_MPU_ATTR_BUFFRABLE 0x00010000  // Bufferable
+#define NVIC_MPU_ATTR_SRD_M     0x0000FF00  // Subregion Disable Bits
 #define NVIC_MPU_ATTR_SRD_0     0x00000100  // Sub-region 0 disable
 #define NVIC_MPU_ATTR_SRD_1     0x00000200  // Sub-region 1 disable
 #define NVIC_MPU_ATTR_SRD_2     0x00000400  // Sub-region 2 disable
@@ -12242,7 +12394,7 @@
 #define NVIC_MPU_ATTR_SRD_5     0x00002000  // Sub-region 5 disable
 #define NVIC_MPU_ATTR_SRD_6     0x00004000  // Sub-region 6 disable
 #define NVIC_MPU_ATTR_SRD_7     0x00008000  // Sub-region 7 disable
-#define NVIC_MPU_ATTR_SIZE_M    0x0000003E  // Region size mask
+#define NVIC_MPU_ATTR_SIZE_M    0x0000003E  // Region Size Mask
 #define NVIC_MPU_ATTR_SIZE_32B  0x00000008  // Region size 32 bytes
 #define NVIC_MPU_ATTR_SIZE_64B  0x0000000A  // Region size 64 bytes
 #define NVIC_MPU_ATTR_SIZE_128B 0x0000000C  // Region size 128 bytes
@@ -12271,7 +12423,94 @@
 #define NVIC_MPU_ATTR_SIZE_1G   0x0000003A  // Region size 1 Gbytes
 #define NVIC_MPU_ATTR_SIZE_2G   0x0000003C  // Region size 2 Gbytes
 #define NVIC_MPU_ATTR_SIZE_4G   0x0000003E  // Region size 4 Gbytes
-#define NVIC_MPU_ATTR_ENABLE    0x00000001  // Region enable
+#define NVIC_MPU_ATTR_ENABLE    0x00000001  // Region Enable
+
+//*****************************************************************************
+//
+// The following are defines for the bit fields in the NVIC_MPU_BASE1 register.
+//
+//*****************************************************************************
+#define NVIC_MPU_BASE1_ADDR_M   0xFFFFFFE0  // Base Address Mask
+#define NVIC_MPU_BASE1_VALID    0x00000010  // Region Number Valid
+#define NVIC_MPU_BASE1_REGION_M 0x00000007  // Region Number
+#define NVIC_MPU_BASE1_ADDR_S   5
+#define NVIC_MPU_BASE1_REGION_S 0
+
+//*****************************************************************************
+//
+// The following are defines for the bit fields in the NVIC_MPU_ATTR1 register.
+//
+//*****************************************************************************
+#define NVIC_MPU_ATTR1_XN       0x10000000  // Instruction Access Disable
+#define NVIC_MPU_ATTR1_AP_M     0x07000000  // Access Privilege
+#define NVIC_MPU_ATTR1_TEX_M    0x00380000  // Type Extension Mask
+#define NVIC_MPU_ATTR1_SHAREABLE \
+                                0x00040000  // Shareable
+#define NVIC_MPU_ATTR1_CACHEABLE \
+                                0x00020000  // Cacheable
+#define NVIC_MPU_ATTR1_BUFFRABLE \
+                                0x00010000  // Bufferable
+#define NVIC_MPU_ATTR1_SRD_M    0x0000FF00  // Subregion Disable Bits
+#define NVIC_MPU_ATTR1_SIZE_M   0x0000003E  // Region Size Mask
+#define NVIC_MPU_ATTR1_ENABLE   0x00000001  // Region Enable
+
+//*****************************************************************************
+//
+// The following are defines for the bit fields in the NVIC_MPU_BASE2 register.
+//
+//*****************************************************************************
+#define NVIC_MPU_BASE2_ADDR_M   0xFFFFFFE0  // Base Address Mask
+#define NVIC_MPU_BASE2_VALID    0x00000010  // Region Number Valid
+#define NVIC_MPU_BASE2_REGION_M 0x00000007  // Region Number
+#define NVIC_MPU_BASE2_ADDR_S   5
+#define NVIC_MPU_BASE2_REGION_S 0
+
+//*****************************************************************************
+//
+// The following are defines for the bit fields in the NVIC_MPU_ATTR2 register.
+//
+//*****************************************************************************
+#define NVIC_MPU_ATTR2_XN       0x10000000  // Instruction Access Disable
+#define NVIC_MPU_ATTR2_AP_M     0x07000000  // Access Privilege
+#define NVIC_MPU_ATTR2_TEX_M    0x00380000  // Type Extension Mask
+#define NVIC_MPU_ATTR2_SHAREABLE \
+                                0x00040000  // Shareable
+#define NVIC_MPU_ATTR2_CACHEABLE \
+                                0x00020000  // Cacheable
+#define NVIC_MPU_ATTR2_BUFFRABLE \
+                                0x00010000  // Bufferable
+#define NVIC_MPU_ATTR2_SRD_M    0x0000FF00  // Subregion Disable Bits
+#define NVIC_MPU_ATTR2_SIZE_M   0x0000003E  // Region Size Mask
+#define NVIC_MPU_ATTR2_ENABLE   0x00000001  // Region Enable
+
+//*****************************************************************************
+//
+// The following are defines for the bit fields in the NVIC_MPU_BASE3 register.
+//
+//*****************************************************************************
+#define NVIC_MPU_BASE3_ADDR_M   0xFFFFFFE0  // Base Address Mask
+#define NVIC_MPU_BASE3_VALID    0x00000010  // Region Number Valid
+#define NVIC_MPU_BASE3_REGION_M 0x00000007  // Region Number
+#define NVIC_MPU_BASE3_ADDR_S   5
+#define NVIC_MPU_BASE3_REGION_S 0
+
+//*****************************************************************************
+//
+// The following are defines for the bit fields in the NVIC_MPU_ATTR3 register.
+//
+//*****************************************************************************
+#define NVIC_MPU_ATTR3_XN       0x10000000  // Instruction Access Disable
+#define NVIC_MPU_ATTR3_AP_M     0x07000000  // Access Privilege
+#define NVIC_MPU_ATTR3_TEX_M    0x00380000  // Type Extension Mask
+#define NVIC_MPU_ATTR3_SHAREABLE \
+                                0x00040000  // Shareable
+#define NVIC_MPU_ATTR3_CACHEABLE \
+                                0x00020000  // Cacheable
+#define NVIC_MPU_ATTR3_BUFFRABLE \
+                                0x00010000  // Bufferable
+#define NVIC_MPU_ATTR3_SRD_M    0x0000FF00  // Subregion Disable Bits
+#define NVIC_MPU_ATTR3_SIZE_M   0x0000003E  // Region Size Mask
+#define NVIC_MPU_ATTR3_ENABLE   0x00000001  // Region Enable
 
 //*****************************************************************************
 //
@@ -12355,7 +12594,7 @@
 // The following are defines for the bit fields in the NVIC_SW_TRIG register.
 //
 //*****************************************************************************
-#define NVIC_SW_TRIG_INTID_M    0x000003FF  // Interrupt to trigger
+#define NVIC_SW_TRIG_INTID_M    0x0000003F  // Interrupt ID
 #define NVIC_SW_TRIG_INTID_S    0
 
 //*****************************************************************************
@@ -12435,6 +12674,21 @@
 //*****************************************************************************
 #define SYSCTL_DID1_PKG_28SOIC  0x00000000  // SOIC package
 #define SYSCTL_DID1_PKG_48QFP   0x00000008  // QFP package
+
+//*****************************************************************************
+//
+// Deprecated defines for the Micro Direct Memory Access register addresses.
+//
+//*****************************************************************************
+#define UDMA_CHALT              (*((volatile unsigned long *)0x400FF500))
+
+//*****************************************************************************
+//
+// Deprecated defines for the bit fields in the UDMA_CHALT register.
+//
+//*****************************************************************************
+#define UDMA_CHALT_M            0xFFFFFFFF  // Channel [n] Alternate Assignment
+                                            // Select
 
 //*****************************************************************************
 //
