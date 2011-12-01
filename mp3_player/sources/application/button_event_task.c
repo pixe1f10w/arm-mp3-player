@@ -153,7 +153,7 @@ ButtonEventTask(void *pvParameters)
     }
     if(PlayState==PLAY_STATE)
       i++;
-    if(i==12)
+    if(i==10)
     {
       SecondCurrent++;
       if(SecondCurrent==60)

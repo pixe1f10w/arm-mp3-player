@@ -890,7 +890,7 @@ void synth_half(struct mad_synth *synth, struct mad_frame /*const*/ *frame,
 
     /* Block render */
     //--render_sample_block(short_sample_buff, 16);
-    
+    WriteMP3ToBuffer(short_sample_buff,16);
     phase = (phase + 1) % 16;
 
   }/* Block For */
@@ -900,6 +900,7 @@ void synth_half(struct mad_synth *synth, struct mad_frame /*const*/ *frame,
  * NAME:	synth->frame()
  * DESCRIPTION:	perform PCM synthesis of frame subband samples
  */
+//extern unsigned char set__;
 void mad_synth_frame(struct mad_synth *synth, struct mad_frame /*const*/ *frame)
 {
   unsigned int nch, ns;
@@ -914,9 +915,15 @@ void mad_synth_frame(struct mad_synth *synth, struct mad_frame /*const*/ *frame)
   
   //--set_dac_sample_rate(synth->pcm.samplerate);
   //while(g_ulFlags!=7);
-  vTaskSuspendScheduler();
-  SoundSetFormat(frame->header.samplerate,16,1);
-  xTaskResumeScheduler();
+  
+  //if(set__)
+  {
+    vPortEnterCritical( );
+    SoundSetFormat(frame->header.samplerate,16,1);
+    //set__=0;
+    vPortExitCritical( );
+  }
+  
   synth->pcm.channels   = nch;
   synth->pcm.length     = 32 * ns;
   samplerate = synth->pcm.samplerate;
@@ -927,6 +934,9 @@ void mad_synth_frame(struct mad_synth *synth, struct mad_frame /*const*/ *frame)
     synth->pcm.samplerate /= 2;
     synth->pcm.length     /= 2;
     //--set_dac_sample_rate(synth->pcm.samplerate);
+    vPortEnterCritical( );
+    SoundSetFormat(frame->header.samplerate,16,1);
+    vPortExitCritical( );
     synth_frame = synth_half;
   }
 

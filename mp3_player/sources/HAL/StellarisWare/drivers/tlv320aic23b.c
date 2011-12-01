@@ -351,7 +351,7 @@ TLV320AIC23BInit(void)
     //
     if(!(GPIOPinRead(DAC_I2CSCL_GPIO_PORT, DAC_I2CSDA_PIN) & DAC_I2CSDA_PIN))
     {
-        return(false);
+        //return(false);
     }
 
     //

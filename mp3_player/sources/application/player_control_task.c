@@ -27,6 +27,7 @@
 #include "conf.h"
 #include "file_management.h"
 #include "lcd_print.h"
+
 #include "player_control_task.h"
 /**
 * Queue for control
@@ -92,6 +93,11 @@ PlayerCtrlTask(void *pvParameters){
     //
     // Loop forever.
     //
+  vTaskSuspendScheduler();
+  ShowStartup();
+  xTaskResumeScheduler();
+  xTaskDelay(5000);
+  
   while(1){
     //get event from button
     if( xQueueReceive(xPlayerCtrlQueue, (unsigned char*)&usEventCode,100)==pdPASS)

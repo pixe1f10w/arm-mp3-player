@@ -56,7 +56,7 @@ extern void __iar_program_start(void);
 //! Reserve space for the system stack.
 //
 //*****************************************************************************
-static unsigned long pulStack[128] @ ".noinit";
+static unsigned long pulStack[256] @ ".noinit";
 
 //*****************************************************************************
 //!@union uVectorEntry

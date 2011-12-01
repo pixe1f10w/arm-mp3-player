@@ -309,6 +309,7 @@
           <state>$PROJ_DIR$\sources\drivers\LCD</state>
           <state>$PROJ_DIR$\sources\drivers\LCD\LCD</state>
           <state>$PROJ_DIR$\sources\drivers\LCD\fonts</state>
+          <state>$PROJ_DIR$\sources\drivers\LCD\images</state>
           <state>$PROJ_DIR$\sources\SafeRTOS</state>
           <state>$PROJ_DIR$\sources\Utils</state>
           <state>$PROJ_DIR$\sources\libmad</state>
@@ -936,9 +937,6 @@
     </file>
     <file>
       <name>$PROJ_DIR$\sources\application\sound_player_task.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\sources\application\usb_control_task.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\sources\application\usbotg_task.c</name>
