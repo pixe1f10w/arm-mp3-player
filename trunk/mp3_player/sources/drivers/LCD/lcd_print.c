@@ -11,6 +11,9 @@
 #include "utils.h"
 #include "file_management.h"
 #include "audio_codec.h"
+#include "logo.h"
+#include "background.h"
+
 #include "lcd_print.h"
 
 
@@ -91,7 +94,10 @@ void NowPlay(unsigned char iii)
         //Total songs in List
         NumToString(ucFileCount,&FileStateStr[3],2);
         //The order of the song in List
-        NumToString(ucFileIndex+1,FileStateStr,2);
+        if(ucFileCount)
+          NumToString(ucFileIndex+1,FileStateStr,2);
+        else
+          NumToString(ucFileIndex,FileStateStr,2);
         TSLCDPrint((320-TSLCDGetStringWidth(FileStateStr)),215,FileStateStr,TS_MODE_FULL);
         //List Files
         TSLCDSetBackColor(TS_COL_BLACK);
@@ -166,7 +172,7 @@ void Browse(unsigned char iii)
             tmp =(ucItemIndex - (DISPLAY_ITEM_MAX-1));
         else
             tmp =0;
-        for(i=tmp; i< ucItemCount && i-tmp < DISPLAY_ITEM_MAX; i++)
+        for(i=tmp;( i-tmp) < DISPLAY_ITEM_MAX; i++)
         {
             if(i == ucItemIndex)
                 TSLCDSetFontColor(TS_COL_RED);
@@ -287,4 +293,8 @@ void initLCD(void)
     PlayMode=0;
     SoundButton=0;
     Selected=PLAY_MODE;
+}
+void ShowStartup(void)
+{
+  TSLCDShowPic(0,239,0,319,logo,TS_MODE_NORMAL);
 }

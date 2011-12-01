@@ -37,4 +37,5 @@ void Settings(unsigned char iii);
 void Info(unsigned char iii);
 void USBTransfer(void);
 void initLCD(void);
+void ShowStartup(void);
 #endif //_LCD_PRINT_H_
