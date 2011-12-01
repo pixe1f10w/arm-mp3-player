@@ -1068,9 +1068,6 @@
       <name>$PROJ_DIR$\sources\HAL\StellarisWare\third_party\fatfs\port\mmc-dk-lm3s9b96.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\sources\drivers\Audio\mp3_file.c</name>
-    </file>
-    <file>
       <name>$PROJ_DIR$\sources\HAL\StellarisWare\drivers\sound.c</name>
     </file>
   </group>
