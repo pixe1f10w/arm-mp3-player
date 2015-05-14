@@ -1,0 +1,1 @@
+![http://www.vatgia.com/pictures_fullsize/vje1200322838.jpg](http://www.vatgia.com/pictures_fullsize/vje1200322838.jpg)
